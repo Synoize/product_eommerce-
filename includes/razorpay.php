@@ -1,0 +1,99 @@
+<?php
+/**
+ * Razorpay Configuration
+ * Payment Gateway Integration
+ */
+
+// Razorpay Credentials - Replace with your actual credentials
+// Test Mode Credentials (provided by user)
+define('RAZORPAY_KEY_ID', 'rzp_test_RIzm0y12l0CJSx');
+define('RAZORPAY_KEY_SECRET', 'xUHJipUjdw38XWLHjZihV1IZD');
+define('RAZORPAY_CURRENCY', 'INR');
+
+// Razorpay API Endpoint
+define('RAZORPAY_API_URL', 'https://api.razorpay.com/v1');
+
+/**
+ * Initialize Razorpay API Client
+ * Uses cURL for API requests
+ */
+function razorpayApiRequest($endpoint, $method = 'POST', $data = null) {
+    $url = RAZORPAY_API_URL . $endpoint;
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_USERPWD, RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    
+    if ($method === 'POST' && $data) {
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+    }
+    
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/x-www-form-urlencoded'
+    ]);
+    
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+    if (curl_errno($ch)) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        throw new Exception('Razorpay API Error: ' . $error);
+    }
+    
+    curl_close($ch);
+    
+    $result = json_decode($response, true);
+    
+    if ($httpCode !== 200 && $httpCode !== 201) {
+        $errorMsg = isset($result['error']['description']) ? $result['error']['description'] : 'Unknown error';
+        throw new Exception('Razorpay API Error: ' . $errorMsg);
+    }
+    
+    return $result;
+}
+
+/**
+ * Create Razorpay Order
+ */
+function createRazorpayOrder($amount, $receipt = null) {
+    // Amount must be in paise (multiply by 100)
+    $amountInPaise = $amount * 100;
+    
+    $data = [
+        'amount' => $amountInPaise,
+        'currency' => RAZORPAY_CURRENCY,
+        'receipt' => $receipt ?: 'order_' . time(),
+        'payment_capture' => 1 // Auto capture
+    ];
+    
+    return razorpayApiRequest('/orders', 'POST', $data);
+}
+
+/**
+ * Verify Razorpay Payment Signature
+ */
+function verifyRazorpaySignature($orderId, $paymentId, $signature) {
+    $payload = $orderId . '|' . $paymentId;
+    $expectedSignature = hash_hmac('sha256', $payload, RAZORPAY_KEY_SECRET);
+    
+    return hash_equals($expectedSignature, $signature);
+}
+
+/**
+ * Fetch Payment Details
+ */
+function fetchRazorpayPayment($paymentId) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, RAZORPAY_API_URL . '/payments/' . $paymentId);
+    curl_setopt($ch, CURLOPT_USERPWD, RAZORPAY_KEY_ID . ':' . RAZORPAY_KEY_SECRET);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+    $response = curl_exec($ch);
+    curl_close($ch);
+    
+    return json_decode($response, true);
+}
