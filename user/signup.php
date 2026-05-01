@@ -66,75 +66,79 @@ $pageTitle = 'Sign Up';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
-                        <h3 class="fw-bold">Create Account</h3>
-                        <p class="text-muted">Join WebStore today</p>
-                    </div>
-                    
-                    <?php if (!empty($errors)): ?>
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
-                            <?php foreach ($errors as $error): ?>
-                            <li><?php echo e($error); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <form action="<?php echo BASE_URL; ?>user/signup.php" method="POST" id="signupForm">
-                        <div class="form-outline mb-4">
-                            <input type="text" name="name" class="form-control" required
-                                   value="<?php echo isset($_POST['name']) ? e($_POST['name']) : ''; ?>">
-                            <label class="form-label">Full Name</label>
-                        </div>
-                        
-                        <div class="form-outline mb-4">
-                            <input type="email" name="email" class="form-control" required
-                                   value="<?php echo isset($_POST['email']) ? e($_POST['email']) : ''; ?>">
-                            <label class="form-label">Email Address</label>
-                        </div>
-                        
-                        <div class="form-outline mb-4">
-                            <input type="tel" name="mobile" class="form-control" required
-                                   pattern="[0-9]{10}" maxlength="10"
-                                   value="<?php echo isset($_POST['mobile']) ? e($_POST['mobile']) : ''; ?>">
-                            <label class="form-label">Mobile Number</label>
-                        </div>
-                        
-                        <div class="form-outline mb-4">
-                            <input type="password" name="password" class="form-control" required minlength="6">
-                            <label class="form-label">Password (min 6 characters)</label>
-                        </div>
-                        
-                        <div class="form-outline mb-4">
-                            <input type="password" name="confirm_password" class="form-control" required>
-                            <label class="form-label">Confirm Password</label>
-                        </div>
-                        
-                        <div class="form-check mb-4">
-                            <input type="checkbox" class="form-check-input" id="terms" required>
-                            <label class="form-check-label" for="terms">
-                                I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-                            </label>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-block btn-lg mb-4">
-                            <i class="fas fa-user-plus me-2"></i>Create Account
-                        </button>
-                    </form>
-                    
-                    <div class="text-center">
-                        <p class="mb-0">Already have an account? 
-                            <a href="<?php echo BASE_URL; ?>user/login.php" class="fw-bold text-primary">Sign in</a>
-                        </p>
-                    </div>
+<div class="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-user-plus text-4xl text-primary-500"></i>
                 </div>
+                <h3 class="text-2xl font-bold text-gray-900">Create Account</h3>
+                <p class="text-gray-500">Join WebStore today</p>
+            </div>
+            
+            <?php if (!empty($errors)): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+                <ul class="mb-0 list-disc list-inside">
+                    <?php foreach ($errors as $error): ?>
+                    <li><?php echo e($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+            
+            <form action="<?php echo BASE_URL; ?>user/signup.php" method="POST" id="signupForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input type="text" name="name" required
+                           value="<?php echo isset($_POST['name']) ? e($_POST['name']) : ''; ?>"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <input type="email" name="email" required
+                           value="<?php echo isset($_POST['email']) ? e($_POST['email']) : ''; ?>"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                    <input type="tel" name="mobile" required
+                           pattern="[0-9]{10}" maxlength="10"
+                           value="<?php echo isset($_POST['mobile']) ? e($_POST['mobile']) : ''; ?>"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                    <p class="text-xs text-gray-500 mt-1">Enter 10-digit mobile number</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Password (min 6 characters)</label>
+                    <input type="password" name="password" required minlength="6"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                    <input type="password" name="confirm_password" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                </div>
+                
+                <div class="flex items-start">
+                    <input type="checkbox" id="terms" required class="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500 mt-1">
+                    <label class="ml-2 text-sm text-gray-600" for="terms">
+                        I agree to the <a href="#" class="text-primary-500 hover:text-primary-600 font-medium">Terms of Service</a> and <a href="#" class="text-primary-500 hover:text-primary-600 font-medium">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 rounded-full transition shadow-lg hover:shadow-xl">
+                    <i class="fas fa-user-plus mr-2"></i>Create Account
+                </button>
+            </form>
+            
+            <div class="text-center mt-6">
+                <p class="text-gray-600">Already have an account? 
+                    <a href="<?php echo BASE_URL; ?>user/login.php" class="font-semibold text-primary-500 hover:text-primary-600">Sign in</a>
+                </p>
             </div>
         </div>
     </div>

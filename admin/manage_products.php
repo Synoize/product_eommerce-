@@ -45,108 +45,111 @@ try {
 }
 ?>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="min-h-screen bg-gray-100">
+    <div class="flex">
         <!-- Admin Sidebar -->
-        <div class="col-md-2 d-none d-md-block admin-sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/index.php">
-                    <i class="fas fa-tachometer-alt"></i>Dashboard
+        <div class="hidden md:flex flex-col w-64 bg-gray-900 text-white min-h-screen">
+            <div class="p-6">
+                <h3 class="text-xl font-bold">Admin Panel</h3>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="<?php echo BASE_URL; ?>admin/index.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tachometer-alt w-6"></i>Dashboard
                 </a>
-                <a class="nav-link active" href="<?php echo BASE_URL; ?>admin/manage_products.php">
-                    <i class="fas fa-box"></i>Products
+                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="flex items-center px-4 py-3 bg-primary-500 rounded-lg text-white">
+                    <i class="fas fa-box w-6"></i>Products
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_categories.php">
-                    <i class="fas fa-tags"></i>Categories
+                <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tags w-6"></i>Categories
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php">
-                    <i class="fas fa-shopping-cart"></i>Orders
+                <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-shopping-cart w-6"></i>Orders
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_coupons.php">
-                    <i class="fas fa-ticket-alt"></i>Coupons
+                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-ticket-alt w-6"></i>Coupons
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_users.php">
-                    <i class="fas fa-users"></i>Users
+                <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-users w-6"></i>Users
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/contact_messages.php">
-                    <i class="fas fa-envelope"></i>Messages
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>">
-                    <i class="fas fa-arrow-left"></i>Back to Site
+                <a href="<?php echo BASE_URL; ?>admin/contact_messages.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-envelope w-6"></i>Messages
                 </a>
             </nav>
+            <div class="p-4">
+                <a href="<?php echo BASE_URL; ?>" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-arrow-left w-6"></i>Back to Site
+                </a>
+            </div>
         </div>
         
         <!-- Main Content -->
-        <div class="col-md-10 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold mb-0">Manage Products</h2>
-                <a href="<?php echo BASE_URL; ?>admin/add_product.php" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Add New Product
+        <div class="flex-1 p-6 md:p-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 class="text-2xl font-bold text-gray-900">Manage Products</h2>
+                <a href="<?php echo BASE_URL; ?>admin/add_product.php" class="inline-flex items-center bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl">
+                    <i class="fas fa-plus mr-2"></i>Add New Product
                 </a>
             </div>
             
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Stock</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($products as $product): ?>
-                                <tr>
-                                    <td><?php echo $product['id']; ?></td>
-                                    <td>
-                                        <?php 
-                                        $imageUrl = getImageUrl($product['image'], 'products');
-                                        ?>
-                                        <img src="<?php echo $imageUrl; ?>" width="50" height="50" class="rounded" alt="">
-                                    </td>
-                                    <td><?php echo e($product['name']); ?></td>
-                                    <td><?php echo e($product['category_name'] ?? 'N/A'); ?></td>
-                                    <td><?php echo formatCurrency($product['price']); ?></td>
-                                    <td><?php echo $product['stock']; ?></td>
-                                    <td>
-                                        <span class="badge bg-<?php echo $product['status'] ? 'success' : 'danger'; ?>">
-                                            <?php echo $product['status'] ? 'Active' : 'Inactive'; ?>
-                                        </span>
-                                    </td>
-                                    <td>
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">ID</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Image</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Category</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Price</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Stock</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <?php foreach ($products as $product): ?>
+                            <tr>
+                                <td class="px-4 py-3 text-sm"><?php echo $product['id']; ?></td>
+                                <td class="px-4 py-3">
+                                    <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
+                                    <img src="<?php echo $imageUrl; ?>" class="w-12 h-12 rounded-lg object-cover" alt="">
+                                </td>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-900"><?php echo e($product['name']); ?></td>
+                                <td class="px-4 py-3 text-sm"><?php echo e($product['category_name'] ?? 'N/A'); ?></td>
+                                <td class="px-4 py-3 text-sm"><?php echo formatCurrency($product['price']); ?></td>
+                                <td class="px-4 py-3 text-sm"><?php echo $product['stock']; ?></td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-block px-2 py-1 rounded text-xs font-medium <?php echo $product['status'] ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?>">
+                                        <?php echo $product['status'] ? 'Active' : 'Inactive'; ?>
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex gap-2">
                                         <a href="<?php echo BASE_URL; ?>admin/edit_product.php?id=<?php echo $product['id']; ?>" 
-                                           class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                                           class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-1 px-2 rounded-lg transition text-sm" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>" 
-                                           class="btn btn-sm btn-outline-info me-1" title="View" target="_blank">
+                                           class="inline-flex items-center border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-medium py-1 px-2 rounded-lg transition text-sm" title="View" target="_blank">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <a href="<?php echo BASE_URL; ?>admin/manage_products.php?delete=<?php echo $product['id']; ?>" 
-                                           class="btn btn-sm btn-outline-danger" title="Delete"
+                                           class="inline-flex items-center border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-medium py-1 px-2 rounded-lg transition text-sm" title="Delete"
                                            onclick="return confirm('Are you sure you want to delete this product?')">
                                             <i class="fas fa-trash"></i>
                                         </a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                                
-                                <?php if (empty($products)): ?>
-                                <tr>
-                                    <td colspan="8" class="text-center py-4">No products found. <a href="<?php echo BASE_URL; ?>admin/add_product.php">Add your first product</a></td>
-                                </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            
+                            <?php if (empty($products)): ?>
+                            <tr>
+                                <td colspan="8" class="px-4 py-8 text-center text-gray-500">No products found. <a href="<?php echo BASE_URL; ?>admin/add_product.php" class="text-primary-500 hover:text-primary-600">Add your first product</a></td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -59,164 +59,160 @@ foreach ($monthlySales as $sale) {
 }
 ?>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="min-h-screen bg-gray-100">
+    <div class="flex">
         <!-- Admin Sidebar -->
-        <div class="col-md-2 d-none d-md-block admin-sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link active" href="<?php echo BASE_URL; ?>admin/index.php">
-                    <i class="fas fa-tachometer-alt"></i>Dashboard
+        <div class="hidden md:flex flex-col w-64 bg-gray-900 text-white min-h-screen">
+            <div class="p-6">
+                <h3 class="text-xl font-bold">Admin Panel</h3>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="<?php echo BASE_URL; ?>admin/index.php" class="flex items-center px-4 py-3 bg-primary-500 rounded-lg text-white">
+                    <i class="fas fa-tachometer-alt w-6"></i>Dashboard
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_products.php">
-                    <i class="fas fa-box"></i>Products
+                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-box w-6"></i>Products
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_categories.php">
-                    <i class="fas fa-tags"></i>Categories
+                <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tags w-6"></i>Categories
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php">
-                    <i class="fas fa-shopping-cart"></i>Orders
+                <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-shopping-cart w-6"></i>Orders
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_coupons.php">
-                    <i class="fas fa-ticket-alt"></i>Coupons
+                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-ticket-alt w-6"></i>Coupons
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_users.php">
-                    <i class="fas fa-users"></i>Users
+                <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-users w-6"></i>Users
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/contact_messages.php">
-                    <i class="fas fa-envelope"></i>Messages
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>">
-                    <i class="fas fa-arrow-left"></i>Back to Site
+                <a href="<?php echo BASE_URL; ?>admin/contact_messages.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-envelope w-6"></i>Messages
                 </a>
             </nav>
+            <div class="p-4">
+                <a href="<?php echo BASE_URL; ?>" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-arrow-left w-6"></i>Back to Site
+                </a>
+            </div>
         </div>
         
         <!-- Main Content -->
-        <div class="col-md-10 p-4">
-            <h2 class="fw-bold mb-4">Dashboard</h2>
+        <div class="flex-1 p-6 md:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Dashboard</h2>
             
             <!-- Stats Cards -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-3 col-6">
-                    <div class="stat-card">
-                        <div class="icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3><?php echo number_format($totalUsers); ?></h3>
-                        <p>Total Users</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-xl text-blue-600"></i>
                     </div>
+                    <h3 class="text-2xl font-bold text-gray-900"><?php echo number_format($totalUsers); ?></h3>
+                    <p class="text-gray-500 text-sm">Total Users</p>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-card">
-                        <div class="icon">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <h3><?php echo number_format($totalProducts); ?></h3>
-                        <p>Total Products</p>
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-box text-xl text-green-600"></i>
                     </div>
+                    <h3 class="text-2xl font-bold text-gray-900"><?php echo number_format($totalProducts); ?></h3>
+                    <p class="text-gray-500 text-sm">Total Products</p>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-card">
-                        <div class="icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <h3><?php echo number_format($totalOrders); ?></h3>
-                        <p>Total Orders</p>
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-shopping-cart text-xl text-purple-600"></i>
                     </div>
+                    <h3 class="text-2xl font-bold text-gray-900"><?php echo number_format($totalOrders); ?></h3>
+                    <p class="text-gray-500 text-sm">Total Orders</p>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-card">
-                        <div class="icon">
-                            <i class="fas fa-rupee-sign"></i>
-                        </div>
-                        <h3><?php echo formatCurrency($totalSales); ?></h3>
-                        <p>Total Sales</p>
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-rupee-sign text-xl text-pink-600"></i>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900"><?php echo formatCurrency($totalSales); ?></h3>
+                    <p class="text-gray-500 text-sm">Total Sales</p>
                 </div>
             </div>
             
-            <div class="row">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Sales Chart -->
-                <div class="col-lg-8 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold mb-4">Sales Overview (Last 6 Months)</h5>
-                            <canvas id="salesChart" height="100"></canvas>
-                        </div>
-                    </div>
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                    <h5 class="font-bold text-gray-900 mb-4">Sales Overview (Last 6 Months)</h5>
+                    <canvas id="salesChart" height="100"></canvas>
                 </div>
                 
                 <!-- Quick Actions -->
-                <div class="col-lg-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold mb-4">Quick Actions</h5>
-                            <div class="d-grid gap-2">
-                                <a href="<?php echo BASE_URL; ?>admin/add_product.php" class="btn btn-primary">
-                                    <i class="fas fa-plus me-2"></i>Add New Product
-                                </a>
-                                <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="btn btn-outline-primary">
-                                    <i class="fas fa-shopping-cart me-2"></i>View Orders
-                                </a>
-                                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="btn btn-outline-primary">
-                                    <i class="fas fa-ticket-alt me-2"></i>Manage Coupons
-                                </a>
-                            </div>
-                        </div>
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h5 class="font-bold text-gray-900 mb-4">Quick Actions</h5>
+                    <div class="space-y-3">
+                        <a href="<?php echo BASE_URL; ?>admin/add_product.php" class="flex items-center justify-center w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-4 rounded-lg transition">
+                            <i class="fas fa-plus mr-2"></i>Add New Product
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="flex items-center justify-center w-full border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-semibold py-3 px-4 rounded-lg transition">
+                            <i class="fas fa-shopping-cart mr-2"></i>View Orders
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="flex items-center justify-center w-full border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-semibold py-3 px-4 rounded-lg transition">
+                            <i class="fas fa-ticket-alt mr-2"></i>Manage Coupons
+                        </a>
                     </div>
                 </div>
             </div>
             
             <!-- Recent Orders -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title fw-bold mb-4">Recent Orders</h5>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                    <th>Payment</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($recentOrders as $order): ?>
-                                <tr>
-                                    <td>#<?php echo $order['id']; ?></td>
-                                    <td><?php echo e($order['user_name']); ?></td>
-                                    <td><?php echo formatCurrency($order['total_amount']); ?></td>
-                                    <td>
-                                        <span class="badge badge-<?php echo $order['status']; ?>">
-                                            <?php echo ucfirst($order['status']); ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge <?php echo ($order['payment_status'] ?? '') === 'paid' ? 'bg-success' : 'bg-warning'; ?>">
-                                            <?php echo ucfirst($order['payment_status'] ?? 'Pending'); ?>
-                                        </span>
-                                    </td>
-                                    <td><?php echo date('M d, Y', strtotime($order['created_at'])); ?></td>
-                                    <td>
-                                        <a href="<?php echo BASE_URL; ?>admin/view_order.php?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                                
-                                <?php if (empty($recentOrders)): ?>
-                                <tr>
-                                    <td colspan="7" class="text-center py-4">No orders yet</td>
-                                </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h5 class="font-bold text-gray-900 mb-4">Recent Orders</h5>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Order ID</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Customer</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Total</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Payment</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Date</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <?php foreach ($recentOrders as $order):
+                                $statusColors = [
+                                    'pending' => 'bg-yellow-100 text-yellow-700',
+                                    'processing' => 'bg-blue-100 text-blue-700',
+                                    'shipped' => 'bg-purple-100 text-purple-700',
+                                    'delivered' => 'bg-green-100 text-green-700',
+                                    'cancelled' => 'bg-red-100 text-red-700'
+                                ];
+                                $statusClass = $statusColors[$order['status']] ?? 'bg-gray-100 text-gray-700';
+                            ?>
+                            <tr>
+                                <td class="px-4 py-3 text-sm">#<?php echo $order['id']; ?></td>
+                                <td class="px-4 py-3 text-sm"><?php echo e($order['user_name']); ?></td>
+                                <td class="px-4 py-3 text-sm font-medium"><?php echo formatCurrency($order['total_amount']); ?></td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-block px-2 py-1 rounded text-xs font-medium <?php echo $statusClass; ?>">
+                                        <?php echo ucfirst($order['status']); ?>
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-block px-2 py-1 rounded text-xs font-medium <?php echo ($order['payment_status'] ?? '') === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'; ?>">
+                                        <?php echo ucfirst($order['payment_status'] ?? 'Pending'); ?>
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-500"><?php echo date('M d, Y', strtotime($order['created_at'])); ?></td>
+                                <td class="px-4 py-3">
+                                    <a href="<?php echo BASE_URL; ?>admin/view_order.php?id=<?php echo $order['id']; ?>" class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-1 px-3 rounded-lg transition text-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            
+                            <?php if (empty($recentOrders)): ?>
+                            <tr>
+                                <td colspan="7" class="px-4 py-8 text-center text-gray-500">No orders yet</td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -74,44 +74,49 @@ $stmt->execute($params);
 $orders = $stmt->fetchAll();
 ?>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="min-h-screen bg-gray-100">
+    <div class="flex">
         <!-- Admin Sidebar -->
-        <div class="col-md-2 d-none d-md-block admin-sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/index.php">
-                    <i class="fas fa-tachometer-alt"></i>Dashboard
+        <div class="hidden md:flex flex-col w-64 bg-gray-900 text-white min-h-screen">
+            <div class="p-6">
+                <h3 class="text-xl font-bold">Admin Panel</h3>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="<?php echo BASE_URL; ?>admin/index.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tachometer-alt w-6"></i>Dashboard
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_products.php">
-                    <i class="fas fa-box"></i>Products
+                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-box w-6"></i>Products
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_categories.php">
-                    <i class="fas fa-tags"></i>Categories
+                <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tags w-6"></i>Categories
                 </a>
-                <a class="nav-link active" href="<?php echo BASE_URL; ?>admin/manage_orders.php">
-                    <i class="fas fa-shopping-cart"></i>Orders
+                <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="flex items-center px-4 py-3 bg-primary-500 rounded-lg text-white">
+                    <i class="fas fa-shopping-cart w-6"></i>Orders
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_coupons.php">
-                    <i class="fas fa-ticket-alt"></i>Coupons
+                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-ticket-alt w-6"></i>Coupons
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_users.php">
-                    <i class="fas fa-users"></i>Users
+                <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-users w-6"></i>Users
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/contact_messages.php">
-                    <i class="fas fa-envelope"></i>Messages
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>">
-                    <i class="fas fa-arrow-left"></i>Back to Site
+                <a href="<?php echo BASE_URL; ?>admin/contact_messages.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-envelope w-6"></i>Messages
                 </a>
             </nav>
+            <div class="p-4">
+                <a href="<?php echo BASE_URL; ?>" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-arrow-left w-6"></i>Back to Site
+                </a>
+            </div>
         </div>
         
         <!-- Main Content -->
-        <div class="col-md-10 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold mb-0">Manage Orders</h2>
-                <form action="<?php echo BASE_URL; ?>admin/manage_orders.php" method="GET" class="d-flex gap-2">
-                    <select name="status" class="form-select" style="width: auto;" onchange="this.form.submit()">
+        <div class="flex-1 p-6 md:p-8">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
+                <h2 class="text-2xl font-bold text-gray-900">Manage Orders</h2>
+                <form action="<?php echo BASE_URL; ?>admin/manage_orders.php" method="GET" class="flex flex-wrap gap-2">
+                    <select name="status" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500" onchange="this.form.submit()">
                         <option value="">All Status</option>
                         <option value="pending" <?php echo $statusFilter === 'pending' ? 'selected' : ''; ?>>Pending</option>
                         <option value="processing" <?php echo $statusFilter === 'processing' ? 'selected' : ''; ?>>Processing</option>
@@ -119,101 +124,105 @@ $orders = $stmt->fetchAll();
                         <option value="delivered" <?php echo $statusFilter === 'delivered' ? 'selected' : ''; ?>>Delivered</option>
                         <option value="cancelled" <?php echo $statusFilter === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                     </select>
-                    <input type="search" name="search" class="form-control" placeholder="Search orders..." 
-                           value="<?php echo e($search); ?>" style="width: 200px;">
-                    <button type="submit" class="btn btn-primary">
+                    <input type="search" name="search" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 w-48" 
+                           placeholder="Search orders..." value="<?php echo e($search); ?>">
+                    <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg transition">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
             </div>
             
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                    <th>Payment</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($orders as $order): ?>
-                                <tr>
-                                    <td>#<?php echo $order['id']; ?></td>
-                                    <td>
-                                        <div><?php echo e($order['user_name']); ?></div>
-                                        <small class="text-muted"><?php echo e($order['user_email']); ?></small>
-                                    </td>
-                                    <td><?php echo formatCurrency($order['total_amount']); ?></td>
-                                    <td>
-                                        <span class="badge badge-<?php echo $order['status']; ?>">
-                                            <?php echo ucfirst($order['status']); ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge <?php echo ($order['payment_status'] ?? '') === 'paid' ? 'bg-success' : 'bg-warning'; ?>">
-                                            <?php echo ucfirst($order['payment_status'] ?? 'Pending'); ?>
-                                        </span>
-                                        <?php if ($order['payment_method']): ?>
-                                        <br><small class="text-muted"><?php echo ucfirst($order['payment_method']); ?></small>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?php echo date('M d, Y H:i', strtotime($order['created_at'])); ?></td>
-                                    <td>
-                                        <a href="<?php echo BASE_URL; ?>admin/view_order.php?id=<?php echo $order['id']; ?>" 
-                                           class="btn btn-sm btn-outline-primary" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                                
-                                <?php if (empty($orders)): ?>
-                                <tr>
-                                    <td colspan="7" class="text-center py-4">No orders found</td>
-                                </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Pagination -->
-                    <?php if ($totalPages > 1): ?>
-                    <nav class="mt-4">
-                        <ul class="pagination justify-content-center">
-                            <?php if ($page > 1): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>">
-                                    <i class="fas fa-chevron-left"></i>
-                                </a>
-                            </li>
-                            <?php endif; ?>
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Order ID</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Customer</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Total</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Payment</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Date</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <?php foreach ($orders as $order):
+                                $statusColors = [
+                                    'pending' => 'bg-yellow-100 text-yellow-700',
+                                    'processing' => 'bg-blue-100 text-blue-700',
+                                    'shipped' => 'bg-purple-100 text-purple-700',
+                                    'delivered' => 'bg-green-100 text-green-700',
+                                    'cancelled' => 'bg-red-100 text-red-700'
+                                ];
+                                $statusClass = $statusColors[$order['status']] ?? 'bg-gray-100 text-gray-700';
+                            ?>
+                            <tr>
+                                <td class="px-4 py-3 text-sm font-medium">#<?php echo $order['id']; ?></td>
+                                <td class="px-4 py-3">
+                                    <div class="text-sm font-medium text-gray-900"><?php echo e($order['user_name']); ?></div>
+                                    <div class="text-sm text-gray-500"><?php echo e($order['user_email']); ?></div>
+                                </td>
+                                <td class="px-4 py-3 text-sm font-medium"><?php echo formatCurrency($order['total_amount']); ?></td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-block px-2 py-1 rounded text-xs font-medium <?php echo $statusClass; ?>">
+                                        <?php echo ucfirst($order['status']); ?>
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-block px-2 py-1 rounded text-xs font-medium <?php echo ($order['payment_status'] ?? '') === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'; ?>">
+                                        <?php echo ucfirst($order['payment_status'] ?? 'Pending'); ?>
+                                    </span>
+                                    <?php if ($order['payment_method']): ?>
+                                    <div class="text-xs text-gray-500 mt-1"><?php echo ucfirst($order['payment_method']); ?></div>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-500"><?php echo date('M d, Y H:i', strtotime($order['created_at'])); ?></td>
+                                <td class="px-4 py-3">
+                                    <a href="<?php echo BASE_URL; ?>admin/view_order.php?id=<?php echo $order['id']; ?>" 
+                                       class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-1 px-3 rounded-lg transition text-sm" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
                             
-                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
-                                <a class="page-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php?<?php echo http_build_query(array_merge($_GET, ['page' => $i])); ?>">
-                                    <?php echo $i; ?>
-                                </a>
-                            </li>
-                            <?php endfor; ?>
-                            
-                            <?php if ($page < $totalPages): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>">
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </li>
+                            <?php if (empty($orders)): ?>
+                            <tr>
+                                <td colspan="7" class="px-4 py-8 text-center text-gray-500">No orders found</td>
+                            </tr>
                             <?php endif; ?>
-                        </ul>
-                    </nav>
-                    <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
+                
+                <!-- Pagination -->
+                <?php if ($totalPages > 1): ?>
+                <div class="mt-6 flex justify-center">
+                    <div class="flex space-x-2">
+                        <?php if ($page > 1): ?>
+                        <a href="<?php echo BASE_URL; ?>admin/manage_orders.php?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>" 
+                           class="w-10 h-10 flex items-center justify-center border-2 border-gray-300 hover:border-primary-500 hover:text-primary-500 rounded-lg transition">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <?php endif; ?>
+                        
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <a href="<?php echo BASE_URL; ?>admin/manage_orders.php?<?php echo http_build_query(array_merge($_GET, ['page' => $i])); ?>" 
+                           class="w-10 h-10 flex items-center justify-center rounded-lg transition <?php echo $i == $page ? 'bg-primary-500 text-white' : 'border-2 border-gray-300 hover:border-primary-500 hover:text-primary-500'; ?>">
+                            <?php echo $i; ?>
+                        </a>
+                        <?php endfor; ?>
+                        
+                        <?php if ($page < $totalPages): ?>
+                        <a href="<?php echo BASE_URL; ?>admin/manage_orders.php?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>" 
+                           class="w-10 h-10 flex items-center justify-center border-2 border-gray-300 hover:border-primary-500 hover:text-primary-500 rounded-lg transition">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -94,57 +94,57 @@ $pageTitle = 'Reset Password';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-key fa-3x text-primary mb-3"></i>
-                        <h3 class="fw-bold">Reset Password</h3>
-                        <p class="text-muted">Enter your new password</p>
-                    </div>
-                    
-                    <?php if (!empty($errors)): ?>
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
-                            <?php foreach ($errors as $error): ?>
-                            <li><?php echo e($error); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($debug): ?>
-                    <div class="alert alert-warning small">
-                        <strong>Debug:</strong> <?php echo e($debug); ?>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($user): ?>
-                    <form method="POST">
-                        <div class="form-outline mb-4">
-                            <input type="password" name="password" class="form-control" required minlength="6">
-                            <label class="form-label">New Password (min 6 characters)</label>
-                        </div>
-                        
-                        <div class="form-outline mb-4">
-                            <input type="password" name="confirm_password" class="form-control" required>
-                            <label class="form-label">Confirm New Password</label>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-block btn-lg mb-4">
-                            <i class="fas fa-save me-2"></i>Reset Password
-                        </button>
-                    </form>
-                    <?php endif; ?>
-                    
-                    <div class="text-center">
-                        <a href="<?php echo BASE_URL; ?>user/login.php" class="text-muted">
-                            <i class="fas fa-arrow-left me-2"></i>Back to Login
-                        </a>
-                    </div>
+<div class="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-key text-4xl text-primary-500"></i>
                 </div>
+                <h3 class="text-2xl font-bold text-gray-900">Reset Password</h3>
+                <p class="text-gray-500">Enter your new password</p>
+            </div>
+            
+            <?php if (!empty($errors)): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+                <ul class="mb-0 list-disc list-inside">
+                    <?php foreach ($errors as $error): ?>
+                    <li><?php echo e($error); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+            
+            <?php if ($debug): ?>
+            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg mb-6 text-sm">
+                <strong>Debug:</strong> <?php echo e($debug); ?>
+            </div>
+            <?php endif; ?>
+            
+            <?php if ($user): ?>
+            <form method="POST" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">New Password (min 6 characters)</label>
+                    <input type="password" name="password" required minlength="6"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                    <input type="password" name="confirm_password" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                </div>
+                
+                <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 rounded-full transition shadow-lg hover:shadow-xl">
+                    <i class="fas fa-save mr-2"></i>Reset Password
+                </button>
+            </form>
+            <?php endif; ?>
+            
+            <div class="text-center mt-6">
+                <a href="<?php echo BASE_URL; ?>user/login.php" class="text-gray-500 hover:text-gray-700 inline-flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Login
+                </a>
             </div>
         </div>
     </div>

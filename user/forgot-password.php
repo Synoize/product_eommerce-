@@ -55,59 +55,58 @@ $pageTitle = 'Forgot Password';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-lock fa-3x text-primary mb-3"></i>
-                        <h3 class="fw-bold">Forgot Password?</h3>
-                        <p class="text-muted">Enter your email and we'll send you reset instructions</p>
-                    </div>
-                    
-                    <?php if ($message): ?>
-                    <div class="alert alert-<?php echo $success ? 'success' : 'danger'; ?>">
-                        <?php echo e($message); ?>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($success && $resetLink): ?>
-                    <!-- Since email is not configured, show the reset link directly -->
-                    <div class="alert alert-info">
-                        <p class="mb-2"><strong>Your Reset Link:</strong></p>
-                        <a href="<?php echo $resetLink; ?>" class="btn btn-success w-100 mb-2">
-                            <i class="fas fa-link me-2"></i>Click Here to Reset Password
-                        </a>
-                        <p class="small mb-0 text-muted">Or copy this link: <?php echo $resetLink; ?></p>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($dbError): ?>
-                    <div class="alert alert-warning small">
-                        <strong>Database Error:</strong> <?php echo e($dbError); ?>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if (!$success): ?>
-                    <form action="<?php echo BASE_URL; ?>user/forgot-password.php" method="POST">
-                        <div class="form-outline mb-4">
-                            <input type="email" name="email" class="form-control" required>
-                            <label class="form-label">Email Address</label>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-block btn-lg mb-4">
-                            <i class="fas fa-paper-plane me-2"></i>Send Reset Link
-                        </button>
-                    </form>
-                    <?php endif; ?>
-                    
-                    <div class="text-center">
-                        <p class="mb-0">Remember your password? 
-                            <a href="<?php echo BASE_URL; ?>user/login.php" class="fw-bold text-primary">Sign in</a>
-                        </p>
-                    </div>
+<div class="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lock text-4xl text-primary-500"></i>
                 </div>
+                <h3 class="text-2xl font-bold text-gray-900">Forgot Password?</h3>
+                <p class="text-gray-500">Enter your email and we'll send you reset instructions</p>
+            </div>
+            
+            <?php if ($message): ?>
+            <div class="px-4 py-3 rounded-lg mb-6 <?php echo $success ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'; ?>">
+                <?php echo e($message); ?>
+            </div>
+            <?php endif; ?>
+            
+            <?php if ($success && $resetLink): ?>
+            <!-- Since email is not configured, show the reset link directly -->
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg mb-6">
+                <p class="mb-2 font-medium">Your Reset Link:</p>
+                <a href="<?php echo $resetLink; ?>" class="block w-full bg-green-500 hover:bg-green-600 text-white text-center font-semibold py-3 px-4 rounded-lg transition mb-2">
+                    <i class="fas fa-link mr-2"></i>Click Here to Reset Password
+                </a>
+                <p class="text-sm">Or copy this link: <span class="break-all text-xs"><?php echo $resetLink; ?></span></p>
+            </div>
+            <?php endif; ?>
+            
+            <?php if ($dbError): ?>
+            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg mb-6 text-sm">
+                <strong>Database Error:</strong> <?php echo e($dbError); ?>
+            </div>
+            <?php endif; ?>
+            
+            <?php if (!$success): ?>
+            <form action="<?php echo BASE_URL; ?>user/forgot-password.php" method="POST" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <input type="email" name="email" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                </div>
+                
+                <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 rounded-full transition shadow-lg hover:shadow-xl">
+                    <i class="fas fa-paper-plane mr-2"></i>Send Reset Link
+                </button>
+            </form>
+            <?php endif; ?>
+            
+            <div class="text-center mt-6">
+                <p class="text-gray-600">Remember your password? 
+                    <a href="<?php echo BASE_URL; ?>user/login.php" class="font-semibold text-primary-500 hover:text-primary-600">Sign in</a>
+                </p>
             </div>
         </div>
     </div>

@@ -98,44 +98,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<div class="container py-5">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <div class="card-body text-center">
-                    <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['user_name']); ?>&background=f84183&color=fff&size=128" 
-                         class="rounded-circle mb-3" width="100" alt="Profile">
-                    <h5 class="fw-bold mb-1"><?php echo e($_SESSION['user_name']); ?></h5>
-                    <p class="text-muted small mb-0"><?php echo e($_SESSION['user_email']); ?></p>
-                    <h5 class="card-title">My Account</h5>
-                    <div class="list-group list-group-flush">
-                        <a href="<?php echo BASE_URL; ?>user/profile.php" class="list-group-item list-group-item-action active">
-                            <i class="fas fa-user me-2"></i>Profile
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/addresses.php" class="list-group-item list-group-item-action">
-                            <i class="fas fa-map-marker-alt me-2"></i>Addresses
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/orders.php" class="list-group-item list-group-item-action">
-                            <i class="fas fa-shopping-bag me-2"></i>Orders
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/logout.php" class="list-group-item list-group-item-action text-danger">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                        </a>
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Sidebar -->
+            <div class="md:col-span-1">
+                <div class="bg-white rounded-2xl shadow-md p-6 sticky top-24">
+                    <div class="text-center mb-6">
+                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['user_name']); ?>&background=f84183&color=fff&size=128" 
+                             class="w-24 h-24 rounded-full mx-auto mb-3" alt="Profile">
+                        <h5 class="font-bold text-gray-900 mb-1"><?php echo e($_SESSION['user_name']); ?></h5>
+                        <p class="text-gray-500 text-sm"><?php echo e($_SESSION['user_email']); ?></p>
                     </div>
+                    <nav class="space-y-2">
+                        <a href="<?php echo BASE_URL; ?>user/profile.php" class="flex items-center px-4 py-2 rounded-lg bg-primary-50 text-primary-600 font-medium">
+                            <i class="fas fa-user mr-3"></i>Profile
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>user/addresses.php" class="flex items-center px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                            <i class="fas fa-map-marker-alt mr-3"></i>Addresses
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>user/orders.php" class="flex items-center px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                            <i class="fas fa-shopping-bag mr-3"></i>Orders
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>user/logout.php" class="flex items-center px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition">
+                            <i class="fas fa-sign-out-alt mr-3"></i>Logout
+                        </a>
+                    </nav>
                 </div>
             </div>
-        </div>
-        
-        <!-- Profile Form -->
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-body p-4">
-                    <h4 class="fw-bold mb-4">Edit Profile</h4>
+            
+            <!-- Profile Form -->
+            <div class="md:col-span-3">
+                <div class="bg-white rounded-2xl shadow-md p-6 md:p-8">
+                    <h4 class="text-2xl font-bold text-gray-900 mb-6">Edit Profile</h4>
                     
                     <?php if (!empty($errors)): ?>
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+                        <ul class="mb-0 list-disc list-inside">
                             <?php foreach ($errors as $error): ?>
                             <li><?php echo e($error); ?></li>
                             <?php endforeach; ?>
@@ -143,68 +142,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <?php endif; ?>
                     
-                    <form action="<?php echo BASE_URL; ?>user/profile.php" method="POST" id="profileForm">
-                        <h6 class="fw-bold text-primary mb-3">Personal Information</h6>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label">Full Name *</label>
-                                <input type="text" name="name" class="form-control" required
-                                       value="<?php echo e($_POST['name'] ?? $user['name'] ?? ''); ?>">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Email Address *</label>
-                                <input type="email" name="email" class="form-control" required
-                                       value="<?php echo e($_POST['email'] ?? $user['email'] ?? ''); ?>">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Mobile Number *</label>
-                                <input type="tel" name="mobile" class="form-control" required
-                                       pattern="[0-9]{10}" maxlength="10"
-                                       value="<?php echo e($_POST['mobile'] ?? $user['mobile'] ?? ''); ?>">
-                            </div>
-                        </div>
-                        
-                        <h6 class="fw-bold text-primary mb-3">Address Information</h6>
-                        <div class="row g-3 mb-4">
-                            <div class="col-12">
-                                <label class="form-label">Address</label>
-                                <textarea name="address" class="form-control" rows="3"><?php echo e($_POST['address'] ?? $user['address'] ?? ''); ?></textarea>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">City</label>
-                                <input type="text" name="city" class="form-control"
-                                       value="<?php echo e($_POST['city'] ?? $user['city'] ?? ''); ?>">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">State</label>
-                                <input type="text" name="state" class="form-control"
-                                       value="<?php echo e($_POST['state'] ?? $user['state'] ?? ''); ?>">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Pincode</label>
-                                <input type="text" name="pincode" class="form-control" maxlength="6"
-                                       value="<?php echo e($_POST['pincode'] ?? $user['pincode'] ?? ''); ?>">
+                    <form action="<?php echo BASE_URL; ?>user/profile.php" method="POST" id="profileForm" class="space-y-6">
+                        <div>
+                            <h6 class="font-bold text-primary-500 mb-4">Personal Information</h6>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                                    <input type="text" name="name" required
+                                           value="<?php echo e($_POST['name'] ?? $user['name'] ?? ''); ?>"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                                    <input type="email" name="email" required
+                                           value="<?php echo e($_POST['email'] ?? $user['email'] ?? ''); ?>"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
+                                    <input type="tel" name="mobile" required
+                                           pattern="[0-9]{10}" maxlength="10"
+                                           value="<?php echo e($_POST['mobile'] ?? $user['mobile'] ?? ''); ?>"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                </div>
                             </div>
                         </div>
                         
-                        <h6 class="fw-bold text-primary mb-3">Change Password</h6>
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-4">
-                                <label class="form-label">Current Password</label>
-                                <input type="password" name="current_password" class="form-control">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">New Password</label>
-                                <input type="password" name="new_password" class="form-control" minlength="6">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Confirm New Password</label>
-                                <input type="password" name="confirm_new_password" class="form-control">
+                        <div class="border-t border-gray-200 pt-6">
+                            <h6 class="font-bold text-primary-500 mb-4">Address Information</h6>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                                    <textarea name="address" rows="3"
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"><?php echo e($_POST['address'] ?? $user['address'] ?? ''); ?></textarea>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                        <input type="text" name="city"
+                                               value="<?php echo e($_POST['city'] ?? $user['city'] ?? ''); ?>"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                        <input type="text" name="state"
+                                               value="<?php echo e($_POST['state'] ?? $user['state'] ?? ''); ?>"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
+                                        <input type="text" name="pincode" maxlength="6"
+                                               value="<?php echo e($_POST['pincode'] ?? $user['pincode'] ?? ''); ?>"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Save Changes
+                        <div class="border-t border-gray-200 pt-6">
+                            <h6 class="font-bold text-primary-500 mb-4">Change Password</h6>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                                    <input type="password" name="current_password"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                                    <input type="password" name="new_password" minlength="6"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                                    <input type="password" name="confirm_new_password"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-full transition shadow-lg hover:shadow-xl inline-flex items-center">
+                            <i class="fas fa-save mr-2"></i>Save Changes
                         </button>
                     </form>
                 </div>

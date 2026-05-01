@@ -122,140 +122,145 @@ try {
 }
 ?>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="min-h-screen bg-gray-100">
+    <div class="flex">
         <!-- Admin Sidebar -->
-        <div class="col-md-2 d-none d-md-block admin-sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/index.php">
-                    <i class="fas fa-tachometer-alt"></i>Dashboard
+        <div class="hidden md:flex flex-col w-64 bg-gray-900 text-white min-h-screen">
+            <div class="p-6">
+                <h3 class="text-xl font-bold">Admin Panel</h3>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="<?php echo BASE_URL; ?>admin/index.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tachometer-alt w-6"></i>Dashboard
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_products.php">
-                    <i class="fas fa-box"></i>Products
+                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-box w-6"></i>Products
                 </a>
-                <a class="nav-link active" href="<?php echo BASE_URL; ?>admin/manage_categories.php">
-                    <i class="fas fa-tags"></i>Categories
+                <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="flex items-center px-4 py-3 bg-primary-500 rounded-lg text-white">
+                    <i class="fas fa-tags w-6"></i>Categories
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php">
-                    <i class="fas fa-shopping-cart"></i>Orders
+                <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-shopping-cart w-6"></i>Orders
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_coupons.php">
-                    <i class="fas fa-ticket-alt"></i>Coupons
+                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-ticket-alt w-6"></i>Coupons
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_users.php">
-                    <i class="fas fa-users"></i>Users
+                <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-users w-6"></i>Users
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/contact_messages.php">
-                    <i class="fas fa-envelope"></i>Messages
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>">
-                    <i class="fas fa-arrow-left"></i>Back to Site
+                <a href="<?php echo BASE_URL; ?>admin/contact_messages.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-envelope w-6"></i>Messages
                 </a>
             </nav>
+            <div class="p-4">
+                <a href="<?php echo BASE_URL; ?>" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-arrow-left w-6"></i>Back to Site
+                </a>
+            </div>
         </div>
         
         <!-- Main Content -->
-        <div class="col-md-10 p-4">
-            <h2 class="fw-bold mb-4">Manage Categories</h2>
+        <div class="flex-1 p-6 md:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Manage Categories</h2>
             
-            <div class="row">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Category Form -->
-                <div class="col-lg-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold mb-4">
-                                <?php echo $editCategory ? 'Edit Category' : 'Add New Category'; ?>
-                            </h5>
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h5 class="font-bold text-gray-900 mb-4">
+                            <?php echo $editCategory ? 'Edit Category' : 'Add New Category'; ?>
+                        </h5>
+                        
+                        <form action="<?php echo BASE_URL; ?>admin/manage_categories.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+                            <input type="hidden" name="form_action" value="<?php echo $editCategory ? 'edit' : 'add'; ?>">
+                            <?php if ($editCategory): ?>
+                            <input type="hidden" name="category_id" value="<?php echo $editCategory['id']; ?>">
+                            <input type="hidden" name="existing_image" value="<?php echo $editCategory['image']; ?>">
+                            <?php endif; ?>
                             
-                            <form action="<?php echo BASE_URL; ?>admin/manage_categories.php" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="form_action" value="<?php echo $editCategory ? 'edit' : 'add'; ?>">
-                                <?php if ($editCategory): ?>
-                                <input type="hidden" name="category_id" value="<?php echo $editCategory['id']; ?>">
-                                <input type="hidden" name="existing_image" value="<?php echo $editCategory['image']; ?>">
-                                <?php endif; ?>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Category Name *</label>
-                                    <input type="text" name="name" class="form-control" required
-                                           value="<?php echo $editCategory ? e($editCategory['name']) : ''; ?>">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Category Name *</label>
+                                <input type="text" name="name" required
+                                       value="<?php echo $editCategory ? e($editCategory['name']) : ''; ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Category Image</label>
+                                <?php if ($editCategory && $editCategory['image']): ?>
+                                <div class="mb-2">
+                                    <img src="<?php echo getImageUrl($editCategory['image'], 'categories'); ?>" class="w-20 h-20 rounded-lg object-cover" alt="">
                                 </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Category Image</label>
-                                    <?php if ($editCategory && $editCategory['image']): ?>
-                                    <div class="mb-2">
-                                        <img src="<?php echo getImageUrl($editCategory['image'], 'categories'); ?>" width="80" class="rounded" alt="">
-                                    </div>
-                                    <?php endif; ?>
-                                    <input type="file" name="image" class="form-control" accept="image/jpeg,image/png,image/webp">
-                                    <small class="text-muted">Max 2MB (JPG, PNG, WEBP)</small>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="fas fa-save me-2"></i>
-                                    <?php echo $editCategory ? 'Update Category' : 'Add Category'; ?>
-                                </button>
-                                
-                                <?php if ($editCategory): ?>
-                                <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="btn btn-outline-secondary w-100 mt-2">
-                                    Cancel
-                                </a>
                                 <?php endif; ?>
-                            </form>
-                        </div>
+                                <input type="file" name="image" accept="image/jpeg,image/png,image/webp"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                <p class="text-xs text-gray-500 mt-1">Max 2MB (JPG, PNG, WEBP)</p>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-full transition shadow-lg hover:shadow-xl">
+                                <i class="fas fa-save mr-2"></i>
+                                <?php echo $editCategory ? 'Update Category' : 'Add Category'; ?>
+                            </button>
+                            
+                            <?php if ($editCategory): ?>
+                            <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="block w-full text-center border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-medium py-3 rounded-full transition">
+                                Cancel
+                            </a>
+                            <?php endif; ?>
+                        </form>
                     </div>
                 </div>
                 
                 <!-- Categories List -->
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold mb-4">Categories List</h5>
-                            
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead class="bg-light">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Image</th>
-                                            <th>Name</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($categories as $category): ?>
-                                        <tr>
-                                            <td><?php echo $category['id']; ?></td>
-                                            <td>
-                                                <?php if ($category['image']): ?>
-                                                <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" width="50" height="50" class="rounded" alt="">
-                                                <?php else: ?>
-                                                <span class="text-muted">No image</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td><?php echo e($category['name']); ?></td>
-                                            <td>
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h5 class="font-bold text-gray-900 mb-4">Categories List</h5>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">ID</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Image</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <?php foreach ($categories as $category): ?>
+                                    <tr>
+                                        <td class="px-4 py-3 text-sm"><?php echo $category['id']; ?></td>
+                                        <td class="px-4 py-3">
+                                            <?php if ($category['image']): ?>
+                                            <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" class="w-12 h-12 rounded-lg object-cover" alt="">
+                                            <?php else: ?>
+                                            <span class="text-gray-500 text-sm">No image</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm font-medium text-gray-900"><?php echo e($category['name']); ?></td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex gap-2">
                                                 <a href="<?php echo BASE_URL; ?>admin/manage_categories.php?edit=<?php echo $category['id']; ?>" 
-                                                   class="btn btn-sm btn-outline-primary me-1">
+                                                   class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-1 px-2 rounded-lg transition text-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <a href="<?php echo BASE_URL; ?>admin/manage_categories.php?delete=<?php echo $category['id']; ?>" 
-                                                   class="btn btn-sm btn-outline-danger"
+                                                   class="inline-flex items-center border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-medium py-1 px-2 rounded-lg transition text-sm"
                                                    onclick="return confirm('Delete this category?')">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
-                                            </td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                        
-                                        <?php if (empty($categories)): ?>
-                                        <tr>
-                                            <td colspan="4" class="text-center py-4">No categories found</td>
-                                        </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                    
+                                    <?php if (empty($categories)): ?>
+                                    <tr>
+                                        <td colspan="4" class="px-4 py-8 text-center text-gray-500">No categories found</td>
+                                    </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

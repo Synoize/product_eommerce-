@@ -169,155 +169,156 @@ $total = $subtotal - $discount;
 ?>
 
 <!-- Page Header -->
-<section class="bg-primary-light py-4">
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="<?php echo BASE_URL; ?>">Home</a></li>
-                <li class="breadcrumb-item active">Shopping Cart</li>
+<section class="bg-gradient-to-r from-pink-50 to-purple-50 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="text-sm text-gray-600 mb-2">
+            <ol class="flex items-center space-x-2">
+                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary-500">Home</a></li>
+                <li><i class="fas fa-chevron-right text-xs"></i></li>
+                <li class="text-primary-500 font-medium">Shopping Cart</li>
             </ol>
         </nav>
-        <h1 class="fw-bold mt-2">Shopping Cart</h1>
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Shopping Cart</h1>
     </div>
 </section>
 
 <!-- Cart Content -->
-<section class="py-5">
-    <div class="container">
+<section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <?php if (empty($_SESSION['cart'])): ?>
         <!-- Empty Cart -->
-        <div class="text-center py-5">
-            <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
-            <h3>Your cart is empty</h3>
-            <p class="text-muted">Looks like you haven't added any products yet.</p>
-            <a href="<?php echo BASE_URL; ?>shop.php" class="btn btn-primary btn-lg">
-                <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+        <div class="text-center py-16">
+            <i class="fas fa-shopping-cart text-7xl text-gray-300 mb-6"></i>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h3>
+            <p class="text-gray-500 mb-6">Looks like you haven't added any products yet.</p>
+            <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-full transition shadow-lg hover:shadow-xl">
+                <i class="fas fa-shopping-bag mr-2"></i>Continue Shopping
             </a>
         </div>
         <?php else: ?>
-        <div class="row">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Cart Items -->
-            <div class="col-lg-8">
+            <div class="lg:col-span-2">
                 <!-- Clear Cart Button -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <p class="text-muted mb-0"><?php echo count($_SESSION['cart']); ?> item(s) in cart</p>
-                    <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="d-inline">
+                <div class="flex justify-between items-center mb-6">
+                    <p class="text-gray-500"><?php echo count($_SESSION['cart']); ?> item(s) in cart</p>
+                    <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
                         <input type="hidden" name="action" value="clear">
-                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Clear your cart?')">
-                            <i class="fas fa-trash me-2"></i>Clear Cart
+                        <button type="submit" class="text-red-500 hover:text-red-600 text-sm font-medium" onclick="return confirm('Clear your cart?')">
+                            <i class="fas fa-trash mr-1"></i>Clear Cart
                         </button>
                     </form>
                 </div>
                 
                 <!-- Cart Items List -->
-                <?php foreach ($_SESSION['cart'] as $productId => $item): ?>
-                <div class="cart-item">
-                    <div class="row align-items-center">
-                        <div class="col-3 col-md-2">
-                            <?php 
-                            $imageUrl = getImageUrl($item['image'], 'products');
-                            ?>
-                            <img src="<?php echo $imageUrl; ?>" alt="<?php echo e($item['name']); ?>">
+                <div class="space-y-4 mb-8">
+                    <?php foreach ($_SESSION['cart'] as $productId => $item): ?>
+                    <div class="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
+                        <div class="w-20 h-20 flex-shrink-0">
+                            <?php $imageUrl = getImageUrl($item['image'], 'products'); ?>
+                            <img src="<?php echo $imageUrl; ?>" alt="<?php echo e($item['name']); ?>" class="w-full h-full object-cover rounded-lg">
                         </div>
-                        <div class="col-9 col-md-4">
-                            <h5 class="fw-bold mb-1"><?php echo e($item['name']); ?></h5>
-                            <p class="text-muted mb-0"><?php echo formatCurrency($item['price']); ?></p>
-                            <p class="text-muted small mb-0">Stock: <?php echo $item['stock']; ?> available</p>
+                        <div class="flex-grow min-w-0">
+                            <h5 class="font-semibold text-gray-900 truncate"><?php echo e($item['name']); ?></h5>
+                            <p class="text-gray-500 text-sm"><?php echo formatCurrency($item['price']); ?></p>
+                            <p class="text-gray-400 text-xs">Stock: <?php echo $item['stock']; ?> available</p>
                         </div>
-                        <div class="col-6 col-md-3 mt-3 mt-md-0">
-                            <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
+                        <div class="flex items-center gap-2">
+                            <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="flex items-center">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
-                                <div class="quantity-control">
-                                    <button type="button" onclick="this.parentElement.querySelector('input').stepDown(); this.form.submit();">-</button>
-                                    <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stock']; ?>" onchange="this.form.submit()">
-                                    <button type="button" onclick="this.parentElement.querySelector('input').stepUp(); this.form.submit();">+</button>
-                                </div>
+                                <button type="button" onclick="this.parentElement.querySelector('input').stepDown(); this.form.submit();" 
+                                        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition">-</button>
+                                <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stock']; ?>" onchange="this.form.submit()"
+                                       class="w-12 text-center text-sm font-medium">
+                                <button type="button" onclick="this.parentElement.querySelector('input').stepUp(); this.form.submit();"
+                                        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition">+</button>
                             </form>
                         </div>
-                        <div class="col-6 col-md-2 mt-3 mt-md-0 text-end">
-                            <p class="fw-bold mb-0"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></p>
+                        <div class="text-right min-w-[80px]">
+                            <p class="font-bold text-gray-900"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></p>
                         </div>
-                        <div class="col-12 col-md-1 mt-3 mt-md-0 text-end">
-                            <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="d-inline">
+                        <div>
+                            <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
                                 <input type="hidden" name="action" value="remove">
                                 <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
-                                <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('Remove this item?')">
-                                    <i class="fas fa-times fa-lg"></i>
+                                <button type="submit" class="text-gray-400 hover:text-red-500 transition" onclick="return confirm('Remove this item?')">
+                                    <i class="fas fa-times text-lg"></i>
                                 </button>
                             </form>
                         </div>
                     </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
                 
                 <!-- Continue Shopping -->
-                <a href="<?php echo BASE_URL; ?>shop.php" class="btn btn-outline-primary">
-                    <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-3 px-6 rounded-full transition">
+                    <i class="fas fa-arrow-left mr-2"></i>Continue Shopping
                 </a>
             </div>
             
             <!-- Cart Summary -->
-            <div class="col-lg-4 mt-4 mt-lg-0">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold mb-4">Order Summary</h5>
-                        
-                        <!-- Coupon Section -->
-                        <?php if (!isset($_SESSION['coupon'])): ?>
-                        <div class="coupon-section mb-4">
-                            <p class="fw-bold mb-2"><i class="fas fa-tag me-2"></i>Have a coupon?</p>
-                            <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
-                                <input type="hidden" name="action" value="apply_coupon">
-                                <div class="input-group">
-                                    <input type="text" name="coupon_code" class="form-control" placeholder="Enter coupon code" required>
-                                    <button type="submit" class="btn btn-primary">Apply</button>
-                                </div>
-                            </form>
-                        </div>
-                        <?php else: ?>
-                        <div class="mb-4">
-                            <div class="coupon-applied mb-2">
-                                <i class="fas fa-check-circle"></i>
-                                <span>Coupon: <strong><?php echo e($_SESSION['coupon']['code']); ?></strong></span>
+            <div>
+                <div class="bg-white rounded-2xl shadow-md p-6 sticky top-24">
+                    <h5 class="text-xl font-bold text-gray-900 mb-6">Order Summary</h5>
+                    
+                    <!-- Coupon Section -->
+                    <?php if (!isset($_SESSION['coupon'])): ?>
+                    <div class="mb-6">
+                        <p class="font-semibold text-gray-700 mb-3"><i class="fas fa-tag mr-2 text-primary-500"></i>Have a coupon?</p>
+                        <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
+                            <input type="hidden" name="action" value="apply_coupon">
+                            <div class="flex">
+                                <input type="text" name="coupon_code" placeholder="Enter coupon code" required
+                                       class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-medium px-4 py-2 rounded-r-lg transition">Apply</button>
                             </div>
-                            <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="d-inline">
-                                <input type="hidden" name="action" value="remove_coupon">
-                                <button type="submit" class="btn btn-link text-danger p-0">Remove coupon</button>
-                            </form>
+                        </form>
+                    </div>
+                    <?php else: ?>
+                    <div class="mb-6">
+                        <div class="flex items-center gap-2 text-green-600 mb-2">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="font-medium">Coupon: <strong><?php echo e($_SESSION['coupon']['code']); ?></strong></span>
                         </div>
-                        <?php endif; ?>
-                        
-                        <!-- Price Breakdown -->
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Subtotal</span>
-                            <span><?php echo formatCurrency($subtotal); ?></span>
+                        <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
+                            <input type="hidden" name="action" value="remove_coupon">
+                            <button type="submit" class="text-red-500 hover:text-red-600 text-sm">Remove coupon</button>
+                        </form>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <!-- Price Breakdown -->
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Subtotal</span>
+                            <span class="font-medium"><?php echo formatCurrency($subtotal); ?></span>
                         </div>
                         
                         <?php if ($discount > 0): ?>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Discount</span>
-                            <span class="text-success">-<?php echo formatCurrency($discount); ?></span>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Discount</span>
+                            <span class="text-green-600 font-medium">-<?php echo formatCurrency($discount); ?></span>
                         </div>
                         <?php endif; ?>
                         
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Shipping</span>
-                            <span class="text-success">Free</span>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Shipping</span>
+                            <span class="text-green-600 font-medium">Free</span>
                         </div>
-                        
-                        <hr>
-                        
-                        <div class="d-flex justify-content-between mb-4">
-                            <span class="fw-bold">Total</span>
-                            <span class="fw-bold fs-5 text-primary"><?php echo formatCurrency($total); ?></span>
-                        </div>
-                        
-                        <!-- Checkout Button -->
-                        <a href="<?php echo BASE_URL; ?>checkout.php" class="btn btn-primary w-100 btn-lg">
-                            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
-                        </a>
                     </div>
+                    
+                    <div class="border-t border-gray-200 pt-4 mb-6">
+                        <div class="flex justify-between">
+                            <span class="font-bold text-gray-900">Total</span>
+                            <span class="font-bold text-xl text-primary-500"><?php echo formatCurrency($total); ?></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Checkout Button -->
+                    <a href="<?php echo BASE_URL; ?>checkout.php" class="block w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-6 rounded-full text-center transition shadow-lg hover:shadow-xl">
+                        <i class="fas fa-credit-card mr-2"></i>Proceed to Checkout
+                    </a>
                 </div>
             </div>
         </div>

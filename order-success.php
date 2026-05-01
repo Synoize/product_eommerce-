@@ -43,93 +43,89 @@ try {
 unset($_SESSION['last_order_id']);
 ?>
 
-<section class="py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card shadow">
-                    <div class="card-body p-5 text-center">
-                        <!-- Success Icon -->
-                        <div class="mb-4">
-                            <i class="fas fa-check-circle fa-5x text-success"></i>
-                        </div>
-                        
-                        <h2 class="fw-bold mb-3">Order Placed Successfully!</h2>
-                        <p class="text-muted mb-4">Thank you for your purchase. Your order has been confirmed.</p>
-                        
-                        <!-- Order Details -->
-                        <div class="bg-light p-4 rounded mb-4">
-                            <div class="row">
-                                <div class="col-sm-6 text-start mb-3 mb-sm-0">
-                                    <p class="text-muted mb-1">Order Number</p>
-                                    <p class="fw-bold fs-5 mb-0">#<?php echo $orderId; ?></p>
-                                </div>
-                                <div class="col-sm-6 text-start text-sm-end">
-                                    <p class="text-muted mb-1">Order Total</p>
-                                    <p class="fw-bold fs-5 text-primary mb-0"><?php echo formatCurrency($order['total_amount']); ?></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Order Summary -->
-                        <div class="text-start mb-4">
-                            <h5 class="fw-bold mb-3">Order Summary</h5>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <tbody>
-                                        <?php foreach ($orderItems as $item): ?>
-                                        <tr>
-                                            <td><?php echo e($item['product_name']); ?> (x<?php echo $item['quantity']; ?>)</td>
-                                            <td class="text-end"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                        <?php if ($order['discount_amount'] > 0): ?>
-                                        <tr>
-                                            <td class="text-success">Discount</td>
-                                            <td class="text-end text-success">-<?php echo formatCurrency($order['discount_amount']); ?></td>
-                                        </tr>
-                                        <?php endif; ?>
-                                        <tr class="fw-bold">
-                                            <td>Total</td>
-                                            <td class="text-end"><?php echo formatCurrency($order['total_amount']); ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
-                        <!-- Shipping Info -->
-                        <div class="text-start mb-4">
-                            <h5 class="fw-bold mb-3">Shipping Information</h5>
-                            <p class="mb-1"><strong><?php echo e($order['name']); ?></strong></p>
-                            <p class="text-muted mb-1"><?php echo e($order['address']); ?></p>
-                            <p class="text-muted mb-1"><?php echo e($order['city']); ?>, <?php echo e($order['state']); ?> - <?php echo e($order['pincode']); ?></p>
-                            <p class="text-muted mb-0">Mobile: <?php echo e($order['mobile']); ?></p>
-                        </div>
-                        
-                        <!-- Payment Info -->
-                        <div class="text-start mb-4">
-                            <h5 class="fw-bold mb-3">Payment Information</h5>
-                            <p class="mb-1">Payment Method: <strong><?php echo ucfirst(e($order['payment_method'])); ?></strong></p>
-                            <p class="mb-1">Payment Status: 
-                                <span class="badge bg-success"><?php echo ucfirst(e($order['payment_status'])); ?></span>
-                            </p>
-                            <?php if ($order['razorpay_payment_id']): ?>
-                            <p class="mb-0 text-muted small">Payment ID: <?php echo e($order['razorpay_payment_id']); ?></p>
-                            <?php endif; ?>
-                        </div>
-                        
-                        <!-- Action Buttons -->
-                        <div class="d-flex justify-content-center gap-3">
-                            <a href="<?php echo BASE_URL; ?>user/orders.php" class="btn btn-primary">
-                                <i class="fas fa-box me-2"></i>View My Orders
-                            </a>
-                            <a href="<?php echo BASE_URL; ?>shop.php" class="btn btn-outline-primary">
-                                <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
-                            </a>
-                        </div>
+<section class="py-12 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 text-center">
+            <!-- Success Icon -->
+            <div class="mb-6">
+                <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <i class="fas fa-check-circle text-6xl text-green-500"></i>
+                </div>
+            </div>
+            
+            <h2 class="text-3xl font-bold text-gray-900 mb-3">Order Placed Successfully!</h2>
+            <p class="text-gray-500 mb-8">Thank you for your purchase. Your order has been confirmed.</p>
+            
+            <!-- Order Details -->
+            <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+                    <div>
+                        <p class="text-gray-500 text-sm mb-1">Order Number</p>
+                        <p class="font-bold text-xl text-gray-900">#<?php echo $orderId; ?></p>
+                    </div>
+                    <div class="sm:text-right">
+                        <p class="text-gray-500 text-sm mb-1">Order Total</p>
+                        <p class="font-bold text-xl text-primary-500"><?php echo formatCurrency($order['total_amount']); ?></p>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="text-left mb-8">
+                <h5 class="font-bold text-gray-900 mb-4">Order Summary</h5>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <tbody class="divide-y divide-gray-200">
+                            <?php foreach ($orderItems as $item): ?>
+                            <tr>
+                                <td class="py-3"><?php echo e($item['product_name']); ?> (x<?php echo $item['quantity']; ?>)</td>
+                                <td class="py-3 text-right font-medium"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php if ($order['discount_amount'] > 0): ?>
+                            <tr>
+                                <td class="py-3 text-green-600">Discount</td>
+                                <td class="py-3 text-right text-green-600 font-medium">-<?php echo formatCurrency($order['discount_amount']); ?></td>
+                            </tr>
+                            <?php endif; ?>
+                            <tr class="font-bold">
+                                <td class="py-3">Total</td>
+                                <td class="py-3 text-right text-primary-500"><?php echo formatCurrency($order['total_amount']); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Shipping Info -->
+            <div class="text-left mb-8">
+                <h5 class="font-bold text-gray-900 mb-4">Shipping Information</h5>
+                <p class="font-medium text-gray-900 mb-1"><?php echo e($order['name']); ?></p>
+                <p class="text-gray-600 text-sm mb-1"><?php echo e($order['address']); ?></p>
+                <p class="text-gray-600 text-sm mb-1"><?php echo e($order['city']); ?>, <?php echo e($order['state']); ?> - <?php echo e($order['pincode']); ?></p>
+                <p class="text-gray-600 text-sm">Mobile: <?php echo e($order['mobile']); ?></p>
+            </div>
+            
+            <!-- Payment Info -->
+            <div class="text-left mb-8">
+                <h5 class="font-bold text-gray-900 mb-4">Payment Information</h5>
+                <p class="text-gray-600 mb-1">Payment Method: <span class="font-medium text-gray-900"><?php echo ucfirst(e($order['payment_method'])); ?></span></p>
+                <p class="text-gray-600 mb-1">Payment Status: 
+                    <span class="inline-block bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium"><?php echo ucfirst(e($order['payment_status'])); ?></span>
+                </p>
+                <?php if ($order['razorpay_payment_id']): ?>
+                <p class="text-gray-400 text-xs">Payment ID: <?php echo e($order['razorpay_payment_id']); ?></p>
+                <?php endif; ?>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="<?php echo BASE_URL; ?>user/orders.php" class="inline-flex items-center justify-center bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl">
+                    <i class="fas fa-box mr-2"></i>View My Orders
+                </a>
+                <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center justify-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-semibold py-3 px-6 rounded-full transition">
+                    <i class="fas fa-shopping-bag mr-2"></i>Continue Shopping
+                </a>
             </div>
         </div>
     </div>

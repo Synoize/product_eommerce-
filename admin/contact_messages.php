@@ -29,89 +29,91 @@ if (isset($tableExists) && $tableExists === false) {
 }
 ?>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="min-h-screen bg-gray-100">
+    <div class="flex">
         <!-- Admin Sidebar -->
-        <div class="col-md-2 d-none d-md-block admin-sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/index.php">
-                    <i class="fas fa-tachometer-alt"></i>Dashboard
+        <div class="hidden md:flex flex-col w-64 bg-gray-900 text-white min-h-screen">
+            <div class="p-6">
+                <h3 class="text-xl font-bold">Admin Panel</h3>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="<?php echo BASE_URL; ?>admin/index.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tachometer-alt w-6"></i>Dashboard
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_products.php">
-                    <i class="fas fa-box"></i>Products
+                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-box w-6"></i>Products
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_categories.php">
-                    <i class="fas fa-tags"></i>Categories
+                <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tags w-6"></i>Categories
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php">
-                    <i class="fas fa-shopping-cart"></i>Orders
+                <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-shopping-cart w-6"></i>Orders
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_coupons.php">
-                    <i class="fas fa-ticket-alt"></i>Coupons
+                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-ticket-alt w-6"></i>Coupons
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_users.php">
-                    <i class="fas fa-users"></i>Users
+                <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-users w-6"></i>Users
                 </a>
-                <a class="nav-link active" href="<?php echo BASE_URL; ?>admin/contact_messages.php">
-                    <i class="fas fa-envelope"></i>Messages
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>">
-                    <i class="fas fa-arrow-left"></i>Back to Site
+                <a href="<?php echo BASE_URL; ?>admin/contact_messages.php" class="flex items-center px-4 py-3 bg-primary-500 rounded-lg text-white">
+                    <i class="fas fa-envelope w-6"></i>Messages
                 </a>
             </nav>
+            <div class="p-4">
+                <a href="<?php echo BASE_URL; ?>" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-arrow-left w-6"></i>Back to Site
+                </a>
+            </div>
         </div>
         
         <!-- Main Content -->
-        <div class="col-md-10 p-4">
-            <h2 class="fw-bold mb-4">Contact Messages</h2>
+        <div class="flex-1 p-6 md:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Contact Messages</h2>
             
             <?php if (isset($tableExists) && $tableExists === false): ?>
-            <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle me-2"></i>
+            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg mb-6 flex items-center">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
                 The contact_messages table doesn't exist yet. Please run the database setup SQL to create it.
             </div>
             <?php endif; ?>
             
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Message</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($messages as $message): ?>
-                                <tr>
-                                    <td><?php echo $message['id']; ?></td>
-                                    <td><strong><?php echo e($message['name']); ?></strong></td>
-                                    <td>
-                                        <div><?php echo e($message['email']); ?></div>
-                                        <small class="text-muted"><?php echo e($message['phone']); ?></small>
-                                    </td>
-                                    <td>
-                                        <div style="max-width: 400px;" class="text-truncate" 
-                                             title="<?php echo e($message['message']); ?>">
-                                            <?php echo e($message['message']); ?>
-                                        </div>
-                                    </td>
-                                    <td><?php echo date('M d, Y H:i', strtotime($message['created_at'])); ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                                
-                                <?php if (empty($messages)): ?>
-                                <tr>
-                                    <td colspan="5" class="text-center py-4">No messages yet</td>
-                                </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">ID</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Contact</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Message</th>
+                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <?php foreach ($messages as $message): ?>
+                            <tr>
+                                <td class="px-4 py-3 text-sm"><?php echo $message['id']; ?></td>
+                                <td class="px-4 py-3 text-sm font-medium text-gray-900"><?php echo e($message['name']); ?></td>
+                                <td class="px-4 py-3">
+                                    <div class="text-sm text-gray-900"><?php echo e($message['email']); ?></div>
+                                    <div class="text-sm text-gray-500"><?php echo e($message['phone']); ?></div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="max-w-xs truncate text-sm text-gray-600" title="<?php echo e($message['message']); ?>">
+                                        <?php echo e($message['message']); ?>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-500"><?php echo date('M d, Y H:i', strtotime($message['created_at'])); ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            
+                            <?php if (empty($messages)): ?>
+                            <tr>
+                                <td colspan="5" class="px-4 py-8 text-center text-gray-500">No messages yet</td>
+                            </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

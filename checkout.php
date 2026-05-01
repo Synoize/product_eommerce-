@@ -139,25 +139,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!-- Page Header -->
-<section class="bg-primary-light py-4">
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="<?php echo BASE_URL; ?>">Home</a></li>
-                <li class="breadcrumb-item"><a href="<?php echo BASE_URL; ?>cart.php">Cart</a></li>
-                <li class="breadcrumb-item active">Checkout</li>
+<section class="bg-gradient-to-r from-pink-50 to-purple-50 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="text-sm text-gray-600 mb-2">
+            <ol class="flex items-center space-x-2">
+                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary-500">Home</a></li>
+                <li><i class="fas fa-chevron-right text-xs"></i></li>
+                <li><a href="<?php echo BASE_URL; ?>cart.php" class="hover:text-primary-500">Cart</a></li>
+                <li><i class="fas fa-chevron-right text-xs"></i></li>
+                <li class="text-primary-500 font-medium">Checkout</li>
             </ol>
         </nav>
-        <h1 class="fw-bold mt-2">Checkout</h1>
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Checkout</h1>
     </div>
 </section>
 
 <!-- Checkout Content -->
-<section class="py-5">
-    <div class="container">
+<section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <?php if (!empty($errors)): ?>
-        <div class="alert alert-danger">
-            <ul class="mb-0">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
+            <ul class="mb-0 list-disc list-inside">
                 <?php foreach ($errors as $error): ?>
                 <li><?php echo e($error); ?></li>
                 <?php endforeach; ?>
@@ -165,114 +167,117 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <?php endif; ?>
         
-        <div class="row">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Checkout Form -->
-            <div class="col-lg-8">
-                <div class="checkout-section">
-                    <h4 class="fw-bold mb-4">Billing & Shipping Information</h4>
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-md p-6 md:p-8">
+                    <h4 class="text-xl font-bold text-gray-900 mb-6">Billing & Shipping Information</h4>
                     
                     <?php if (isset($showPayment) && $showPayment): ?>
                     <!-- Razorpay Payment Button -->
-                    <div class="text-center py-4">
-                        <h5 class="mb-3">Complete Your Payment</h5>
-                        <p class="text-muted mb-4">Order Total: <strong class="text-primary fs-4"><?php echo formatCurrency($total); ?></strong></p>
+                    <div class="text-center py-8">
+                        <h5 class="text-lg font-semibold text-gray-900 mb-3">Complete Your Payment</h5>
+                        <p class="text-gray-500 mb-6">Order Total: <strong class="text-primary-500 text-2xl"><?php echo formatCurrency($total); ?></strong></p>
                         
-                        <button id="rzp-button" class="btn btn-primary btn-lg">
-                            <i class="fas fa-credit-card me-2"></i>Pay Now with Razorpay
+                        <button id="rzp-button" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-full transition shadow-lg hover:shadow-xl">
+                            <i class="fas fa-credit-card mr-2"></i>Pay Now with Razorpay
                         </button>
                         
-                        <div id="payment-loading" class="d-none mt-3">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <p class="mt-2 text-muted">Processing payment...</p>
+                        <div id="payment-loading" class="hidden mt-6">
+                            <div class="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                            <p class="mt-3 text-gray-500">Processing payment...</p>
                         </div>
                     </div>
                     <?php else: ?>
                     
                     <!-- Saved Addresses Selection -->
                     <?php if (!empty($savedAddresses)): ?>
-                    <div class="mb-4">
-                        <h5 class="fw-bold mb-3">Select Delivery Address</h5>
-                        <div class="row">
+                    <div class="mb-8">
+                        <h5 class="font-semibold text-gray-900 mb-4">Select Delivery Address</h5>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <?php foreach ($savedAddresses as $address): ?>
-                            <div class="col-md-6 mb-3">
-                                <div class="card h-100 <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'border-primary' : ''; ?>">
-                                    <div class="card-body">
-                                        <?php if ($address['is_default']): ?>
-                                        <span class="badge bg-primary mb-2">Default</span>
-                                        <?php endif; ?>
-                                        <h6 class="card-title fw-bold"><?php echo e($address['name']); ?></h6>
-                                        <p class="card-text mb-1"><i class="fas fa-phone me-2"></i><?php echo e($address['mobile']); ?></p>
-                                        <p class="card-text text-muted small"><?php echo e($address['address']); ?>, <?php echo e($address['city']); ?>, <?php echo e($address['state']); ?> - <?php echo e($address['pincode']); ?></p>
-                                        
-                                        <a href="?address_id=<?php echo $address['id']; ?>" 
-                                           class="btn btn-sm <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'btn-primary' : 'btn-outline-primary'; ?>">
-                                            <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'Selected' : 'Select'; ?>
-                                        </a>
-                                    </div>
+                            <div class="relative">
+                                <div class="border-2 rounded-xl p-4 h-full <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'border-primary-500 bg-primary-50' : 'border-gray-200'; ?>">
+                                    <?php if ($address['is_default']): ?>
+                                    <span class="inline-block bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded mb-2">Default</span>
+                                    <?php endif; ?>
+                                    <h6 class="font-semibold text-gray-900 mb-2"><?php echo e($address['name']); ?></h6>
+                                    <p class="text-gray-600 text-sm mb-1"><i class="fas fa-phone mr-2 text-primary-500"></i><?php echo e($address['mobile']); ?></p>
+                                    <p class="text-gray-500 text-sm"><?php echo e($address['address']); ?>, <?php echo e($address['city']); ?>, <?php echo e($address['state']); ?> - <?php echo e($address['pincode']); ?></p>
+                                    
+                                    <a href="?address_id=<?php echo $address['id']; ?>" 
+                                       class="mt-3 inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'bg-primary-500 text-white' : 'border-2 border-primary-500 text-primary-500 hover:bg-primary-50'; ?>">
+                                        <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'Selected' : 'Select'; ?>
+                                    </a>
                                 </div>
                             </div>
                             <?php endforeach; ?>
                         </div>
-                        <a href="<?php echo BASE_URL; ?>user/addresses.php" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-plus me-2"></i>Add New Address
+                        <a href="<?php echo BASE_URL; ?>user/addresses.php" class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-2 px-4 rounded-lg transition text-sm mt-4">
+                            <i class="fas fa-plus mr-2"></i>Add New Address
                         </a>
-                        <hr class="my-4">
+                        <hr class="my-6 border-gray-200">
                     </div>
                     <?php endif; ?>
                     
                     <!-- Checkout Form -->
                     <form action="<?php echo BASE_URL; ?>checkout.php" method="POST" id="checkoutForm" novalidate>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Full Name *</label>
-                                <input type="text" name="name" class="form-control" 
-                                       value="<?php echo e($_POST['name'] ?? $selectedAddress['name'] ?? $user['name'] ?? ''); ?>" required>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                                <input type="text" name="name" required
+                                       value="<?php echo e($_POST['name'] ?? $selectedAddress['name'] ?? $user['name'] ?? ''); ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Email *</label>
-                                <input type="email" name="email" class="form-control" 
-                                       value="<?php echo e($_POST['email'] ?? $user['email'] ?? ''); ?>" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                                <input type="email" name="email" required
+                                       value="<?php echo e($_POST['email'] ?? $user['email'] ?? ''); ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Mobile Number *</label>
-                                <input type="tel" name="mobile" class="form-control" 
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
+                                <input type="tel" name="mobile" 
                                        placeholder="Enter 10-digit mobile number"
-                                       value="<?php echo e($_POST['mobile'] ?? $selectedAddress['mobile'] ?? $user['mobile'] ?? ''); ?>" 
-                                       pattern="[0-9]{10}" maxlength="10" required>
-                                <div class="form-text">Enter 10-digit mobile number without country code</div>
+                                       pattern="[0-9]{10}" maxlength="10" required
+                                       value="<?php echo e($_POST['mobile'] ?? $selectedAddress['mobile'] ?? $user['mobile'] ?? ''); ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                <p class="text-xs text-gray-500 mt-1">Enter 10-digit mobile number without country code</p>
                             </div>
-                            <div class="col-12">
-                                <label class="form-label">Address *</label>
-                                <textarea name="address" class="form-control" rows="3" required><?php echo e($_POST['address'] ?? $selectedAddress['address'] ?? $user['address'] ?? ''); ?></textarea>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Address *</label>
+                                <textarea name="address" rows="3" required
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"><?php echo e($_POST['address'] ?? $selectedAddress['address'] ?? $user['address'] ?? ''); ?></textarea>
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label">City *</label>
-                                <input type="text" name="city" class="form-control" 
-                                       value="<?php echo e($_POST['city'] ?? $selectedAddress['city'] ?? ''); ?>" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                                <input type="text" name="city" required
+                                       value="<?php echo e($_POST['city'] ?? $selectedAddress['city'] ?? ''); ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label">State *</label>
-                                <input type="text" name="state" class="form-control" 
-                                       value="<?php echo e($_POST['state'] ?? $selectedAddress['state'] ?? ''); ?>" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">State *</label>
+                                <input type="text" name="state" required
+                                       value="<?php echo e($_POST['state'] ?? $selectedAddress['state'] ?? ''); ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Pincode *</label>
-                                <input type="text" name="pincode" class="form-control" 
-                                       value="<?php echo e($_POST['pincode'] ?? $selectedAddress['pincode'] ?? ''); ?>" 
-                                       pattern="[0-9]{6}" maxlength="6" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Pincode *</label>
+                                <input type="text" name="pincode" 
+                                       pattern="[0-9]{6}" maxlength="6" required
+                                       value="<?php echo e($_POST['pincode'] ?? $selectedAddress['pincode'] ?? ''); ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                             </div>
                         </div>
                         
-                        <hr class="my-4">
+                        <hr class="my-6 border-gray-200">
                         
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a href="<?php echo BASE_URL; ?>cart.php" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Back to Cart
+                        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <a href="<?php echo BASE_URL; ?>cart.php" class="inline-flex items-center text-gray-600 hover:text-gray-900 font-medium">
+                                <i class="fas fa-arrow-left mr-2"></i>Back to Cart
                             </a>
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-credit-card me-2"></i>Continue to Payment
+                            <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-full transition shadow-lg hover:shadow-xl">
+                                <i class="fas fa-credit-card mr-2"></i>Continue to Payment
                             </button>
                         </div>
                     </form>
@@ -281,47 +286,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             
             <!-- Order Summary -->
-            <div class="col-lg-4 mt-4 mt-lg-0">
-                <div class="order-summary">
-                    <h5 class="fw-bold mb-4">Order Summary</h5>
+            <div>
+                <div class="bg-white rounded-2xl shadow-md p-6 sticky top-24">
+                    <h5 class="text-xl font-bold text-gray-900 mb-6">Order Summary</h5>
                     
                     <!-- Cart Items -->
-                    <div class="mb-3">
+                    <div class="space-y-3 mb-6">
                         <?php foreach ($_SESSION['cart'] as $item): ?>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-truncate" style="max-width: 150px;">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 truncate max-w-[180px] text-sm">
                                 <?php echo e($item['name']); ?> (x<?php echo $item['quantity']; ?>)
                             </span>
-                            <span><?php echo formatCurrency($item['price'] * $item['quantity']); ?></span>
+                            <span class="font-medium"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></span>
                         </div>
                         <?php endforeach; ?>
                     </div>
                     
-                    <hr>
-                    
-                    <!-- Price Breakdown -->
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Subtotal</span>
-                        <span><?php echo formatCurrency($subtotal); ?></span>
+                    <div class="border-t border-gray-200 pt-4 space-y-3 mb-4">
+                        <!-- Price Breakdown -->
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Subtotal</span>
+                            <span class="font-medium"><?php echo formatCurrency($subtotal); ?></span>
+                        </div>
+                        
+                        <?php if ($discount > 0): ?>
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Discount</span>
+                            <span class="text-green-600 font-medium">-<?php echo formatCurrency($discount); ?></span>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <div class="flex justify-between">
+                            <span class="text-gray-500">Shipping</span>
+                            <span class="text-green-600 font-medium">Free</span>
+                        </div>
                     </div>
                     
-                    <?php if ($discount > 0): ?>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Discount</span>
-                        <span class="text-success">-<?php echo formatCurrency($discount); ?></span>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Shipping</span>
-                        <span class="text-success">Free</span>
-                    </div>
-                    
-                    <hr>
-                    
-                    <div class="d-flex justify-content-between">
-                        <span class="fw-bold">Total</span>
-                        <span class="fw-bold fs-5"><?php echo formatCurrency($total); ?></span>
+                    <div class="border-t border-gray-200 pt-4">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-gray-900">Total</span>
+                            <span class="font-bold text-2xl text-primary-500"><?php echo formatCurrency($total); ?></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -342,8 +347,8 @@ var options = {
     "order_id": "<?php echo $_SESSION['razorpay_order_id']; ?>",
     "handler": function (response) {
         // Show loading
-        document.getElementById('rzp-button').classList.add('d-none');
-        document.getElementById('payment-loading').classList.remove('d-none');
+        document.getElementById('rzp-button').classList.add('hidden');
+        document.getElementById('payment-loading').classList.remove('hidden');
         
         // Send payment data to server
         var form = document.createElement('form');

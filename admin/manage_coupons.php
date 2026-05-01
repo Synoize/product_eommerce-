@@ -100,192 +100,201 @@ try {
 }
 ?>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="min-h-screen bg-gray-100">
+    <div class="flex">
         <!-- Admin Sidebar -->
-        <div class="col-md-2 d-none d-md-block admin-sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/index.php">
-                    <i class="fas fa-tachometer-alt"></i>Dashboard
+        <div class="hidden md:flex flex-col w-64 bg-gray-900 text-white min-h-screen">
+            <div class="p-6">
+                <h3 class="text-xl font-bold">Admin Panel</h3>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="<?php echo BASE_URL; ?>admin/index.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tachometer-alt w-6"></i>Dashboard
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_products.php">
-                    <i class="fas fa-box"></i>Products
+                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-box w-6"></i>Products
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_categories.php">
-                    <i class="fas fa-tags"></i>Categories
+                <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-tags w-6"></i>Categories
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php">
-                    <i class="fas fa-shopping-cart"></i>Orders
+                <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-shopping-cart w-6"></i>Orders
                 </a>
-                <a class="nav-link active" href="<?php echo BASE_URL; ?>admin/manage_coupons.php">
-                    <i class="fas fa-ticket-alt"></i>Coupons
+                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="flex items-center px-4 py-3 bg-primary-500 rounded-lg text-white">
+                    <i class="fas fa-ticket-alt w-6"></i>Coupons
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_users.php">
-                    <i class="fas fa-users"></i>Users
+                <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-users w-6"></i>Users
                 </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/contact_messages.php">
-                    <i class="fas fa-envelope"></i>Messages
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>">
-                    <i class="fas fa-arrow-left"></i>Back to Site
+                <a href="<?php echo BASE_URL; ?>admin/contact_messages.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-envelope w-6"></i>Messages
                 </a>
             </nav>
+            <div class="p-4">
+                <a href="<?php echo BASE_URL; ?>" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
+                    <i class="fas fa-arrow-left w-6"></i>Back to Site
+                </a>
+            </div>
         </div>
         
         <!-- Main Content -->
-        <div class="col-md-10 p-4">
-            <h2 class="fw-bold mb-4">Manage Coupons</h2>
+        <div class="flex-1 p-6 md:p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Manage Coupons</h2>
             
-            <div class="row">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Coupon Form -->
-                <div class="col-lg-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold mb-4">
-                                <?php echo $editCoupon ? 'Edit Coupon' : 'Add New Coupon'; ?>
-                            </h5>
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h5 class="font-bold text-gray-900 mb-4">
+                            <?php echo $editCoupon ? 'Edit Coupon' : 'Add New Coupon'; ?>
+                        </h5>
+                        
+                        <form action="<?php echo BASE_URL; ?>admin/manage_coupons.php" method="POST" class="space-y-4">
+                            <input type="hidden" name="form_action" value="<?php echo $editCoupon ? 'edit' : 'add'; ?>">
+                            <?php if ($editCoupon): ?>
+                            <input type="hidden" name="coupon_id" value="<?php echo $editCoupon['id']; ?>">
+                            <?php endif; ?>
                             
-                            <form action="<?php echo BASE_URL; ?>admin/manage_coupons.php" method="POST">
-                                <input type="hidden" name="form_action" value="<?php echo $editCoupon ? 'edit' : 'add'; ?>">
-                                <?php if ($editCoupon): ?>
-                                <input type="hidden" name="coupon_id" value="<?php echo $editCoupon['id']; ?>">
-                                <?php endif; ?>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Coupon Code *</label>
-                                    <input type="text" name="code" class="form-control text-uppercase" required maxlength="50"
-                                           value="<?php echo $editCoupon ? e($editCoupon['code']) : ''; ?>">
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Discount Type *</label>
-                                    <select name="type" class="form-select" required>
-                                        <option value="percent" <?php echo ($editCoupon && $editCoupon['type'] === 'percent') ? 'selected' : ''; ?>>Percentage (%)</option>
-                                        <option value="fixed" <?php echo ($editCoupon && $editCoupon['type'] === 'fixed') ? 'selected' : ''; ?>>Fixed Amount (₹)</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Discount Value *</label>
-                                    <input type="number" name="value" class="form-control" step="0.01" min="0" required
-                                           value="<?php echo $editCoupon ? $editCoupon['value'] : ''; ?>">
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Minimum Order Amount</label>
-                                    <input type="number" name="min_order" class="form-control" step="0.01" min="0"
-                                           value="<?php echo $editCoupon ? $editCoupon['min_order'] : ''; ?>">
-                                    <small class="text-muted">Leave 0 for no minimum</small>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Maximum Discount (for % type)</label>
-                                    <input type="number" name="max_discount" class="form-control" step="0.01" min="0"
-                                           value="<?php echo $editCoupon ? $editCoupon['max_discount'] : ''; ?>">
-                                    <small class="text-muted">Leave 0 for no limit</small>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Expiry Date *</label>
-                                    <input type="date" name="expiry_date" class="form-control" required
-                                           value="<?php echo $editCoupon ? $editCoupon['expiry_date'] : ''; ?>">
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Usage Limit</label>
-                                    <input type="number" name="usage_limit" class="form-control" min="0"
-                                           value="<?php echo $editCoupon ? $editCoupon['usage_limit'] : ''; ?>">
-                                    <small class="text-muted">Leave 0 for unlimited</small>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" name="status" value="1" 
-                                               <?php echo (!$editCoupon || $editCoupon['status']) ? 'checked' : ''; ?>>
-                                        <label class="form-check-label">Active</label>
-                                    </div>
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="fas fa-save me-2"></i>
-                                    <?php echo $editCoupon ? 'Update Coupon' : 'Add Coupon'; ?>
-                                </button>
-                                
-                                <?php if ($editCoupon): ?>
-                                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="btn btn-outline-secondary w-100 mt-2">
-                                    Cancel
-                                </a>
-                                <?php endif; ?>
-                            </form>
-                        </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Coupon Code *</label>
+                                <input type="text" name="code" required maxlength="50"
+                                       value="<?php echo $editCoupon ? e($editCoupon['code']) : ''; ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition uppercase">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Discount Type *</label>
+                                <select name="type" required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                    <option value="percent" <?php echo ($editCoupon && $editCoupon['type'] === 'percent') ? 'selected' : ''; ?>>Percentage (%)</option>
+                                    <option value="fixed" <?php echo ($editCoupon && $editCoupon['type'] === 'fixed') ? 'selected' : ''; ?>>Fixed Amount (₹)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Discount Value *</label>
+                                <input type="number" name="value" step="0.01" min="0" required
+                                       value="<?php echo $editCoupon ? $editCoupon['value'] : ''; ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Minimum Order Amount</label>
+                                <input type="number" name="min_order" step="0.01" min="0"
+                                       value="<?php echo $editCoupon ? $editCoupon['min_order'] : ''; ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                <p class="text-xs text-gray-500 mt-1">Leave 0 for no minimum</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Maximum Discount (for % type)</label>
+                                <input type="number" name="max_discount" step="0.01" min="0"
+                                       value="<?php echo $editCoupon ? $editCoupon['max_discount'] : ''; ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                <p class="text-xs text-gray-500 mt-1">Leave 0 for no limit</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Expiry Date *</label>
+                                <input type="date" name="expiry_date" required
+                                       value="<?php echo $editCoupon ? $editCoupon['expiry_date'] : ''; ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Usage Limit</label>
+                                <input type="number" name="usage_limit" min="0"
+                                       value="<?php echo $editCoupon ? $editCoupon['usage_limit'] : ''; ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                <p class="text-xs text-gray-500 mt-1">Leave 0 for unlimited</p>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <input type="checkbox" name="status" value="1" 
+                                       <?php echo (!$editCoupon || $editCoupon['status']) ? 'checked' : ''; ?>
+                                       class="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500">
+                                <label class="ml-2 text-sm text-gray-600">Active</label>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 rounded-full transition shadow-lg hover:shadow-xl">
+                                <i class="fas fa-save mr-2"></i>
+                                <?php echo $editCoupon ? 'Update Coupon' : 'Add Coupon'; ?>
+                            </button>
+                            
+                            <?php if ($editCoupon): ?>
+                            <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="block w-full text-center border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-medium py-3 rounded-full transition">
+                                Cancel
+                            </a>
+                            <?php endif; ?>
+                        </form>
                     </div>
                 </div>
                 
                 <!-- Coupons List -->
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold mb-4">Coupons List</h5>
-                            
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead class="bg-light">
-                                        <tr>
-                                            <th>Code</th>
-                                            <th>Type</th>
-                                            <th>Value</th>
-                                            <th>Used</th>
-                                            <th>Expiry</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($coupons as $coupon): ?>
-                                        <tr>
-                                            <td><span class="fw-bold"><?php echo e($coupon['code']); ?></span></td>
-                                            <td><?php echo $coupon['type'] === 'percent' ? 'Percentage' : 'Fixed'; ?></td>
-                                            <td>
-                                                <?php echo $coupon['type'] === 'percent' ? $coupon['value'] . '%' : '₹' . $coupon['value']; ?>
-                                                <?php if ($coupon['max_discount'] > 0 && $coupon['type'] === 'percent'): ?>
-                                                <br><small class="text-muted">Max: ₹<?php echo $coupon['max_discount']; ?></small>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td><?php echo $coupon['used_count']; ?> / <?php echo $coupon['usage_limit'] > 0 ? $coupon['usage_limit'] : '∞'; ?></td>
-                                            <td>
-                                                <?php echo date('M d, Y', strtotime($coupon['expiry_date'])); ?>
-                                                <?php if (strtotime($coupon['expiry_date']) < time()): ?>
-                                                <br><span class="badge bg-danger">Expired</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php?toggle=<?php echo $coupon['id']; ?>" 
-                                                   class="badge bg-<?php echo $coupon['status'] ? 'success' : 'danger'; ?>">
-                                                    <?php echo $coupon['status'] ? 'Active' : 'Inactive'; ?>
-                                                </a>
-                                            </td>
-                                            <td>
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h5 class="font-bold text-gray-900 mb-4">Coupons List</h5>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Code</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Type</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Value</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Used</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Expiry</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                        <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <?php foreach ($coupons as $coupon): ?>
+                                    <tr>
+                                        <td class="px-4 py-3 font-bold text-gray-900"><?php echo e($coupon['code']); ?></td>
+                                        <td class="px-4 py-3 text-sm"><?php echo $coupon['type'] === 'percent' ? 'Percentage' : 'Fixed'; ?></td>
+                                        <td class="px-4 py-3 text-sm">
+                                            <?php echo $coupon['type'] === 'percent' ? $coupon['value'] . '%' : '₹' . $coupon['value']; ?>
+                                            <?php if ($coupon['max_discount'] > 0 && $coupon['type'] === 'percent'): ?>
+                                            <div class="text-xs text-gray-500">Max: ₹<?php echo $coupon['max_discount']; ?></div>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm"><?php echo $coupon['used_count']; ?> / <?php echo $coupon['usage_limit'] > 0 ? $coupon['usage_limit'] : '∞'; ?></td>
+                                        <td class="px-4 py-3 text-sm">
+                                            <?php echo date('M d, Y', strtotime($coupon['expiry_date'])); ?>
+                                            <?php if (strtotime($coupon['expiry_date']) < time()): ?>
+                                            <div class="inline-block bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-medium mt-1">Expired</div>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php?toggle=<?php echo $coupon['id']; ?>" 
+                                               class="inline-block px-2 py-1 rounded text-xs font-medium <?php echo $coupon['status'] ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'; ?>">
+                                                <?php echo $coupon['status'] ? 'Active' : 'Inactive'; ?>
+                                            </a>
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex gap-2">
                                                 <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php?edit=<?php echo $coupon['id']; ?>" 
-                                                   class="btn btn-sm btn-outline-primary me-1">
+                                                   class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-1 px-2 rounded-lg transition text-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php?delete=<?php echo $coupon['id']; ?>" 
-                                                   class="btn btn-sm btn-outline-danger"
+                                                   class="inline-flex items-center border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-medium py-1 px-2 rounded-lg transition text-sm"
                                                    onclick="return confirm('Delete this coupon?')">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
-                                            </td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                        
-                                        <?php if (empty($coupons)): ?>
-                                        <tr>
-                                            <td colspan="7" class="text-center py-4">No coupons found</td>
-                                        </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                    
+                                    <?php if (empty($coupons)): ?>
+                                    <tr>
+                                        <td colspan="7" class="px-4 py-8 text-center text-gray-500">No coupons found</td>
+                                    </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

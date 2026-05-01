@@ -6,122 +6,98 @@
 ?>
 
 <!-- Footer -->
-<footer class="footer">
-    <div class="container">
-        <div class="row">
+<footer class="bg-gray-900 text-white pt-12 pb-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
             <!-- About Column -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <h5>About WebStore</h5>
-                <p>Your one-stop destination for quality products at amazing prices. We bring you the best shopping experience with secure payments and fast delivery.</p>
-                <div class="social-links">
-                    <a href="#" class="me-3"><i class="fab fa-facebook-f fa-lg"></i></a>
-                    <a href="#" class="me-3"><i class="fab fa-twitter fa-lg"></i></a>
-                    <a href="#" class="me-3"><i class="fab fa-instagram fa-lg"></i></a>
-                    <a href="#" class="me-3"><i class="fab fa-linkedin-in fa-lg"></i></a>
+            <div class="lg:col-span-2">
+                <h5 class="text-lg font-bold mb-4 text-primary-400">About WebStore</h5>
+                <p class="text-gray-400 text-sm mb-4">Your one-stop destination for quality products at amazing prices. We bring you the best shopping experience with secure payments and fast delivery.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-primary-400 transition"><i class="fab fa-facebook-f text-lg"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-primary-400 transition"><i class="fab fa-twitter text-lg"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-primary-400 transition"><i class="fab fa-instagram text-lg"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-primary-400 transition"><i class="fab fa-linkedin-in text-lg"></i></a>
                 </div>
             </div>
             
             <!-- Quick Links -->
-            <div class="col-lg-2 col-md-6 mb-4">
-                <h5>Quick Links</h5>
-                <a href="<?php echo BASE_URL; ?>">Home</a>
-                <a href="<?php echo BASE_URL; ?>shop.php">Shop</a>
-                <a href="<?php echo BASE_URL; ?>about-us.php">About Us</a>
-                <a href="<?php echo BASE_URL; ?>contact-us.php">Contact Us</a>
+            <div>
+                <h5 class="text-lg font-bold mb-4 text-primary-400">Quick Links</h5>
+                <ul class="space-y-2">
+                    <li><a href="<?php echo BASE_URL; ?>" class="text-gray-400 hover:text-white text-sm transition">Home</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>shop.php" class="text-gray-400 hover:text-white text-sm transition">Shop</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>about-us.php" class="text-gray-400 hover:text-white text-sm transition">About Us</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>contact-us.php" class="text-gray-400 hover:text-white text-sm transition">Contact Us</a></li>
+                </ul>
             </div>
             
             <!-- Categories -->
-            <div class="col-lg-2 col-md-6 mb-4">
-                <h5>Categories</h5>
-                <?php 
-                try {
-                    $stmt = $pdo->query("SELECT name FROM categories ORDER BY name ASC LIMIT 5");
-                    $footerCategories = $stmt->fetchAll();
-                    foreach ($footerCategories as $cat):
-                ?>
-                <a href="<?php echo BASE_URL; ?>shop.php?search=<?php echo urlencode($cat['name']); ?>">
-                    <?php echo e($cat['name']); ?>
-                </a>
-                <?php 
-                    endforeach;
-                } catch (PDOException $e) {
-                    // Silent fail
-                }
-                ?>
-            </div>
-            
-            <!-- Customer Service -->
-            <div class="col-lg-2 col-md-6 mb-4">
-                <h5>Customer Service</h5>
-                <a href="#">FAQs</a>
-                <a href="#">Shipping Info</a>
-                <a href="#">Returns Policy</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+            <div>
+                <h5 class="text-lg font-bold mb-4 text-primary-400">Categories</h5>
+                <ul class="space-y-2">
+                    <?php 
+                    try {
+                        $stmt = $pdo->query("SELECT name FROM categories ORDER BY name ASC LIMIT 5");
+                        $footerCategories = $stmt->fetchAll();
+                        foreach ($footerCategories as $cat):
+                    ?>
+                    <li>
+                        <a href="<?php echo BASE_URL; ?>shop.php?search=<?php echo urlencode($cat['name']); ?>" class="text-gray-400 hover:text-white text-sm transition">
+                            <?php echo e($cat['name']); ?>
+                        </a>
+                    </li>
+                    <?php 
+                        endforeach;
+                    } catch (PDOException $e) {
+                        // Silent fail
+                    }
+                    ?>
+                </ul>
             </div>
             
             <!-- Contact Info -->
-            <div class="col-lg-2 col-md-6 mb-4">
-                <h5>Contact Us</h5>
-                <p><i class="fas fa-map-marker-alt me-2"></i>123 Street, City, Country</p>
-                <p><i class="fas fa-phone me-2"></i>+1 234 567 8900</p>
-                <p><i class="fas fa-envelope me-2"></i>support@webstore.com</p>
+            <div>
+                <h5 class="text-lg font-bold mb-4 text-primary-400">Contact Us</h5>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-2 text-primary-400"></i>123 Street, City, Country</li>
+                    <li class="flex items-center"><i class="fas fa-phone mr-2 text-primary-400"></i>+1 234 567 8900</li>
+                    <li class="flex items-center"><i class="fas fa-envelope mr-2 text-primary-400"></i>support@webstore.com</li>
+                </ul>
             </div>
         </div>
         
         <!-- Footer Bottom -->
-        <div class="footer-bottom text-center">
-            <p class="mb-0">&copy; <?php echo date('Y'); ?> WebStore. All rights reserved.</p>
+        <div class="border-t border-gray-800 pt-6 text-center">
+            <p class="text-gray-400 text-sm">&copy; <?php echo date('Y'); ?> WebStore. All rights reserved.</p>
         </div>
     </div>
 </footer>
 
 <!-- Scroll to Top Button -->
-<div class="scroll-to-top" id="scrollToTop">
+<button id="scrollToTop" class="fixed bottom-6 right-6 bg-primary-500 hover:bg-primary-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 z-50">
     <i class="fas fa-chevron-up"></i>
-</div>
+</button>
 
 <!-- Scripts -->
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-
-<!-- Bootstrap 5 Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- MDB UI Kit JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
-
-<!-- Custom JavaScript -->
 <script>
-$(document).ready(function() {
-    // Flash message auto-dismiss
-    setTimeout(function() {
-        $('.flash-message').alert('close');
-    }, 5000);
-    
-    // Scroll to Top Button
-    const scrollToTopBtn = document.getElementById('scrollToTop');
-    
-    window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
-            scrollToTopBtn.classList.add('show');
-        } else {
-            scrollToTopBtn.classList.remove('show');
-        }
-    });
-    
-    scrollToTopBtn.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-    
-    // Product image zoom on hover
-    $('.product-card .card-img-top').on('mouseenter', function() {
-        $(this).css('transform', 'scale(1.05)');
-    }).on('mouseleave', function() {
-        $(this).css('transform', 'scale(1)');
+// Scroll to Top Button
+const scrollToTopBtn = document.getElementById('scrollToTop');
+
+window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.remove('opacity-0', 'invisible');
+        scrollToTopBtn.classList.add('opacity-100', 'visible');
+    } else {
+        scrollToTopBtn.classList.add('opacity-0', 'invisible');
+        scrollToTopBtn.classList.remove('opacity-100', 'visible');
+    }
+});
+
+scrollToTopBtn.addEventListener('click', function() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
     });
 });
 </script>
