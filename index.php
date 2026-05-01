@@ -46,7 +46,7 @@ try {
 ?>
 
 <!-- Hero Section -->
-<section class="bg-gradient-to-r from-pink-50 to-purple-50 py-20">
+<section class="bg-white py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid md:grid-cols-2 gap-12 items-center">
             <div>

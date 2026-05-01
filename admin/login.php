@@ -53,12 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = 'Admin Login';
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/includes/header.php';
 ?>
 
-<div class="min-h-screen bg-gray-900 py-12 px-4">
+<div class="h-[]calc(100vh-80px)] mt-30">
     <div class="max-w-md mx-auto">
-        <div class="bg-white rounded-2xl shadow-2xl p-8">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
             <div class="text-center mb-8">
                 <div class="w-20 h-20 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-user-shield text-4xl text-white"></i>
@@ -103,5 +103,3 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
     </div>
 </div>
-
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>

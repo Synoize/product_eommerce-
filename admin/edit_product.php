@@ -4,7 +4,7 @@
  */
 
 $pageTitle = 'Edit Product';
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/includes/header.php';
 requireAdmin();
 
 // Get product ID
@@ -144,50 +144,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="bg-white mt-20">
+    <div class="h-[calc(100vh-80px)] flex flex-col md:flex-row gap-4">
         <!-- Admin Sidebar -->
-        <div class="col-md-2 d-none d-md-block admin-sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/index.php">
-                    <i class="fas fa-tachometer-alt"></i>Dashboard
-                </a>
-                <a class="nav-link active" href="<?php echo BASE_URL; ?>admin/manage_products.php">
-                    <i class="fas fa-box"></i>Products
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_categories.php">
-                    <i class="fas fa-tags"></i>Categories
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_orders.php">
-                    <i class="fas fa-shopping-cart"></i>Orders
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_coupons.php">
-                    <i class="fas fa-ticket-alt"></i>Coupons
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/manage_users.php">
-                    <i class="fas fa-users"></i>Users
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>admin/contact_messages.php">
-                    <i class="fas fa-envelope"></i>Messages
-                </a>
-                <a class="nav-link" href="<?php echo BASE_URL; ?>">
-                    <i class="fas fa-arrow-left"></i>Back to Site
-                </a>
-            </nav>
-        </div>
+        <?php include __DIR__ . '/includes/sidebar.php'; ?>
         
         <!-- Main Content -->
-        <div class="col-md-10 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold mb-0">Edit Product</h2>
-                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="btn btn-outline-secondary">
+        <div class="flex-1 overflow-y-auto p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Edit Product</h2>
+                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
                     <i class="fas fa-arrow-left me-2"></i>Back to Products
                 </a>
             </div>
             
             <?php if (!empty($errors)): ?>
-            <div class="alert alert-danger">
-                <ul class="mb-0">
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+                <ul class="list-disc list-inside space-y-1">
                     <?php foreach ($errors as $error): ?>
                     <li><?php echo e($error); ?></li>
                     <?php endforeach; ?>
@@ -195,18 +168,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <?php endif; ?>
             
-            <div class="card">
-                <div class="card-body p-4">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="p-6">
                     <form action="<?php echo BASE_URL; ?>admin/edit_product.php?id=<?php echo $productId; ?>" method="POST" enctype="multipart/form-data">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Product Name *</label>
-                                <input type="text" name="name" class="form-control" required
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Product Name *</label>
+                                <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" required
                                        value="<?php echo e($_POST['name'] ?? $product['name']); ?>">
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Category *</label>
-                                <select name="category_id" class="form-select" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+                                <select name="category_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" required>
                                     <option value="">Select Category</option>
                                     <?php foreach ($categories as $category): ?>
                                     <option value="<?php echo $category['id']; ?>" 
@@ -216,74 +189,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="col-12">
-                                <label class="form-label">Description *</label>
-                                <textarea name="description" class="form-control" rows="4" required><?php echo e($_POST['description'] ?? $product['description']); ?></textarea>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                                <textarea name="description" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" rows="4" required><?php echo e($_POST['description'] ?? $product['description']); ?></textarea>
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Price (₹) *</label>
-                                <input type="number" name="price" class="form-control" step="0.01" min="0" required
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹) *</label>
+                                <input type="number" name="price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" step="0.01" min="0" required
                                        value="<?php echo e($_POST['price'] ?? $product['price']); ?>">
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Original Price (₹)</label>
-                                <input type="number" name="original_price" class="form-control" step="0.01" min="0"
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Original Price (₹)</label>
+                                <input type="number" name="original_price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" step="0.01" min="0"
                                        value="<?php echo e($_POST['original_price'] ?? $product['original_price']); ?>">
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Stock Quantity *</label>
-                                <input type="number" name="stock" class="form-control" min="0" required
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity *</label>
+                                <input type="number" name="stock" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" min="0" required
                                        value="<?php echo e($_POST['stock'] ?? $product['stock']); ?>">
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Status</label>
-                                <div class="form-check form-switch mt-2">
-                                    <input class="form-check-input" type="checkbox" name="status" value="1" 
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <div class="flex items-center mt-2">
+                                    <input class="w-5 h-5 text-pink-600 focus:ring-pink-500" type="checkbox" name="status" value="1" 
                                            <?php echo ($product['status'] ?? 1) ? 'checked' : ''; ?>>
-                                    <label class="form-check-label">Active</label>
+                                    <label class="ml-2 text-sm text-gray-600">Active</label>
                                 </div>
                             </div>
                             
                             <!-- Main Image -->
-                            <div class="col-md-6">
-                                <label class="form-label">Main Product Image</label>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Main Product Image</label>
                                 <?php if ($product['image']): ?>
                                 <div class="mb-2">
-                                    <img src="<?php echo getImageUrl($product['image'], 'products'); ?>" width="100" class="rounded" alt="">
+                                    <img src="<?php echo getImageUrl($product['image'], 'products'); ?>" width="100" class="rounded-lg" alt="">
                                 </div>
                                 <?php endif; ?>
-                                <input type="file" name="image" class="form-control" accept="image/jpeg,image/png,image/webp">
-                                <small class="text-muted">Leave empty to keep current image. Max 2MB.</small>
+                                <input type="file" name="image" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" accept="image/jpeg,image/png,image/webp">
+                                <p class="text-xs text-gray-500 mt-1">Leave empty to keep current image. Max 2MB.</p>
                             </div>
                             
                             <!-- Gallery Images -->
-                            <div class="col-md-6">
-                                <label class="form-label">Gallery Images</label>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Gallery Images</label>
                                 <?php if (!empty($gallery)): ?>
-                                <div class="mb-2 d-flex gap-2 flex-wrap">
+                                <div class="mb-2 flex flex-wrap gap-2">
                                     <?php foreach ($gallery as $galleryImage): ?>
-                                    <div class="position-relative">
-                                        <img src="<?php echo getImageUrl($galleryImage, 'products'); ?>" width="80" height="80" class="rounded" alt="">
-                                        <div class="form-check position-absolute top-0 start-0 m-1">
-                                            <input class="form-check-input" type="checkbox" name="remove_gallery[]" value="<?php echo e($galleryImage); ?>" title="Remove">
-                                        </div>
+                                    <div class="relative">
+                                        <img src="<?php echo getImageUrl($galleryImage, 'products'); ?>" width="80" height="80" class="rounded-lg" alt="">
+                                        <input class="absolute top-1 left-1 w-4 h-4" type="checkbox" name="remove_gallery[]" value="<?php echo e($galleryImage); ?>" title="Remove">
                                     </div>
                                     <?php endforeach; ?>
                                 </div>
-                                <small class="text-muted d-block mb-2">Check to remove images</small>
+                                <p class="text-xs text-gray-500 mb-2">Check to remove images</p>
                                 <?php endif; ?>
-                                <input type="file" name="gallery[]" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
-                                <small class="text-muted">Add more images. Max 2MB each.</small>
+                                <input type="file" name="gallery[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" accept="image/jpeg,image/png,image/webp" multiple>
+                                <p class="text-xs text-gray-500 mt-1">Add more images. Max 2MB each.</p>
                             </div>
                         </div>
                         
-                        <hr class="my-4">
+                        <hr class="my-6 border-gray-200">
                         
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">
+                        <div class="flex gap-3">
+                            <button type="submit" class="px-5 py-2.5 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-medium">
                                 <i class="fas fa-save me-2"></i>Update Product
                             </button>
-                            <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="btn btn-outline-secondary">
+                            <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
                                 Cancel
                             </a>
                         </div>
@@ -293,5 +264,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
-
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>

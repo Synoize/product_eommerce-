@@ -4,7 +4,7 @@
  */
 
 $pageTitle = 'Add Product';
-require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/includes/header.php';
 requireAdmin();
 
 // Fetch categories
@@ -100,45 +100,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<div class="min-h-screen bg-gray-100">
-    <div class="flex">
+<div class="bg-white mt-20">
+    <div class="h-[calc(100vh-80px)] flex">
         <!-- Admin Sidebar -->
-        <div class="hidden md:flex flex-col w-64 bg-gray-900 text-white min-h-screen">
-            <div class="p-6">
-                <h3 class="text-xl font-bold">Admin Panel</h3>
-            </div>
-            <nav class="flex-1 px-4 space-y-2">
-                <a href="<?php echo BASE_URL; ?>admin/index.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
-                    <i class="fas fa-tachometer-alt w-6"></i>Dashboard
-                </a>
-                <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="flex items-center px-4 py-3 bg-primary-500 rounded-lg text-white">
-                    <i class="fas fa-box w-6"></i>Products
-                </a>
-                <a href="<?php echo BASE_URL; ?>admin/manage_categories.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
-                    <i class="fas fa-tags w-6"></i>Categories
-                </a>
-                <a href="<?php echo BASE_URL; ?>admin/manage_orders.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
-                    <i class="fas fa-shopping-cart w-6"></i>Orders
-                </a>
-                <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
-                    <i class="fas fa-ticket-alt w-6"></i>Coupons
-                </a>
-                <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
-                    <i class="fas fa-users w-6"></i>Users
-                </a>
-                <a href="<?php echo BASE_URL; ?>admin/contact_messages.php" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
-                    <i class="fas fa-envelope w-6"></i>Messages
-                </a>
-            </nav>
-            <div class="p-4">
-                <a href="<?php echo BASE_URL; ?>" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 rounded-lg transition">
-                    <i class="fas fa-arrow-left w-6"></i>Back to Site
-                </a>
-            </div>
-        </div>
+        <?php include __DIR__ . '/includes/sidebar.php'; ?>
         
         <!-- Main Content -->
-        <div class="flex-1 p-6 md:p-8">
+        <div class="flex-1 overflow-y-auto p-6 md:p-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <h2 class="text-2xl font-bold text-gray-900">Add New Product</h2>
                 <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="inline-flex items-center border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-medium py-2 px-4 rounded-lg transition">
@@ -229,5 +197,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
-
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>
