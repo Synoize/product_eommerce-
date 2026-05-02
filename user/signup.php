@@ -173,5 +173,3 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
     return true;
 });
 </script>
-
-<?php require_once __DIR__ . '/../includes/footer.php'; ?>

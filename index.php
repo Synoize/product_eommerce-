@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Home Page
  * eCommerce Website Main Landing Page
@@ -63,10 +64,54 @@ try {
                     </a>
                 </div>
             </div>
-            <div class="text-center">
-                <img src="https://img.freepik.com/free-vector/ecommerce-web-page-concept-illustration_114360-820.jpg" 
-                     alt="Shopping" class="w-full max-w-md mx-auto rounded-3xl shadow-2xl">
+            <!-- <div class="text-center">
+                <img src="<?php echo IMAGES_URL; ?>/pkg1.png" 
+                     alt="Shopping" class="max-h-[500px] mx-auto ">
+            </div> -->
+
+            <div class="relative w-[700px] h-[500px] mx-auto flex items-center justify-center">
+
+                <img src="<?php echo IMAGES_URL; ?>/pkg1.png"
+                    class="pkg absolute max-h-[500px] opacity-0 scale-75">
+
+                <img src="<?php echo IMAGES_URL; ?>/pkg2.png"
+                    class="pkg absolute max-h-[500px] opacity-0 scale-75">
+
+                <img src="<?php echo IMAGES_URL; ?>/pkg1.png"
+                    class="pkg absolute max-h-[500px] opacity-0 scale-75">
+
             </div>
+            <script>
+                const images = document.querySelectorAll('.pkg');
+                let current = 0;
+
+                function showNextImage() {
+                    // hide all
+                    images.forEach(img => {
+                        img.classList.remove('animate-pop', 'animate-float');
+                        img.classList.add('opacity-0', 'scale-75');
+                    });
+
+                    // show current
+                    const img = images[current];
+                    img.classList.remove('opacity-0', 'scale-75');
+                    img.classList.add('animate-pop');
+
+                    // after pop → start floating
+                    setTimeout(() => {
+                        img.classList.remove('animate-pop');
+                        img.classList.add('animate-float');
+                    }, 500);
+
+                    current = (current + 1) % images.length;
+                }
+
+                // start
+                showNextImage();
+
+                // change every 10 sec
+                setInterval(showNextImage, 10000);
+            </script>
         </div>
     </div>
 </section>
@@ -78,27 +123,27 @@ try {
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Shop by Category</h2>
             <p class="text-gray-500 text-lg">Explore our wide range of product categories</p>
         </div>
-        
+
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php foreach ($categories as $category): ?>
-            <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $category['id']; ?>" class="group">
-                <div class="relative rounded-2xl overflow-hidden shadow-lg transition transform group-hover:-translate-y-2 group-hover:shadow-2xl">
-                    <?php if ($category['image']): ?>
-                        <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" 
-                             alt="<?php echo e($category['name']); ?>"
-                             class="w-full h-48 object-cover">
-                    <?php else: ?>
-                        <div class="w-full h-48 bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
-                            <span class="text-white font-bold text-xl text-center px-4"><?php echo e($category['name']); ?></span>
+                <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $category['id']; ?>" class="group">
+                    <div class="relative rounded-2xl overflow-hidden shadow-lg transition transform group-hover:-translate-y-2 group-hover:shadow-2xl">
+                        <?php if ($category['image']): ?>
+                            <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>"
+                                alt="<?php echo e($category['name']); ?>"
+                                class="w-full h-48 object-cover">
+                        <?php else: ?>
+                            <div class="w-full h-48 bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
+                                <span class="text-white font-bold text-xl text-center px-4"><?php echo e($category['name']); ?></span>
+                            </div>
+                        <?php endif; ?>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                            <h5 class="text-white font-semibold text-lg"><?php echo e($category['name']); ?></h5>
                         </div>
-                    <?php endif; ?>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
-                        <h5 class="text-white font-semibold text-lg"><?php echo e($category['name']); ?></h5>
                     </div>
-                </div>
-            </a>
+                </a>
             <?php endforeach; ?>
-            
+
             <?php if (empty($categories)): ?>
                 <div class="col-span-full text-center py-12">
                     <p class="text-gray-500">No categories available yet.</p>
@@ -120,58 +165,58 @@ try {
                 View All <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
-        
+
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php foreach ($featuredProducts as $product): ?>
-            <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden group">
-                <div class="relative">
-                    <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
-                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo e($product['name']); ?>" class="w-full h-48 object-cover">
-                    
-                    <?php if ($product['stock'] <= 5 && $product['stock'] > 0): ?>
-                        <span class="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded">Low Stock</span>
-                    <?php elseif ($product['stock'] == 0): ?>
-                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">Out of Stock</span>
-                    <?php endif; ?>
-                    
-                    <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>" class="absolute top-2 right-2 bg-white/90 hover:bg-white text-primary-500 w-10 h-10 rounded-full flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition">
-                        <i class="fas fa-eye"></i>
-                    </a>
-                </div>
-                <div class="p-4">
-                    <small class="text-gray-400 text-xs"><?php echo e($product['category_name']); ?></small>
-                    <h5 class="font-semibold text-gray-900 mb-1 truncate"><?php echo e($product['name']); ?></h5>
-                    <p class="text-gray-500 text-sm mb-3 line-clamp-2"><?php echo substr(e($product['description']), 0, 60) . '...'; ?></p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-primary-600 font-bold text-lg"><?php echo formatCurrency($product['price']); ?></span>
-                        <?php if ($product['stock'] > 0): ?>
-                        <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
-                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                            <input type="hidden" name="action" value="add">
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white w-10 h-10 rounded-full flex items-center justify-center transition">
-                                <i class="fas fa-cart-plus"></i>
-                            </button>
-                        </form>
-                        <?php else: ?>
-                        <button class="bg-gray-300 text-white w-10 h-10 rounded-full flex items-center justify-center cursor-not-allowed" disabled>
-                            <i class="fas fa-times"></i>
-                        </button>
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden group">
+                    <div class="relative">
+                        <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
+                        <img src="<?php echo $imageUrl; ?>" alt="<?php echo e($product['name']); ?>" class="w-full h-48 object-cover">
+
+                        <?php if ($product['stock'] <= 5 && $product['stock'] > 0): ?>
+                            <span class="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded">Low Stock</span>
+                        <?php elseif ($product['stock'] == 0): ?>
+                            <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">Out of Stock</span>
                         <?php endif; ?>
+
+                        <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>" class="absolute top-2 right-2 bg-white/90 hover:bg-white text-primary-500 w-10 h-10 rounded-full flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                    <div class="p-4">
+                        <small class="text-gray-400 text-xs"><?php echo e($product['category_name']); ?></small>
+                        <h5 class="font-semibold text-gray-900 mb-1 truncate"><?php echo e($product['name']); ?></h5>
+                        <p class="text-gray-500 text-sm mb-3 line-clamp-2"><?php echo substr(e($product['description']), 0, 60) . '...'; ?></p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-primary-600 font-bold text-lg"><?php echo formatCurrency($product['price']); ?></span>
+                            <?php if ($product['stock'] > 0): ?>
+                                <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
+                                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                                    <input type="hidden" name="action" value="add">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white w-10 h-10 rounded-full flex items-center justify-center transition">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <button class="bg-gray-300 text-white w-10 h-10 rounded-full flex items-center justify-center cursor-not-allowed" disabled>
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endforeach; ?>
-            
+
             <?php if (empty($featuredProducts)): ?>
-            <div class="col-span-full text-center py-12">
-                <div class="bg-blue-50 border border-blue-200 text-blue-700 px-6 py-4 rounded-xl inline-flex items-center">
-                    <i class="fas fa-info-circle mr-2"></i>Products will appear here once added by admin.
+                <div class="col-span-full text-center py-12">
+                    <div class="bg-blue-50 border border-blue-200 text-blue-700 px-6 py-4 rounded-xl inline-flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i>Products will appear here once added by admin.
+                    </div>
                 </div>
-            </div>
             <?php endif; ?>
         </div>
-        
+
         <div class="mt-8 text-center md:hidden">
             <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center text-primary-500 hover:text-primary-600 font-semibold">
                 View All <i class="fas fa-arrow-right ml-2"></i>
@@ -187,20 +232,20 @@ try {
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Trending Now</h2>
             <p class="text-gray-500">Most popular items this week</p>
         </div>
-        
+
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             <?php foreach ($trendingProducts as $product): ?>
-            <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden">
-                <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
-                <img src="<?php echo $imageUrl; ?>" alt="<?php echo e($product['name']); ?>" class="w-full h-48 object-cover">
-                <div class="p-4 text-center">
-                    <h5 class="font-semibold text-gray-900 mb-2 truncate"><?php echo e($product['name']); ?></h5>
-                    <p class="text-primary-600 font-bold text-lg mb-3"><?php echo formatCurrency($product['price']); ?></p>
-                    <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>" class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-2 px-4 rounded-full transition text-sm">
-                        View Details
-                    </a>
+                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden">
+                    <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
+                    <img src="<?php echo $imageUrl; ?>" alt="<?php echo e($product['name']); ?>" class="w-full h-48 object-cover">
+                    <div class="p-4 text-center">
+                        <h5 class="font-semibold text-gray-900 mb-2 truncate"><?php echo e($product['name']); ?></h5>
+                        <p class="text-primary-600 font-bold text-lg mb-3"><?php echo formatCurrency($product['price']); ?></p>
+                        <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>" class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-2 px-4 rounded-full transition text-sm">
+                            View Details
+                        </a>
+                    </div>
                 </div>
-            </div>
             <?php endforeach; ?>
         </div>
     </div>
@@ -250,7 +295,7 @@ try {
             <p class="text-gray-400 mb-8">Get the latest updates on new products and exclusive offers</p>
             <form class="flex flex-col sm:flex-row gap-4" action="<?php echo BASE_URL; ?>subscribe.php" method="POST">
                 <input type="email" name="email" placeholder="Enter your email" required
-                       class="flex-1 px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    class="flex-1 px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                 <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-full transition flex items-center justify-center">
                     <i class="fas fa-paper-plane mr-2"></i>Subscribe
                 </button>

@@ -139,33 +139,71 @@ try {
                 <div class="flex items-center space-x-4">
                     <!-- User Account -->
                     <?php if (isLoggedIn()): ?>
-                        <div class="relative group">
-                            <button class="flex items-center text-gray-700 hover:text-primary-500">
-                                <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['user_name'] ?? 'User'); ?>&background=f84183&color=fff"
-                                    class="w-8 h-8 rounded-full mr-2">
-                                <span class="hidden sm:block font-medium"><?php echo e($_SESSION['user_name'] ?? 'User'); ?></span>
-                                <i class="fas fa-chevron-down ml-1 text-sm"></i>
+                        <div class="relative group hidden md:block">
+
+                            <!-- User Button -->
+                            <button class="flex items-center gap-2 text-gray-700 hover:text-primary-600 transition">
+
+                                <img
+                                    src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['user_name'] ?? 'User'); ?>&background=66bb6a&color=fff"
+                                    class="w-9 h-9 rounded-full object-cover border border-gray-200">
+
+                                <span class="hidden sm:block text-sm font-medium">
+                                    <?php echo e($_SESSION['user_name'] ?? 'User'); ?>
+                                </span>
+
+                                <i class="fas fa-chevron-down text-xs transition-transform duration-300 group-hover:rotate-180"></i>
                             </button>
-                            <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 hidden group-hover:block">
-                                <a href="<?php echo BASE_URL; ?>user/profile.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-500">
-                                    <i class="fas fa-user mr-2"></i>My Profile
-                                </a>
-                                <a href="<?php echo BASE_URL; ?>user/addresses.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-500">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>Addresses
-                                </a>
-                                <a href="<?php echo BASE_URL; ?>user/orders.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-500">
-                                    <i class="fas fa-box mr-2"></i>My Orders
-                                </a>
-                                <div class="border-t border-gray-100"></div>
-                                <a href="<?php echo BASE_URL; ?>user/logout.php" class="block px-4 py-2 text-red-600 hover:bg-gray-50">
-                                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                                </a>
+
+                            <!-- Dropdown -->
+                            <div class="
+                absolute right-0 mt-3 w-52 
+                bg-white rounded-lg border border-gray-100
+                
+                opacity-0 invisible translate-y-3
+                transition-all duration-300 ease-out
+                
+                group-hover:opacity-100 
+                group-hover:visible 
+                group-hover:translate-y-0
+            ">
+
+                                <div class="py-2 text-sm">
+
+                                    <a href="<?php echo BASE_URL; ?>user/profile.php"
+                                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition">
+                                        <i class="fas fa-user mr-3"></i> My Profile
+                                    </a>
+
+                                    <a href="<?php echo BASE_URL; ?>help.php"
+                                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition">
+                                        <i class="fas fa-question-circle mr-3"></i> Help & Support
+                                    </a>
+
+                                    <div class="border-t border-gray-100 my-1"></div>
+
+                                    <a href="<?php echo BASE_URL; ?>user/logout.php"
+                                        class="flex items-center px-4 py-2 text-red-500 hover:bg-red-50 transition">
+                                        <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                                    </a>
+
+                                </div>
                             </div>
                         </div>
+
                     <?php else: ?>
-                        <a href="<?php echo BASE_URL; ?>user/login.php" class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-full font-medium text-sm transition">
-                            <i class="fas fa-sign-in-alt mr-1"></i>Login
+
+                        <!-- Login Button -->
+                        <a href="<?php echo BASE_URL; ?>user/login.php"
+                            class="
+           bg-primary-500 hover:bg-primary-600 
+           text-white px-5 py-2.5 rounded-full 
+           text-sm font-medium 
+           shadow-sm hover:shadow-md
+           transition-all
+           "> Register/Login
                         </a>
+
                     <?php endif; ?>
 
                 </div>

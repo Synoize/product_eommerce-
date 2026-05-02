@@ -97,18 +97,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $galleryImages = $gallery;
     if (isset($_FILES['gallery']) && is_array($_FILES['gallery']['name'])) {
         $uploadDir = PRODUCTS_PATH;
-        
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
         foreach ($_FILES['gallery']['name'] as $key => $galleryFileName) {
             if ($_FILES['gallery']['error'][$key] === UPLOAD_ERR_OK) {
-                $fileName = time() . '_gallery_' . $key . '_' . basename($galleryFileName);
+                $fileName = time() . '_gallery_' . $key . '_' . preg_replace('/[^A-Za-z0-9\.\-_]/', '_', basename($galleryFileName));
                 $targetPath = $uploadDir . $fileName;
-                
+
                 $fileType = $_FILES['gallery']['type'][$key];
-                if (in_array($fileType, ['image/jpeg', 'image/png', 'image/webp']) && 
-                    $_FILES['gallery']['size'][$key] <= 2 * 1024 * 1024 &&
-                    move_uploaded_file($_FILES['gallery']['tmp_name'][$key], $targetPath)) {
-                    $galleryImages[] = $fileName;
+                if (!in_array($fileType, ['image/jpeg', 'image/png', 'image/webp'])) {
+                    $errors[] = 'Only JPG, PNG, and WEBP gallery images are allowed';
+                    continue;
                 }
+                if ($_FILES['gallery']['size'][$key] > 2 * 1024 * 1024) {
+                    $errors[] = 'Each gallery image must be less than 2MB';
+                    continue;
+                }
+                if (!is_uploaded_file($_FILES['gallery']['tmp_name'][$key])) {
+                    $errors[] = 'Gallery image upload failed for ' . e($galleryFileName);
+                    continue;
+                }
+                if (move_uploaded_file($_FILES['gallery']['tmp_name'][$key], $targetPath)) {
+                    $galleryImages[] = $fileName;
+                } else {
+                    $errors[] = 'Failed to upload gallery image: ' . e($galleryFileName);
+                }
+            } elseif ($_FILES['gallery']['error'][$key] !== UPLOAD_ERR_NO_FILE) {
+                $errors[] = 'Gallery image upload failed (error code ' . $_FILES['gallery']['error'][$key] . ')';
             }
         }
     }

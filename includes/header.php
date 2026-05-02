@@ -86,7 +86,23 @@ try {
 
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
-                    }
+                    },
+
+                    keyframes: {
+        pop: {
+            '0%': { transform: 'scale(0.7)', opacity: '0' },
+            '60%': { transform: 'scale(1.1)', opacity: '1' },
+            '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        float: {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(-12px)' },
+        }
+    },
+    animation: {
+        pop: 'pop 0.5s ease-out forwards',
+        float: 'float 3s ease-in-out infinite',
+    }
 
 
 
@@ -159,7 +175,7 @@ try {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="md:hidden text-gray-400 hover:text-gray-500 text-xl">
+                <button id="mobileMenuBtn" class="md:hidden text-gray-400 hover:text-gray-500 text-xl relative z-50">
                     <i class="fas fa-bars"></i>
                 </button>
 
@@ -332,11 +348,6 @@ try {
                                         <i class="fas fa-user mr-3"></i> My Profile
                                     </a>
 
-                                    <a href="<?php echo BASE_URL; ?>user/addresses.php"
-                                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition">
-                                        <i class="fas fa-map-marker-alt mr-3"></i> Addresses
-                                    </a>
-
                                     <a href="<?php echo BASE_URL; ?>user/wishlist.php"
                                         class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition">
                                         <i class="fas fa-heart mr-3"></i> Wishlist
@@ -386,13 +397,85 @@ try {
             </div>
         </div>
 
+        <!-- Mobile Menu Overlay -->
+        <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/50 z-40 opacity-0 invisible transition-opacity duration-300 md:hidden"></div>
+
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100">
-            <div class="px-4 py-2 space-y-2">
-                <a href="<?php echo BASE_URL; ?>" class="block py-2 text-gray-700 hover:text-primary-500"><i class="fas fa-home mr-2"></i>Home</a>
-                <a href="<?php echo BASE_URL; ?>shop.php" class="block py-2 text-gray-700 hover:text-primary-500"><i class="fas fa-store mr-2"></i>Shop</a>
-                <a href="<?php echo BASE_URL; ?>about-us.php" class="block py-2 text-gray-700 hover:text-primary-500"><i class="fas fa-info-circle mr-2"></i>About</a>
-                <a href="<?php echo BASE_URL; ?>contact-us.php" class="block py-2 text-gray-700 hover:text-primary-500"><i class="fas fa-envelope mr-2"></i>Contact</a>
+        <div id="mobileMenu" class="fixed top-0 left-0 w-72 max-w-[85vw] h-full bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-out md:hidden">
+            <div class="flex items-center justify-between px-4 py-2 border-b border-gray-100">
+                <img src="<?php echo ASSETS_URL; ?>/public/logo.png" alt="logo" class="h-16">
+                <button id="mobileMenuClose" class="text-gray-500 hover:text-gray-700 p-2">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="px-2 py-4 space-y-1 overflow-y-auto h-[calc(100%-65px)]">
+                <a href="<?php echo BASE_URL; ?>" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                    <i class="fas fa-home w-8"></i> Home
+                </a>
+                <a href="<?php echo BASE_URL; ?>shop.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                    <i class="fas fa-store w-8"></i> Shop
+                </a>
+
+                <!-- Mobile Categories -->
+                <?php if (!empty($categories)): ?>
+                    <div>
+                        <button id="mobileCategoriesToggle" class="flex items-center justify-start gap-4 w-full px-1 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                            <span><i class="fas fa-th-large w-8"></i> Categories</span>
+                            <i class="fas fa-chevron-up text-sm transition-transform duration-300" id="mobileCategoriesIcon"></i>
+                        </button>
+                        <div id="mobileCategoriesList" class="hidden pl-4 mt-1 space-y-1">
+                            <?php foreach ($categories as $category): ?>
+                                <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $category['id']; ?>" class="flex items-center px-4 py-2 text-gray-600 hover:text-primary-500 text-sm">
+                                    <?php if ($category['image']): ?>
+                                        <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" class="w-5 h-5 rounded-full mr-2 object-cover">
+                                    <?php endif; ?>
+                                    <?php echo e($category['name']); ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <a href="<?php echo BASE_URL; ?>about-us.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                    <i class="fas fa-info-circle w-8"></i> About
+                </a>
+                <a href="<?php echo BASE_URL; ?>contact-us.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                    <i class="fas fa-envelope w-8"></i> Contact
+                </a>
+
+                <!-- Mobile Auth Links -->
+                <?php if (isLoggedIn()): ?>
+                    <div class="border-t border-gray-100 pt-2 mt-2">
+                        <a href="<?php echo BASE_URL; ?>user/profile.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                            <i class="fas fa-user w-8"></i> My Profile
+                        </a>
+                        <a href="">
+                            <a href="<?php echo BASE_URL; ?>user/wishlist.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                                <i class="fas fa-heart w-8"></i> Wishlist
+                            </a>
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>user/orders.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                            <i class="fas fa-box w-8"></i> My Orders
+                        </a>
+                        <a href="">
+                            <a href="<?php echo BASE_URL; ?>checkout.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                                <i class="fas fa-shopping-cart w-8"></i> Checkout
+                            </a>
+                            <a href="">
+                                <a href="<?php echo BASE_URL; ?>help.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                                    <i class="fas fa-question-circle w-8"></i> Help & Support
+                                </a>
+                                <a href="<?php echo BASE_URL; ?>user/logout.php" class="flex items-center p-3 text-red-500 hover:bg-red-50 rounded-lg transition">
+                                    <i class="fas fa-sign-out-alt w-8"></i> Logout
+                                </a>
+                    </div>
+                <?php else: ?>
+                    <div class="border-t border-gray-100 pt-2 mt-2">
+                        <a href="<?php echo BASE_URL; ?>user/login.php" class="flex items-center justify-center p-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition mt-2">
+                            Login / Register
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
@@ -402,7 +485,33 @@ try {
 
     <script>
         // Mobile menu toggle
-        document.getElementById('mobileMenuBtn')?.addEventListener('click', function() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const mobileCategoriesToggle = document.getElementById('mobileCategoriesToggle');
+        const mobileCategoriesList = document.getElementById('mobileCategoriesList');
+        const mobileCategoriesIcon = document.getElementById('mobileCategoriesIcon');
+
+        function openMobileMenu() {
+            mobileMenu.classList.remove('-translate-x-full');
+            mobileMenuOverlay.classList.remove('opacity-0', 'invisible');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('-translate-x-full');
+            mobileMenuOverlay.classList.add('opacity-0', 'invisible');
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn?.addEventListener('click', openMobileMenu);
+        mobileMenuClose?.addEventListener('click', closeMobileMenu);
+        mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
+
+        // Mobile categories toggle
+        mobileCategoriesToggle?.addEventListener('click', function() {
+            mobileCategoriesList.classList.toggle('hidden');
+            mobileCategoriesIcon.classList.toggle('rotate-90');
         });
     </script>

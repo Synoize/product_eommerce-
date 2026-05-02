@@ -57,7 +57,14 @@ function e($string) {
 
 // Redirect helper
 function redirect($url) {
-    header("Location: " . $url);
+    if (!headers_sent()) {
+        header("Location: " . $url);
+        exit();
+    }
+
+    $safeUrl = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+    echo '<script>window.location.href="' . $safeUrl . '";</script>';
+    echo '<noscript><meta http-equiv="refresh" content="0;url=' . $safeUrl . '" /></noscript>';
     exit();
 }
 

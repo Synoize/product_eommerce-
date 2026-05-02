@@ -4,47 +4,58 @@
  */
 
 $pageTitle = 'Manage Categories';
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/db_connect.php';
 requireAdmin();
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['form_action'] ?? '';
+    $errors = [];
     
     if ($action === 'add' || $action === 'edit') {
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
         $categoryId = isset($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
         
         if (empty($name)) {
-            setFlash('Category name is required', 'danger');
-        } else {
-            // Handle image upload
-            $imageName = isset($_POST['existing_image']) ? $_POST['existing_image'] : '';
-            
-            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $errors[] = 'Category name is required';
+        }
+        
+        $imageName = isset($_POST['existing_image']) ? $_POST['existing_image'] : '';
+        
+        if (isset($_FILES['image'])) {
+            if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = CATEGORIES_PATH;
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
                 
-                $fileName = time() . '_' . basename($_FILES['image']['name']);
+                $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9\.\-_]/', '_', basename($_FILES['image']['name']));
                 $targetPath = $uploadDir . $fileName;
                 
                 $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                $fileType = $_FILES['image']['type'];
+                $fileSize = $_FILES['image']['size'];
                 
-                if (!in_array($_FILES['image']['type'], $allowedTypes)) {
-                    setFlash('Only JPG, PNG, and WEBP images are allowed', 'danger');
-                } elseif ($_FILES['image']['size'] > 2 * 1024 * 1024) {
-                    setFlash('Image size must be less than 2MB', 'danger');
+                if (!in_array($fileType, $allowedTypes)) {
+                    $errors[] = 'Only JPG, PNG, and WEBP images are allowed';
+                } elseif ($fileSize > 2 * 1024 * 1024) {
+                    $errors[] = 'Image size must be less than 2MB';
+                } elseif (!is_uploaded_file($_FILES['image']['tmp_name'])) {
+                    $errors[] = 'Uploaded file is invalid';
                 } elseif (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
-                    // Delete old image
                     if ($imageName && file_exists($uploadDir . $imageName)) {
                         unlink($uploadDir . $imageName);
                     }
                     $imageName = $fileName;
+                } else {
+                    $errors[] = 'Failed to upload image';
                 }
+            } elseif ($_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+                $errors[] = 'Image upload failed (error code ' . $_FILES['image']['error'] . ')';
             }
-            
+        }
+        
+        if (empty($errors)) {
             try {
                 if ($action === 'add') {
                     $stmt = $pdo->prepare("INSERT INTO categories (name, image, created_at) VALUES (?, ?, NOW())");
@@ -58,6 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } catch (PDOException $e) {
                 setFlash('Error saving category', 'danger');
             }
+        } else {
+            setFlash(implode(' ', $errors), 'danger');
         }
     }
     
@@ -120,6 +133,8 @@ try {
 } catch (PDOException $e) {
     $categories = [];
 }
+
+require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="bg-white mt-20">
