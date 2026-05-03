@@ -201,6 +201,39 @@ function getWishlistCount() {
     }
 }
 
+function getCurrentPageUrl() {
+    if (empty($_SERVER['HTTP_HOST'])) {
+        return BASE_URL;
+    }
+
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '';
+
+    return $protocol . $_SERVER['HTTP_HOST'] . $requestUri;
+}
+
+function renderWishlistIconButton($productId, $formClass = '', $buttonClass = '') {
+    $productId = (int)$productId;
+    $inWishlist = isInWishlist($productId);
+    $action = $inWishlist ? 'remove' : 'add';
+    $label = $inWishlist ? 'Remove from wishlist' : 'Add to wishlist';
+    $iconClass = $inWishlist ? 'fas' : 'far';
+    $stateClass = $inWishlist
+        ? 'bg-red-500 text-white hover:bg-red-600'
+        : 'bg-white/95 text-gray-600 hover:bg-white hover:text-red-500';
+    $classes = trim($stateClass . ' w-10 h-10 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition ' . $buttonClass);
+    ?>
+    <form action="<?php echo BASE_URL; ?>wishlist_action.php" method="POST" class="<?php echo e($formClass); ?>">
+        <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
+        <input type="hidden" name="wishlist_action" value="<?php echo $action; ?>">
+        <input type="hidden" name="redirect_url" value="<?php echo e(getCurrentPageUrl()); ?>">
+        <button type="submit" class="<?php echo e($classes); ?>" title="<?php echo e($label); ?>" aria-label="<?php echo e($label); ?>">
+            <i class="<?php echo $iconClass; ?> fa-heart"></i>
+        </button>
+    </form>
+    <?php
+}
+
 
 function  getOrderCount() {
     if (!isLoggedIn()) {

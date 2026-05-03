@@ -347,7 +347,10 @@ $pageTitle = $product['name'];
                 <?php foreach ($relatedProducts as $related): ?>
                 <div class="bg-white rounded-2xl shadow-md overflow-hidden group">
                     <?php $relImageUrl = getImageUrl($related['image'], 'products'); ?>
-                    <img src="<?php echo $relImageUrl; ?>" alt="<?php echo e($related['name']); ?>" class="w-full h-48 object-cover">
+                    <div class="relative">
+                        <img src="<?php echo $relImageUrl; ?>" alt="<?php echo e($related['name']); ?>" class="w-full h-48 object-cover">
+                        <?php renderWishlistIconButton($related['id'], 'absolute top-2 right-2 z-10'); ?>
+                    </div>
                     <div class="p-4 text-center">
                         <h5 class="font-semibold text-gray-900 mb-2 truncate"><?php echo e($related['name']); ?></h5>
                         <p class="text-primary-600 font-bold text-lg mb-3"><?php echo formatCurrency($related['price']); ?></p>

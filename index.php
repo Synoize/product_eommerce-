@@ -244,6 +244,8 @@ try {
                                 Only <?php echo $product['stock']; ?> left
                             </span>
                         <?php endif; ?>
+
+                        <?php renderWishlistIconButton($product['id'], 'absolute top-3 right-3 z-10'); ?>
                     </div>
 
                     <!-- CONTENT -->
@@ -362,6 +364,8 @@ try {
                                 Only <?php echo $product['stock']; ?> left
                             </span>
                         <?php endif; ?>
+
+                        <?php renderWishlistIconButton($product['id'], 'absolute top-2 right-2 z-10'); ?>
                     </div>
 
                     <!-- CONTENT -->

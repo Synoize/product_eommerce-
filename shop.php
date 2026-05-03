@@ -235,11 +235,15 @@ if ($categoryId > 0) {
                                 <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">Out of Stock</span>
                             <?php endif; ?>
                             
-                            <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>" 
-                               class="absolute top-2 right-2 bg-white/90 hover:bg-white text-primary-500 w-10 h-10 rounded-full flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition"
-                               title="View Details">
-                                <i class="fas fa-eye"></i>
-                            </a>
+                            <div class="absolute top-2 right-2 flex flex-col gap-2">
+                                <?php renderWishlistIconButton($product['id']); ?>
+                                <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>" 
+                                   class="bg-white/90 hover:bg-white text-primary-500 w-10 h-10 rounded-full flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition"
+                                   title="View Details"
+                                   aria-label="View details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
                         </div>
                         <div class="p-4">
                             <small class="text-gray-400 text-xs"><?php echo e($product['category_name'] ?? 'Uncategorized'); ?></small>
