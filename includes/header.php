@@ -204,7 +204,7 @@ try {
     <?php endif; ?>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-40 animate-slide-top">
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-40 md:animate-slide-top">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Mobile Menu Button -->
@@ -284,7 +284,7 @@ try {
 
                         <div class="
         flex items-center w-64 
-        bg-gray-100 border 
+        bg-gray-50 border 
         rounded-full px-2 py-1
         focus-within:bg-white
         focus-within:border-primary-400
@@ -500,7 +500,7 @@ try {
                             <?php foreach ($categories as $category): ?>
                                 <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $category['id']; ?>" class="flex items-center px-4 py-2 text-gray-600 hover:text-primary-500 text-sm">
                                     <?php if ($category['image']): ?>
-                                        <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" class="w-5 h-5 rounded-full mr-2 object-cover">
+                                        <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" class="w-6 mr-2 object-contain">
                                     <?php endif; ?>
                                     <?php echo e($category['name']); ?>
                                 </a>

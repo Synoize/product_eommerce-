@@ -47,7 +47,7 @@ try {
 ?>
 
 <!-- Hero Section -->
-<section class="bg-accent/5 py-20 md:py-20 overflow-hidden">
+<section class="bg-accent-50/50 py-20 md:py-20 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -187,14 +187,14 @@ try {
                     </div>
 
                     <!-- Title -->
-                    <h5 class="mt-2 text-black text-center text-xs md:text-lg">
+                    <h5 class="mt-2 text-gray-600 text-center text-xs md:text-lg">
                         <?php echo e($category['name']); ?>
                     </h5>
 
                 </a>
             <?php endforeach; ?>
 
-            <img src="<?php echo IMAGES_URL; ?>/new.png" class="scroll-animate-top hidden md:block mt-8 w-24 h-24 md:w-56 md:h-56 animate-float">
+            <img src="<?php echo IMAGES_URL; ?>/new.png" class="hidden md:block mt-8 w-24 h-24 md:w-56 md:h-56 animate-float">
 
         </div>
 
