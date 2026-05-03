@@ -36,6 +36,16 @@ if (!empty($product['gallery'])) {
     $gallery = json_decode($product['gallery'], true) ?: [];
 }
 
+// Fetch product weights
+$productWeights = [];
+try {
+    $stmt = $pdo->prepare("SELECT * FROM product_weights WHERE product_id = ? ORDER BY sort_order ASC");
+    $stmt->execute([$productId]);
+    $productWeights = $stmt->fetchAll();
+} catch (PDOException $e) {
+    // Silent fail
+}
+
 // Fetch categories
 $categories = [];
 try {
@@ -141,6 +151,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    // Handle weights
+    $weights = isset($_POST['weights']) ? $_POST['weights'] : [];
+    $validWeights = [];
+    
+    if (!empty($weights)) {
+        foreach ($weights as $weightData) {
+            $weight = trim($weightData['weight'] ?? '');
+            $weightPrice = (float)($weightData['price'] ?? 0);
+            $weightStock = (int)($weightData['stock'] ?? 0);
+            
+            if (!empty($weight) && $weightPrice > 0 && $weightStock >= 0) {
+                $validWeights[] = [
+                    'weight' => $weight,
+                    'price' => $weightPrice,
+                    'stock' => $weightStock
+                ];
+            }
+        }
+    }
+    
     if (empty($errors)) {
         try {
             $galleryJson = !empty($galleryImages) ? json_encode(array_values($galleryImages)) : null;
@@ -151,6 +181,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 WHERE id = ?");
             $stmt->execute([$name, $description, $categoryId, $price, $originalPrice, 
                           $stock, $imageName, $galleryJson, $status, $productId]);
+            
+            // Delete existing weights and insert new ones
+            $stmt = $pdo->prepare("DELETE FROM product_weights WHERE product_id = ?");
+            $stmt->execute([$productId]);
+            
+            if (!empty($validWeights)) {
+                $stmt = $pdo->prepare("INSERT INTO product_weights (product_id, weight, price, stock, sort_order) VALUES (?, ?, ?, ?, ?)");
+                foreach ($validWeights as $index => $weightData) {
+                    $stmt->execute([$productId, $weightData['weight'], $weightData['price'], $weightData['stock'], $index]);
+                }
+            }
             
             setFlash('Product updated successfully!', 'success');
             redirect(BASE_URL . 'admin/manage_products.php');
@@ -267,6 +308,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
                         <hr class="my-6 border-gray-200">
                         
+                        <!-- Weight Variants -->
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-900">Weight Variants</h3>
+                                <button type="button" onclick="addWeight()" class="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors">
+                                    <i class="fas fa-plus me-1"></i>Add Weight
+                                </button>
+                            </div>
+                            
+                            <div id="weights-container">
+                                <?php if (!empty($productWeights)): ?>
+                                    <?php foreach ($productWeights as $index => $weight): ?>
+                                        <div class="weight-entry flex gap-3 items-end p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                            <div class="flex-1">
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
+                                                <input type="text" name="weights[<?php echo $index; ?>][weight]" value="<?php echo htmlspecialchars($weight['weight']); ?>" 
+                                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" 
+                                                       placeholder="e.g., 100g, 250g, 500g" required>
+                                            </div>
+                                            <div class="flex-1">
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+                                                <input type="number" name="weights[<?php echo $index; ?>][price]" value="<?php echo $weight['price']; ?>" 
+                                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" 
+                                                       step="0.01" min="0" required>
+                                            </div>
+                                            <div class="flex-1">
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+                                                <input type="number" name="weights[<?php echo $index; ?>][stock]" value="<?php echo $weight['stock']; ?>" 
+                                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" 
+                                                       min="0" required>
+                                            </div>
+                                            <button type="button" onclick="removeWeight(this)" class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600">Add different weight options for this product. Each weight can have its own price and stock level.</p>
+                        </div>
+                        
+                        <hr class="my-6 border-gray-200">
+                        
                         <div class="flex gap-3">
                             <button type="submit" class="px-5 py-2.5 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-medium">
                                 <i class="fas fa-save me-2"></i>Update Product
@@ -281,3 +366,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
+
+<script>
+let weightIndex = <?php echo count($productWeights); ?>;
+
+function addWeight() {
+    const container = document.getElementById('weights-container');
+    const weightEntry = document.createElement('div');
+    weightEntry.className = 'weight-entry flex gap-3 items-end p-4 border border-gray-200 rounded-lg bg-gray-50';
+    weightEntry.innerHTML = `
+        <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
+            <input type="text" name="weights[${weightIndex}][weight]" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" 
+                   placeholder="e.g., 100g, 250g, 500g" required>
+        </div>
+        <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+            <input type="number" name="weights[${weightIndex}][price]" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" 
+                   step="0.01" min="0" required>
+        </div>
+        <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+            <input type="number" name="weights[${weightIndex}][stock]" 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" 
+                   min="0" required>
+        </div>
+        <button type="button" onclick="removeWeight(this)" class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    container.appendChild(weightEntry);
+    weightIndex++;
+}
+
+function removeWeight(button) {
+    button.closest('.weight-entry').remove();
+}
+</script>

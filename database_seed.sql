@@ -99,3 +99,145 @@ INSERT INTO `reviews` (`product_id`, `user_id`, `rating`, `comment`, `created_at
 (11, 1, 5, 'Authentic garam masala! Perfect blend, makes my curries taste like restaurant style.', DATE_SUB(NOW(), INTERVAL 6 DAY)),
 (12, 1, 5, 'Turmeric powder has beautiful color and aroma. Very pure and authentic.', DATE_SUB(NOW(), INTERVAL 4 DAY)),
 (16, 1, 4, 'Pav bhaji masala is excellent! Tastes just like Mumbai street food.', DATE_SUB(NOW(), INTERVAL 3 DAY));
+
+-- --------------------------------------------------------
+
+--
+-- Dumping data for table `product_weights`
+--
+
+-- Roasted Makhana Premium (Product ID 1)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(1, '100g', 149.00, 100, 0),
+(1, '250g', 349.00, 80, 1),
+(1, '500g', 649.00, 60, 2),
+(1, '1kg', 1199.00, 40, 3);
+
+-- Masala Makhana (Product ID 2)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(2, '100g', 159.00, 80, 0),
+(2, '250g', 379.00, 70, 1),
+(2, '500g', 699.00, 50, 2);
+
+-- Aloo Bhujia (Product ID 3)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(3, '200g', 79.00, 100, 0),
+(3, '400g', 129.00, 150, 1),
+(3, '800g', 239.00, 80, 2),
+(3, '1kg', 299.00, 50, 3);
+
+-- Moong Dal Namkeen (Product ID 4)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(4, '200g', 79.00, 100, 0),
+(4, '400g', 139.00, 120, 1),
+(4, '800g', 259.00, 80, 2);
+
+-- Chana Choor Garam (Product ID 5)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(5, '250g', 79.00, 90, 0),
+(5, '500g', 119.00, 85, 1),
+(5, '1kg', 219.00, 60, 2);
+
+-- Kurkure Masala (Product ID 6)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(6, '40g', 15.00, 150, 0),
+(6, '100g', 20.00, 200, 1),
+(6, '200g', 35.00, 100, 2);
+
+-- Soya Sticks Crunchy (Product ID 7)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(7, '100g', 49.00, 60, 0),
+(7, '200g', 89.00, 75, 1),
+(7, '400g', 159.00, 50, 2);
+
+-- Peanut Chikki (Product ID 8)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(8, '100g', 49.00, 50, 0),
+(8, '250g', 99.00, 60, 1),
+(8, '500g', 179.00, 40, 2);
+
+-- Khatta Meetha Mixture (Product ID 9)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(9, '200g', 79.00, 70, 0),
+(9, '400g', 149.00, 85, 1),
+(9, '800g', 279.00, 60, 2);
+
+-- Methi Mathri (Product ID 10)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(10, '250g', 99.00, 60, 0),
+(10, '500g', 179.00, 70, 1),
+(10, '1kg', 329.00, 50, 2);
+
+-- Turmeric Powder Premium (Product ID 11)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(11, '100g', 49.00, 80, 0),
+(11, '250g', 89.00, 100, 1),
+(11, '500g', 159.00, 60, 2),
+(11, '1kg', 299.00, 40, 3);
+
+-- Red Chili Powder (Product ID 12)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(12, '100g', 79.00, 70, 0),
+(12, '250g', 129.00, 80, 1),
+(12, '500g', 239.00, 50, 2);
+
+-- Garam Masala (Product ID 13)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(13, '50g', 79.00, 70, 0),
+(13, '100g', 149.00, 90, 1),
+(13, '200g', 279.00, 60, 2);
+
+-- Cumin Seeds Whole (Product ID 14)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(14, '50g', 39.00, 100, 0),
+(14, '100g', 79.00, 110, 1),
+(14, '250g', 189.00, 80, 2),
+(14, '500g', 359.00, 50, 3);
+
+-- Coriander Powder (Product ID 15)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(15, '100g', 39.00, 85, 0),
+(15, '250g', 69.00, 95, 1),
+(15, '500g', 129.00, 70, 2);
+
+-- Pav Bhaji Masala (Product ID 16)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(16, '50g', 39.00, 100, 0),
+(16, '100g', 59.00, 120, 1),
+(16, '200g', 109.00, 80, 2);
+
+-- Chole Masala (Product ID 17)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(17, '50g', 39.00, 75, 0),
+(17, '100g', 69.00, 85, 1),
+(17, '200g', 129.00, 60, 2);
+
+-- Kitchen King Masala (Product ID 18)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(18, '50g', 49.00, 80, 0),
+(18, '100g', 89.00, 100, 1),
+(18, '200g', 169.00, 70, 2);
+
+-- Kasuri Methi (Product ID 19)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(19, '20g', 29.00, 60, 0),
+(19, '50g', 49.00, 75, 1),
+(19, '100g', 89.00, 50, 2);
+
+-- Mustard Seeds (Product ID 20)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(20, '50g', 25.00, 110, 0),
+(20, '100g', 39.00, 130, 1),
+(20, '250g', 89.00, 90, 2);
+
+-- Cardamom Green Whole (Product ID 21)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(21, '25g', 99.00, 40, 0),
+(21, '50g', 199.00, 50, 1),
+(21, '100g', 379.00, 35, 2);
+
+-- Black Pepper Powder (Product ID 22)
+INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_order`) VALUES
+(22, '50g', 59.00, 65, 0),
+(22, '100g', 119.00, 80, 1),
+(22, '200g', 229.00, 60, 2);

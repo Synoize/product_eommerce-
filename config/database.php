@@ -139,3 +139,80 @@ function requireLogin() {
         redirect(BASE_URL . 'user/login.php');
     }
 }
+
+// Wishlist helper functions
+function isInWishlist($productId) {
+    if (!isLoggedIn()) {
+        return false;
+    }
+    
+    global $pdo;
+    try {
+        $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM wishlist WHERE user_id = ? AND product_id = ?");
+        $stmt->execute([$_SESSION['user_id'], $productId]);
+        return $stmt->fetch()['count'] > 0;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+function addToWishlist($productId) {
+    if (!isLoggedIn()) {
+        return false;
+    }
+    
+    global $pdo;
+    try {
+        $stmt = $pdo->prepare("INSERT INTO wishlist (user_id, product_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE created_at = NOW()");
+        $stmt->execute([$_SESSION['user_id'], $productId]);
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+function removeFromWishlist($productId) {
+    if (!isLoggedIn()) {
+        return false;
+    }
+    
+    global $pdo;
+    try {
+        $stmt = $pdo->prepare("DELETE FROM wishlist WHERE user_id = ? AND product_id = ?");
+        $stmt->execute([$_SESSION['user_id'], $productId]);
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+function getWishlistCount() {
+    if (!isLoggedIn()) {
+        return 0;
+    }
+    
+    global $pdo;
+    try {
+        $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM wishlist WHERE user_id = ?");
+        $stmt->execute([$_SESSION['user_id']]);
+        return $stmt->fetch()['count'];
+    } catch (PDOException $e) {
+        return 0;
+    }
+}
+
+
+function  getOrderCount() {
+    if (!isLoggedIn()) {
+        return 0;
+    }
+    
+    global $pdo;
+    try {
+        $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM orders WHERE user_id = ?");
+        $stmt->execute([$_SESSION['user_id']]);
+        return $stmt->fetch()['count'];
+    } catch (PDOException $e) {
+        return 0;
+    }
+}

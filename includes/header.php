@@ -31,11 +31,13 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($pageTitle) ? e($pageTitle) . ' - ' : ''; ?>WebStore</title>
     <link rel="icon" href="<?= ASSETS_URL; ?>/public/favicon.ico">
+    <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/public/css/styles.css">
+
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Luckiest+Guy&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Palanquin+Dark:wght@400;500;600;700&family=Patrick+Hand+SC&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Protest+Revolution&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -85,55 +87,86 @@ try {
                     },
 
                     fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
+                        sans: ['sans-serif'],
+                        luckiest: ['Luckiest Guy', 'cursive'],
                     },
 
                     keyframes: {
-        pop: {
-            '0%': { transform: 'scale(0.7)', opacity: '0' },
-            '60%': { transform: 'scale(1.1)', opacity: '1' },
-            '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        float: {
-            '0%, 100%': { transform: 'translateY(0px)' },
-            '50%': { transform: 'translateY(-12px)' },
-        }
-    },
-    animation: {
-        pop: 'pop 0.5s ease-out forwards',
-        float: 'float 3s ease-in-out infinite',
-    }
+                        pop: {
+                            '0%': {
+                                transform: 'scale(0.7)',
+                                opacity: '0'
+                            },
+                            '60%': {
+                                transform: 'scale(1.1)',
+                                opacity: '1'
+                            },
+                            '100%': {
+                                transform: 'scale(1)',
+                                opacity: '1'
+                            },
+                        },
+                        float: {
+                            '0%, 100%': {
+                                transform: 'translateY(0px)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-12px)'
+                            },
+                        },
+                        slideLeft: {
+                            '0%': {
+                                transform: 'translateX(-80px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideRight: {
+                            '0%': {
+                                transform: 'translateX(80px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideTop: {
+                            '0%': {
+                                transform: 'translateY(-80px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
+                        },
+                        slideBottom: {
+                            '0%': {
+                                transform: 'translateY(80px)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateY(0)',
+                                opacity: '1'
+                            },
+                        },
+                    },
 
+                    animation: {
+                        pop: 'pop 1s ease-out forwards',
+                        float: 'float 3s ease-in-out infinite',
 
+                        // NEW
+                        'slide-left': 'slideLeft 0.8s ease-out forwards',
+                        'slide-right': 'slideRight 0.8s ease-out forwards',
+                        'slide-top': 'slideTop 0.8s ease-out forwards',
+                        'slide-bottom': 'slideBottom 0.8s ease-out forwards',
+                    }
 
-
-
-
-                    // colors: {
-                    //     primary: {
-                    //         DEFAULT: '#f84183',
-                    //         50: '#fef1f5',
-                    //         100: '#fde4ec',
-                    //         200: '#fdcde0',
-                    //         300: '#fca6c6',
-                    //         400: '#f970a2',
-                    //         500: '#f84183',
-                    //         600: '#e91e63',
-                    //         700: '#c2185b',
-                    //         800: '#9d174d',
-                    //         900: '#831843',
-                    //     },
-                    //     secondary: {
-                    //         DEFAULT: '#6366f1',
-                    //         50: '#eef2ff',
-                    //         100: '#e0e7ff',
-                    //         500: '#6366f1',
-                    //         600: '#4f46e5',
-                    //     }
-                    // },
-                    // fontFamily: {
-                    //     sans: ['Inter', 'sans-serif'],
-                    // }
                 }
             }
         }
@@ -171,7 +204,7 @@ try {
     <?php endif; ?>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-40">
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-40 animate-slide-top">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Mobile Menu Button -->
@@ -189,7 +222,7 @@ try {
                     <a href="<?php echo BASE_URL; ?>" class="text-gray-700 hover:text-primary-500 font-medium <?php echo basename($_SERVER['PHP_SELF']) === 'index.php' ? 'text-primary-500' : ''; ?>">
                         Home
                     </a>
-                    <a href="<?php echo BASE_URL; ?>." class="text-gray-700 hover:text-primary-500 font-medium <?php echo basename($_SERVER['PHP_SELF']) === 'shop.php' ? 'text-primary-500' : ''; ?>">
+                    <a href="<?php echo BASE_URL; ?>shop.php" class="text-gray-700 hover:text-primary-500 font-medium <?php echo basename($_SERVER['PHP_SELF']) === 'shop.php' ? 'text-primary-500' : ''; ?>">
                         Shop
                     </a>
 
@@ -223,7 +256,7 @@ try {
                                         <?php if ($category['image']): ?>
                                             <img
                                                 src="<?php echo getImageUrl($category['image'], 'categories'); ?>"
-                                                class="w-6 h-6 rounded-full mr-3 object-cover">
+                                                class="w-8 h-8 mr-3 object-contain">
                                         <?php endif; ?>
 
                                         <span class="text-sm font-medium">
@@ -251,7 +284,7 @@ try {
 
                         <div class="
         flex items-center w-64 
-        bg-gray-100 border border-slate-100 
+        bg-gray-100 border 
         rounded-full px-2 py-1
         focus-within:bg-white
         focus-within:border-primary-400
@@ -289,6 +322,28 @@ try {
                         </div>
 
                     </form>
+
+                    <!-- Wishlist -->
+                    <a href="<?php echo BASE_URL; ?>user/wishlist.php"
+                        class="relative text-red-500 hover:text-red-400 transition">
+
+                        <i class="fas fa-heart text-xl"></i>
+
+                        <?php
+                        $wishlistCount = getWishlistCount();
+                        if ($wishlistCount > 0):
+                        ?>
+                            <span class="
+                absolute -top-1.5 -right-1.5 
+                text-red-500 bg-white 
+                text-[10px] font-semibold 
+                rounded-full h-5 min-w-[20px] px-1
+                flex items-center justify-center
+                shadow">
+                                <?php echo $wishlistCount; ?>
+                            </span>
+                        <?php endif; ?>
+                    </a>
 
                     <!-- Cart -->
                     <a href="<?php echo BASE_URL; ?>cart.php"
@@ -349,13 +404,31 @@ try {
                                     </a>
 
                                     <a href="<?php echo BASE_URL; ?>user/wishlist.php"
-                                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition">
-                                        <i class="fas fa-heart mr-3"></i> Wishlist
+                                        class="relative flex items-center px-4 py-2 hover:text-red-500 hover:bg-gray-50 hover:text-red-400 transition">
+                                        <i class="fas fa-heart mr-3 text-red-500"></i> Wishlist
+                                        <?php
+                                        $wishlistCount = getWishlistCount();
+                                        if ($wishlistCount > 0):
+                                        ?>
+                                            <span class="absolute top-1 left-6 text-red-500 bg-white text-[8px] font-semibold rounded-full h-3 min-w-3 px-1 flex items-center justify-center shadow">
+                                                <?php echo $wishlistCount; ?>
+                                            </span>
+                                        <?php endif; ?>
                                     </a>
 
                                     <a href="<?php echo BASE_URL; ?>user/orders.php"
-                                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition">
-                                        <i class="fas fa-box mr-3"></i> My Orders
+                                        class="relative flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition">
+                                        <i class="fas fa-shopping-bag mr-3"></i> My Orders
+
+                                        <?php
+                                        $orderCount = getOrderCount();
+                                        if ($orderCount > 0):
+                                        ?>
+                                            <span class="absolute top-1 left-6 text-accent-600 bg-black text-[8px] font-semibold rounded-full h-3 min-w-3 px-1 flex items-center justify-center shadow">
+                                                <?php echo $orderCount; ?>
+                                            </span>
+                                        <?php endif; ?>
+
                                     </a>
 
                                     <a href="<?php echo BASE_URL; ?>checkout.php"
@@ -450,12 +523,29 @@ try {
                             <i class="fas fa-user w-8"></i> My Profile
                         </a>
                         <a href="">
-                            <a href="<?php echo BASE_URL; ?>user/wishlist.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                                <i class="fas fa-heart w-8"></i> Wishlist
+                            <a href="<?php echo BASE_URL; ?>user/wishlist.php" class="relative flex items-center p-3 hover:text-red-500 hover:bg-gray-50 rounded-lg transition">
+                                <i class="fas fa-heart w-8 text-red-500"></i> Wishlist
+                                <?php
+                                $wishlistCount = getWishlistCount();
+                                if ($wishlistCount > 0):
+                                ?>
+                                    <span class="absolute top-3 left-5 text-red-500 bg-white text-[8px] font-semibold rounded-full h-3 min-w-3 px-1 flex items-center justify-center shadow">
+                                        <?php echo $wishlistCount; ?>
+                                    </span>
+                                <?php endif; ?>
                             </a>
                         </a>
-                        <a href="<?php echo BASE_URL; ?>user/orders.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                            <i class="fas fa-box w-8"></i> My Orders
+                        <a href="<?php echo BASE_URL; ?>user/orders.php" class="relative flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                            <i class="fas fa-shopping-bag w-8"></i> My Orders
+
+                            <?php
+                            $orderCount = getOrderCount();
+                            if ($orderCount > 0):
+                            ?>
+                                <span class="absolute top-3 left-5 text-accent-600 bg-black text-[8px] font-semibold rounded-full h-3 min-w-3 px-1 flex items-center justify-center shadow">
+                                    <?php echo $orderCount; ?>
+                                </span>
+                            <?php endif; ?>
                         </a>
                         <a href="">
                             <a href="<?php echo BASE_URL; ?>checkout.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">

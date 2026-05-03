@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($action) {
         case 'add':
             $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
+            $weightId = isset($_POST['weight_id']) ? (int)$_POST['weight_id'] : null;
             
             // Validate product exists and has stock
             try {
@@ -27,17 +28,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $product = $stmt->fetch();
                 
                 if ($product) {
-                    if ($product['stock'] >= $quantity) {
-                        if (isset($_SESSION['cart'][$productId])) {
-                            $_SESSION['cart'][$productId]['quantity'] += $quantity;
+                    $availableStock = $product['stock'];
+                    $price = $product['price'];
+                    $weight = null;
+                    
+                    // If weight is selected, get weight details
+                    if ($weightId) {
+                        $stmt = $pdo->prepare("SELECT * FROM product_weights WHERE id = ? AND product_id = ?");
+                        $stmt->execute([$weightId, $productId]);
+                        $weight = $stmt->fetch();
+                        
+                        if ($weight) {
+                            $availableStock = $weight['stock'];
+                            $price = $weight['price'];
                         } else {
-                            $_SESSION['cart'][$productId] = [
+                            setFlash('Invalid weight selection.', 'danger');
+                            redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : BASE_URL . 'shop.php');
+                            exit;
+                        }
+                    }
+                    
+                    if ($availableStock >= $quantity) {
+                        $cartKey = $weightId ? $productId . '_w' . $weightId : $productId;
+                        
+                        if (isset($_SESSION['cart'][$cartKey])) {
+                            $_SESSION['cart'][$cartKey]['quantity'] += $quantity;
+                        } else {
+                            $_SESSION['cart'][$cartKey] = [
                                 'id' => $product['id'],
                                 'name' => $product['name'],
-                                'price' => $product['price'],
+                                'price' => $price,
                                 'image' => $product['image'],
                                 'quantity' => $quantity,
-                                'stock' => $product['stock']
+                                'stock' => $availableStock,
+                                'weight_id' => $weightId,
+                                'weight' => $weight ? $weight['weight'] : null
                             ];
                         }
                         setFlash('Product added to cart successfully!', 'success');
@@ -220,6 +245,9 @@ $total = $subtotal - $discount;
                         </div>
                         <div class="flex-grow min-w-0">
                             <h5 class="font-semibold text-gray-900 truncate"><?php echo e($item['name']); ?></h5>
+                            <?php if (!empty($item['weight'])): ?>
+                                <p class="text-blue-600 text-sm font-medium"><?php echo e($item['weight']); ?></p>
+                            <?php endif; ?>
                             <p class="text-gray-500 text-sm"><?php echo formatCurrency($item['price']); ?></p>
                             <p class="text-gray-400 text-xs">Stock: <?php echo $item['stock']; ?> available</p>
                         </div>

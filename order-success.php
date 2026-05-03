@@ -78,7 +78,13 @@ unset($_SESSION['last_order_id']);
                         <tbody class="divide-y divide-gray-200">
                             <?php foreach ($orderItems as $item): ?>
                             <tr>
-                                <td class="py-3"><?php echo e($item['product_name']); ?> (x<?php echo $item['quantity']; ?>)</td>
+                                <td class="py-3">
+                                    <?php echo e($item['product_name']); ?>
+                                    <?php if (!empty($item['weight'])): ?>
+                                        <span class="text-blue-600 text-xs">(<?php echo e($item['weight']); ?>)</span>
+                                    <?php endif; ?>
+                                    (x<?php echo $item['quantity']; ?>)
+                                </td>
                                 <td class="py-3 text-right font-medium"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></td>
                             </tr>
                             <?php endforeach; ?>

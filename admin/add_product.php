@@ -102,6 +102,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    // Handle weights
+    $weights = isset($_POST['weights']) ? $_POST['weights'] : [];
+    $validWeights = [];
+    
+    if (!empty($weights)) {
+        foreach ($weights as $weightData) {
+            $weight = trim($weightData['weight'] ?? '');
+            $weightPrice = (float)($weightData['price'] ?? 0);
+            $weightStock = (int)($weightData['stock'] ?? 0);
+            
+            if (!empty($weight) && $weightPrice > 0 && $weightStock >= 0) {
+                $validWeights[] = [
+                    'weight' => $weight,
+                    'price' => $weightPrice,
+                    'stock' => $weightStock
+                ];
+            }
+        }
+    }
+    
     if (empty($errors)) {
         try {
             $galleryJson = !empty($galleryImages) ? json_encode($galleryImages) : null;
@@ -109,6 +129,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO products (name, description, category_id, price, original_price, stock, image, gallery, status, created_at) 
                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
             $stmt->execute([$name, $description, $categoryId, $price, $originalPrice, $stock, $imageName, $galleryJson]);
+            
+            $productId = $pdo->lastInsertId();
+            
+            // Insert weights if provided
+            if (!empty($validWeights)) {
+                $stmt = $pdo->prepare("INSERT INTO product_weights (product_id, weight, price, stock, sort_order) VALUES (?, ?, ?, ?, ?)");
+                foreach ($validWeights as $index => $weightData) {
+                    $stmt->execute([$productId, $weightData['weight'], $weightData['price'], $weightData['stock'], $index]);
+                }
+            }
             
             setFlash('Product added successfully!', 'success');
             redirect(BASE_URL . 'admin/manage_products.php');
@@ -203,6 +233,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                     
+                    <!-- Product Weights Section -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Product Weights & Pricing</h3>
+                        <div id="weightsContainer">
+                            <!-- Weight entries will be added here -->
+                        </div>
+                        <button type="button" onclick="addWeight()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition inline-flex items-center">
+                            <i class="fas fa-plus mr-2"></i>Add Weight Option
+                        </button>
+                        <p class="text-xs text-gray-500 mt-2">Add different weight options with their respective prices and stock levels.</p>
+                    </div>
+                    
                     <div class="border-t border-gray-200 pt-6 flex flex-wrap gap-3">
                         <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl">
                             <i class="fas fa-save mr-2"></i>Add Product
@@ -216,3 +258,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
+
+<script>
+let weightIndex = 0;
+
+function addWeight(weight = '', price = '', stock = '') {
+    const container = document.getElementById('weightsContainer');
+    const weightDiv = document.createElement('div');
+    weightDiv.className = 'weight-entry bg-gray-50 p-4 rounded-lg mb-3';
+    weightDiv.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Weight *</label>
+                <input type="text" name="weights[${weightIndex}][weight]" value="${weight}" placeholder="e.g., 100g, 250g, 500g" required
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹) *</label>
+                <input type="number" name="weights[${weightIndex}][price]" value="${price}" step="0.01" min="0" required
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Stock *</label>
+                <input type="number" name="weights[${weightIndex}][stock]" value="${stock}" min="0" required
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+            </div>
+            <div>
+                <button type="button" onclick="removeWeight(this)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    container.appendChild(weightDiv);
+    weightIndex++;
+}
+
+function removeWeight(button) {
+    button.closest('.weight-entry').remove();
+}
+
+// Add default weight option
+addWeight();
+</script>

@@ -14,6 +14,32 @@ if ($productId <= 0) {
     redirect(BASE_URL . 'shop.php');
 }
 
+// Handle wishlist action via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wishlist_action'])) {
+    if (!isLoggedIn()) {
+        setFlash('Please login to manage wishlist', 'warning');
+        redirect(BASE_URL . 'user/login.php');
+    }
+    
+    $action = $_POST['wishlist_action'];
+    
+    if ($action === 'add') {
+        if (addToWishlist($productId)) {
+            setFlash('Added to wishlist!', 'success');
+        } else {
+            setFlash('Error adding to wishlist', 'danger');
+        }
+    } elseif ($action === 'remove') {
+        if (removeFromWishlist($productId)) {
+            setFlash('Removed from wishlist', 'success');
+        } else {
+            setFlash('Error removing from wishlist', 'danger');
+        }
+    }
+    
+    redirect(BASE_URL . 'product.php?id=' . $productId);
+}
+
 // Fetch product details
 try {
     $stmt = $pdo->prepare("SELECT p.*, c.name as category_name 
@@ -42,6 +68,16 @@ if (!empty($product['gallery'])) {
 $mainImage = $product['image'];
 if (!empty($mainImage) && !in_array($mainImage, $gallery)) {
     array_unshift($gallery, $mainImage);
+}
+
+// Fetch product weights
+$productWeights = [];
+try {
+    $stmt = $pdo->prepare("SELECT * FROM product_weights WHERE product_id = ? ORDER BY sort_order ASC");
+    $stmt->execute([$productId]);
+    $productWeights = $stmt->fetchAll();
+} catch (PDOException $e) {
+    // Silent fail
 }
 
 // Fetch related products
@@ -76,6 +112,9 @@ try {
 } catch (PDOException $e) {
     // Reviews table might not exist
 }
+
+// Check if product is in wishlist
+$inWishlist = isInWishlist($productId);
 
 $pageTitle = $product['name'];
 ?>
@@ -177,12 +216,37 @@ $pageTitle = $product['name'];
                         <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                         <input type="hidden" name="action" value="add">
                         
+                        <!-- Weight Selection -->
+                        <?php if (!empty($productWeights)): ?>
+                        <div class="mb-4">
+                            <label class="block font-semibold text-gray-700 mb-2">Select Weight:</label>
+                            <div class="space-y-2">
+                                <?php foreach ($productWeights as $weight): ?>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="weight_id" value="<?php echo $weight['id']; ?>" 
+                                               class="mr-3 text-primary-500 focus:ring-primary-500" 
+                                               onchange="updatePrice(<?php echo $weight['price']; ?>, <?php echo $weight['stock']; ?>)"
+                                               <?php echo $weight === $productWeights[0] ? 'checked' : ''; ?>>
+                                        <span class="text-gray-700">
+                                            <?php echo htmlspecialchars($weight['weight']); ?> - ₹<?php echo number_format($weight['price'], 2); ?>
+                                            <?php if ($weight['stock'] <= 0): ?>
+                                                <span class="text-red-500 text-sm">(Out of Stock)</span>
+                                            <?php elseif ($weight['stock'] <= 5): ?>
+                                                <span class="text-yellow-600 text-sm">(Only <?php echo $weight['stock']; ?> left)</span>
+                                            <?php endif; ?>
+                                        </span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        
                         <div class="flex flex-wrap items-center gap-4">
                             <label class="font-semibold text-gray-700">Quantity:</label>
                             <div class="flex items-center border-2 border-gray-300 rounded-full overflow-hidden">
                                 <button type="button" onclick="decreaseQty()" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition text-lg font-medium">-</button>
-                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="<?php echo $product['stock']; ?>" class="w-14 text-center text-lg font-semibold border-x-2 border-gray-300">
-                                <button type="button" onclick="increaseQty(<?php echo $product['stock']; ?>)" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition text-lg font-medium">+</button>
+                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="<?php echo !empty($productWeights) ? $productWeights[0]['stock'] : $product['stock']; ?>" class="w-14 text-center text-lg font-semibold border-x-2 border-gray-300">
+                                <button type="button" onclick="increaseQty(<?php echo !empty($productWeights) ? $productWeights[0]['stock'] : $product['stock']; ?>)" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition text-lg font-medium">+</button>
                             </div>
                             <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-full transition shadow-lg hover:shadow-xl inline-flex items-center">
                                 <i class="fas fa-cart-plus mr-2"></i>Add to Cart
@@ -190,6 +254,25 @@ $pageTitle = $product['name'];
                         </div>
                     </form>
                     <?php endif; ?>
+                    
+                    <!-- Wishlist Button -->
+                    <div class="mb-6">
+                        <form method="POST" class="inline">
+                            <input type="hidden" name="wishlist_action" value="<?php echo $inWishlist ? 'remove' : 'add'; ?>">
+                            <?php if (isLoggedIn()): ?>
+                                <button type="submit" class="<?php echo $inWishlist ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-200 hover:bg-gray-300'; ?> text-<?php echo $inWishlist ? 'white' : 'gray-900'; ?> font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl inline-flex items-center">
+                                    <i class="fas fa-heart mr-2"></i><?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>
+                                </button>
+                            <?php else: ?>
+                                <a href="<?php echo BASE_URL; ?>user/login.php" class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl inline-flex items-center">
+                                    <i class="fas fa-heart mr-2"></i>Add to Wishlist
+                                </a>
+                            <?php endif; ?>
+                        </form>
+                        <a href="<?php echo BASE_URL; ?>user/wishlist.php" class="ml-3 text-primary-500 hover:text-primary-600 font-medium inline-flex items-center">
+                            <i class="fas fa-list mr-1"></i>View Wishlist
+                        </a>
+                    </div>
                     
                     <!-- Additional Info -->
                     <div class="border-t border-gray-200 pt-6">
@@ -307,6 +390,21 @@ function decreaseQty() {
     if (val > 1) {
         qtyInput.value = val - 1;
     }
+}
+
+function updatePrice(price, stock) {
+    // Update quantity max based on selected weight stock
+    const qtyInput = document.getElementById('quantity');
+    qtyInput.max = stock;
+    
+    // Reset quantity to 1 if current value exceeds new stock
+    if (parseInt(qtyInput.value) > stock) {
+        qtyInput.value = 1;
+    }
+    
+    // Update the increase button's onclick to use new stock
+    const increaseBtn = qtyInput.nextElementSibling;
+    increaseBtn.onclick = function() { increaseQty(stock); };
 }
 </script>
 

@@ -151,7 +151,12 @@ foreach ($orders as $order) {
                                                     <div class="flex items-center">
                                                         <img src="<?php echo getImageUrl($item['product_image'], 'products'); ?>" 
                                                              class="w-10 h-10 rounded-lg mr-3 object-cover" alt="">
-                                                        <span class="text-gray-900"><?php echo e($item['product_name']); ?></span>
+                                                        <div>
+                                                            <span class="text-gray-900"><?php echo e($item['product_name']); ?></span>
+                                                            <?php if (!empty($item['weight'])): ?>
+                                                                <div class="text-blue-600 text-xs font-medium"><?php echo e($item['weight']); ?></div>
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td class="px-4 py-3 text-center"><?php echo $item['quantity']; ?></td>

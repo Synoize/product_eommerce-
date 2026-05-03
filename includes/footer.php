@@ -102,5 +102,6 @@ scrollToTopBtn.addEventListener('click', function() {
 });
 </script>
 
+<script src="<?php echo ASSETS_URL; ?>/public/js/script.js"></script>
 </body>
 </html>

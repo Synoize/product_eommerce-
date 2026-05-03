@@ -80,31 +80,45 @@ try {
         $orderId = $pdo->lastInsertId();
         
         // Insert order items and update stock
-        $itemQuery = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+        $itemQuery = "INSERT INTO order_items (order_id, product_id, weight_id, weight, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
         $itemStmt = $pdo->prepare($itemQuery);
         
-        $stockQuery = "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?";
-        $stockStmt = $pdo->prepare($stockQuery);
-        
-        foreach ($cart as $productId => $item) {
+        foreach ($cart as $cartKey => $item) {
+            $productId = $item['id'];
+            $weightId = $item['weight_id'] ?? null;
+            $weight = $item['weight'] ?? null;
+            
             // Insert order item
             $itemStmt->execute([
                 $orderId,
                 $productId,
+                $weightId,
+                $weight,
                 $item['quantity'],
                 $item['price']
             ]);
             
-            // Decrement stock
-            $stockStmt->execute([
-                $item['quantity'],
-                $productId,
-                $item['quantity']
-            ]);
-            
-            // Check if stock update succeeded
-            if ($stockStmt->rowCount() === 0) {
-                throw new Exception('Insufficient stock for product: ' . $item['name']);
+            // Update stock - decrement from appropriate table
+            if ($weightId) {
+                // Update weight-specific stock
+                $weightStockQuery = "UPDATE product_weights SET stock = stock - ? WHERE id = ? AND stock >= ?";
+                $weightStockStmt = $pdo->prepare($weightStockQuery);
+                $weightStockStmt->execute([$item['quantity'], $weightId, $item['quantity']]);
+                
+                // Check if stock update succeeded
+                if ($weightStockStmt->rowCount() === 0) {
+                    throw new Exception('Insufficient stock for weight variant: ' . $item['name'] . ' (' . $weight . ')');
+                }
+            } else {
+                // Update main product stock
+                $stockQuery = "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?";
+                $stockStmt = $pdo->prepare($stockQuery);
+                $stockStmt->execute([$item['quantity'], $productId, $item['quantity']]);
+                
+                // Check if stock update succeeded
+                if ($stockStmt->rowCount() === 0) {
+                    throw new Exception('Insufficient stock for product: ' . $item['name']);
+                }
             }
         }
         
