@@ -38,18 +38,34 @@ try {
     $savedAddresses = [];
 }
 
-// Handle address selection
-$selectedAddress = null;
-if (isset($_GET['address_id'])) {
-    $addressId = (int)$_GET['address_id'];
-    foreach ($savedAddresses as $addr) {
-        if ($addr['id'] == $addressId) {
-            $selectedAddress = $addr;
-            break;
+function checkoutFindAddressById(array $addresses, int $addressId): ?array
+{
+    foreach ($addresses as $address) {
+        if ((int)$address['id'] === $addressId) {
+            return $address;
         }
     }
-} elseif (!empty($savedAddresses)) {
-    $selectedAddress = $savedAddresses[0]; // Default to first (default) address
+
+    return null;
+}
+
+function checkoutAddressLabel(array $address): string
+{
+    $defaultText = !empty($address['is_default']) ? 'Default - ' : '';
+    return $defaultText . $address['name'] . ' - ' . $address['city'] . ', ' . $address['state'] . ' (' . $address['pincode'] . ')';
+}
+
+$selectedAddressId = isset($_POST['selected_address_id'])
+    ? (int)$_POST['selected_address_id']
+    : (isset($_GET['address_id']) ? (int)$_GET['address_id'] : 0);
+
+$selectedAddress = $selectedAddressId > 0
+    ? checkoutFindAddressById($savedAddresses, $selectedAddressId)
+    : null;
+
+if (!$selectedAddress && !empty($savedAddresses)) {
+    $selectedAddress = $savedAddresses[0];
+    $selectedAddressId = (int)$selectedAddress['id'];
 }
 
 // Calculate cart totals
@@ -95,24 +111,30 @@ if ($paymentMethod === 'cod') {
 // Handle checkout form submission (before payment)
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate form data
-    $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-    $mobile = isset($_POST['mobile']) ? trim($_POST['mobile']) : '';
-    $address = isset($_POST['address']) ? trim($_POST['address']) : '';
-    $city = isset($_POST['city']) ? trim($_POST['city']) : '';
-    $state = isset($_POST['state']) ? trim($_POST['state']) : '';
-    $pincode = isset($_POST['pincode']) ? trim($_POST['pincode']) : '';
     $paymentMethod = isset($_POST['payment_method']) ? trim($_POST['payment_method']) : 'online';
+    $selectedAddressId = isset($_POST['selected_address_id']) ? (int)$_POST['selected_address_id'] : 0;
+    $selectedAddress = checkoutFindAddressById($savedAddresses, $selectedAddressId);
 
-    // Validation
-    if (empty($name)) $errors[] = 'Name is required';
+    $name = trim($selectedAddress['name'] ?? '');
+    $email = trim($user['email'] ?? '');
+    $mobile = trim($selectedAddress['mobile'] ?? '');
+    $address = trim($selectedAddress['address'] ?? '');
+    $city = trim($selectedAddress['city'] ?? '');
+    $state = trim($selectedAddress['state'] ?? '');
+    $pincode = trim($selectedAddress['pincode'] ?? '');
+
+    if (!$selectedAddress) {
+        $errors[] = 'Please select a saved delivery address';
+    } else {
+        if (empty($name)) $errors[] = 'Name is required';
+        if (empty($mobile) || !preg_match('/^[0-9]{10}$/', $mobile)) $errors[] = 'Valid 10-digit mobile number is required';
+        if (empty($address)) $errors[] = 'Address is required';
+        if (empty($city)) $errors[] = 'City is required';
+        if (empty($state)) $errors[] = 'State is required';
+        if (empty($pincode) || !preg_match('/^[0-9]{6}$/', $pincode)) $errors[] = 'Valid 6-digit pincode is required';
+    }
+
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Valid email is required';
-    if (empty($mobile) || !preg_match('/^[0-9]{10}$/', $mobile)) $errors[] = 'Valid 10-digit mobile number is required';
-    if (empty($address)) $errors[] = 'Address is required';
-    if (empty($city)) $errors[] = 'City is required';
-    if (empty($state)) $errors[] = 'State is required';
-    if (empty($pincode) || !preg_match('/^[0-9]{6}$/', $pincode)) $errors[] = 'Valid 6-digit pincode is required';
     if (!in_array($paymentMethod, ['online', 'cod'])) $errors[] = 'Invalid payment method';
 
     // Store checkout data in session for after payment
@@ -140,7 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'payment_method' => $paymentMethod,
             'initial_payment_amount' => $initialPaymentAmount,
             'remaining_payment_amount' => $remainingPaymentAmount,
-            'coupon_code' => $couponCode
+            'coupon_code' => $couponCode,
+            'address_id' => $selectedAddressId
         ];
 
         if ($paymentMethod === 'cod') {
@@ -195,13 +218,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!-- Page Header -->
-<section class="py-12">
+<section class="md:py-12 pt-12 pb-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="text-sm text-gray-600 mb-2">
             <ol class="flex items-center space-x-2">
-                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary-500">Home</a></li>
+                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-accent">Home</a></li>
                 <li><i class="fas fa-chevron-right text-xs"></i></li>
-                <li><a href="<?php echo BASE_URL; ?>cart.php" class="hover:text-primary-500">Cart</a></li>
+                <li><a href="<?php echo BASE_URL; ?>cart.php" class="hover:text-accent">Cart</a></li>
                 <li><i class="fas fa-chevron-right text-xs"></i></li>
                 <li class="text-accent font-medium">Checkout</li>
             </ol>
@@ -222,15 +245,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </ul>
             </div>
         <?php endif; ?>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="flex flex-col-reverse md:grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Checkout Form -->
             <div class="lg:col-span-2">
-                <div class="bg-white border rounded-2xl shadow-sm p-6 md:p-8">
-                    <h4 class="text-xl font-bold text-gray-900 mb-6">Billing & Shipping Information</h4>
+                <div class="bg-white md:border rounded-2xl md:shadow-sm md:p-8">
+                    <h4 class="text-xl font-bold text-gray-900 mb-6 hidden md:block">Delivery & Billing</h4>
 
                     <?php if (isset($showPayment) && $showPayment): ?>
                         <!-- Show Order Summary Before Payment -->
-                        <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                        <div class="bg-gray-50 border rounded-xl p-6 mb-8">
                             <h5 class="font-semibold text-gray-900 mb-4">Order Details</h5>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Billing Information -->
@@ -307,159 +330,126 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <!-- Razorpay Payment Button -->
-                        <div class="text-center py-8">
-                            <?php if ($_SESSION['checkout_data']['payment_method'] === 'cod' && $_SESSION['checkout_data']['initial_payment_amount'] > 0): ?>
-                                <h5 class="text-lg font-semibold text-gray-900 mb-3">Pay Initial Amount (30%)</h5>
-                                <p class="text-gray-600 mb-2">You'll pay the remaining amount on delivery</p>
-                                <p class="text-gray-500 mb-2">Full Order Amount: <strong class="text-primary-500 text-lg"><?php echo formatCurrency($total); ?></strong></p>
-                                <p class="text-gray-500 mb-6">Initial Payment: <strong class="text-primary-500 text-2xl"><?php echo formatCurrency($_SESSION['checkout_data']['initial_payment_amount']); ?></strong></p>
-                            <?php else: ?>
-                                <h5 class="text-lg font-semibold text-gray-900 mb-3">Complete Your Payment</h5>
-                                <p class="text-gray-500 mb-6">Order Total: <strong class="text-primary-500 text-2xl"><?php echo formatCurrency($total); ?></strong></p>
-                            <?php endif; ?>
+                        <div class="text-center md:text-right">
 
-                            <button id="rzp-button" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-full transition shadow-lg hover:shadow-xl">
-                                <i class="fas fa-credit-card mr-2"></i><?php echo ($_SESSION['checkout_data']['payment_method'] === 'cod' && $_SESSION['checkout_data']['initial_payment_amount'] > 0) ? 'Pay (30%)' : 'Pay Now'; ?>
+                            <button id="rzp-button"
+                                class="w-full md:w-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-lg transition hover:shadow-sm">
+                                <!-- Right Side -->
+                                <span class="text-right text-nowrap">
+                                    <i class="fas fa-credit-card mr-2"></i> Pay Now 
+                                    <?php if ($_SESSION['checkout_data']['payment_method'] === 'cod' && $_SESSION['checkout_data']['initial_payment_amount'] > 0): ?>
+                                        <?php echo formatCurrency($_SESSION['checkout_data']['initial_payment_amount']); ?>
+                                    <?php else: ?>
+                                        <?php echo formatCurrency($total); ?>
+                                    <?php endif; ?>
+                                </span>
+
                             </button>
 
                             <div id="payment-loading" class="hidden mt-6">
-                                <div class="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                                <p class="mt-3 text-gray-500">Processing payment...</p>
+                                <div class="w-6 h-6 md:w-12 md:h-12 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
                             </div>
                         </div>
                     <?php else: ?>
 
                         <!-- Checkout Form -->
-                        <form action="<?php echo BASE_URL; ?>checkout.php" method="POST" id="checkoutForm" novalidate>
-                            <!-- Payment Method Selection -->
-                            <div class="mb-8 pb-6 border-b border-gray-200">
-                                <h5 class="font-semibold text-gray-900 mb-4">Select Payment Method</h5>
-                                <div class="space-y-3">
-                                    <!-- Online Payment Option -->
-                                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition payment-method-option <?php echo ($paymentMethod !== 'cod') ? 'border-accent bg-accent-50' : 'border-gray-200 hover:border-gray-300'; ?>" data-method="online">
-                                        <input type="radio" name="payment_method" value="online" 
-                                            <?php echo ($paymentMethod !== 'cod') ? 'checked' : ''; ?>
-                                            class="mt-1 w-4 h-4 text-accent cursor-pointer payment-method-input">
-                                        <div class="ml-3 flex-1">
-                                            <p class="font-semibold text-gray-900">Pay Online</p>
-                                            <p class="text-sm text-gray-600">Pay the full amount using credit/debit card or UPI</p>
-                                            <p class="text-sm font-medium text-primary-500 mt-1 payment-online-amount">Full Amount: <?php echo formatCurrency($total); ?></p>
-                                        </div>
-                                    </label>
-
-                                    <!-- COD Option -->
-                                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition payment-method-option <?php echo ($paymentMethod === 'cod') ? 'border-accent bg-accent-50' : 'border-gray-200 hover:border-gray-300'; ?>" data-method="cod">
-                                        <input type="radio" name="payment_method" value="cod" 
-                                            <?php echo ($paymentMethod === 'cod') ? 'checked' : ''; ?>
-                                            class="mt-1 w-4 h-4 text-accent cursor-pointer payment-method-input">
-                                        <div class="ml-3 flex-1">
-                                            <p class="font-semibold text-gray-900">Cash on Delivery (COD)</p>
-                                            <p class="text-sm text-gray-600">Pay part now and the rest at delivery</p>
-                                            <div class="text-sm font-medium mt-2 space-y-1 payment-cod-amount">
-                                                <p class="text-accent">Initial Payment (30%): <?php echo formatCurrency(round($total * 30 / 100, 2)); ?></p>
-                                                <p class="text-gray-600">Remaining at Delivery (70%): <?php echo formatCurrency(round($total * 70 / 100, 2)); ?></p>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
+                        <form action="<?php echo BASE_URL; ?>checkout.php" method="POST" id="checkoutForm" novalidate class="space-y-8">
 
                             <!-- Address Selection & Billing Details -->
-                            <div class="mb-8">
-                                <h5 class="font-semibold text-gray-900 mb-4">Delivery Address & Billing Information</h5>
-
-                                <!-- Saved Addresses Selection -->
+                            <div class="pb-6 border-b border-gray-200">
                                 <?php if (!empty($savedAddresses)): ?>
-                                    <div class="mb-6">
-                                        <h6 class="text-sm font-medium text-gray-700 mb-3">Select Delivery Address</h6>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <?php foreach ($savedAddresses as $address): ?>
-                                                <div class="relative">
-                                                    <div class="border-2 rounded-xl p-4 h-full <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'border-accent bg-accent-50' : 'border-gray-200'; ?>">
-                                                        <?php if ($address['is_default']): ?>
-                                                            <span class="inline-block bg-accent text-white text-xs font-bold px-2 py-1 rounded mb-2">Default</span>
-                                                        <?php endif; ?>
-                                                        <h6 class="font-semibold text-gray-900 mb-2"><?php echo e($address['name']); ?></h6>
-                                                        <p class="text-gray-600 text-sm mb-1"><i class="fas fa-phone mr-2 text-primary-500"></i><?php echo e($address['mobile']); ?></p>
-                                                        <p class="text-gray-500 text-sm"><?php echo e($address['address']); ?>, <?php echo e($address['city']); ?>, <?php echo e($address['state']); ?> - <?php echo e($address['pincode']); ?></p>
+                                    <label for="selected_address_id" class="block md:text-sm font-semibold md:font-medium text-gray-700 mb-2">Select Delivery Address</label>
+                                    <select name="selected_address_id" id="selected_address_id" required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white outline-none focus:border-accent focus:ring-2 focus:ring-accent-50 transition">
+                                        <?php foreach ($savedAddresses as $address): ?>
+                                            <option value="<?php echo (int)$address['id']; ?>"
+                                                <?php echo ($selectedAddress && (int)$selectedAddress['id'] === (int)$address['id']) ? 'selected' : ''; ?>>
+                                                <?php echo e(checkoutAddressLabel($address)); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
 
-                                                        <a href="?address_id=<?php echo $address['id']; ?>"
-                                                            class="mt-3 inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'bg-accent text-white' : 'border-2 border-accent text-accent hover:bg-accent-50'; ?>">
-                                                            <?php echo ($selectedAddress && $selectedAddress['id'] == $address['id']) ? 'Selected' : 'Select'; ?>
-                                                        </a>
-                                                    </div>
+                                    <div id="selectedAddressPreview" class="mt-4 border border-gray-200 rounded-xl p-4 text-sm bg-gray-50">
+                                        <div class="flex flex-wrap items-start justify-between gap-3">
+                                            <div>
+                                                <div class="flex flex-wrap items-center gap-2 mb-2">
+                                                    <p id="previewName" class="font-semibold text-gray-900"><?php echo e($selectedAddress['name'] ?? ''); ?></p>
+                                                    <span id="previewDefaultBadge" class="<?php echo !empty($selectedAddress['is_default']) ? 'inline-flex' : 'hidden'; ?> bg-accent text-white text-xs font-bold px-2 py-1 rounded">Default</span>
                                                 </div>
-                                            <?php endforeach; ?>
+                                                <p class="text-gray-600 mb-1">
+                                                    <i class="fas fa-phone mr-2 text-primary-500"></i><span id="previewMobile"><?php echo e($selectedAddress['mobile'] ?? ''); ?></span>
+                                                </p>
+                                                <p id="previewFullAddress" class="text-gray-500">
+                                                    <?php if ($selectedAddress): ?>
+                                                        <?php echo e($selectedAddress['address']); ?>, <?php echo e($selectedAddress['city']); ?>, <?php echo e($selectedAddress['state']); ?> - <?php echo e($selectedAddress['pincode']); ?>
+                                                    <?php endif; ?>
+                                                </p>
+                                                <p class="text-gray-500 mt-1">
+                                                    <i class="fas fa-envelope mr-2 text-primary-500"></i><?php echo e($user['email'] ?? ''); ?>
+                                                </p>
+                                            </div>
+                                            <a href="<?php echo BASE_URL; ?>user/addresses.php" class="inline-flex items-center border border-accent text-accent hover:bg-accent hover:text-white font-medium py-2 px-3 rounded-lg transition text-xs">
+                                                <i class="fas fa-edit mr-2"></i>Manage
+                                            </a>
                                         </div>
-                                        <a href="<?php echo BASE_URL; ?>user/addresses.php" class="inline-flex items-center border-2 border-accent text-accent hover:bg-accent-50 font-medium py-2 px-4 rounded-lg transition text-sm mt-4">
-                                            <i class="fas fa-plus mr-2"></i>Add New Address
+                                    </div>
+                                <?php else: ?>
+                                    <div class="border border-yellow-200 bg-yellow-50 rounded-xl p-4 text-sm">
+                                        <p class="font-medium text-gray-900 mb-1">No saved address found</p>
+                                        <p class="text-gray-600 mb-4">Add a delivery address before continuing to payment.</p>
+                                        <a href="<?php echo BASE_URL; ?>user/addresses.php" class="inline-flex items-center bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-5 rounded-lg transition">
+                                            <i class="fas fa-plus mr-2"></i>Add Address
                                         </a>
                                     </div>
                                 <?php endif; ?>
+                            </div>
 
-                                <!-- Billing Details Form -->
-                                <div>
-                                    <h6 class="text-sm font-medium text-gray-700 mb-3">Billing Details</h6>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                                            <input type="text" name="name" required
-                                                value="<?php echo e($_POST['name'] ?? $selectedAddress['name'] ?? $user['name'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent">
+                            <!-- Payment Method Selection -->
+                            <div>
+                                <h5 class="font-semibold text-gray-900 mb-4">Select Payment Method</h5>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                                    <!-- Online Payment -->
+                                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition payment-method-option <?php echo ($paymentMethod !== 'cod') ? 'border-accent bg-accent-50' : 'border-gray-200 hover:border-gray-300'; ?>" data-method="online">
+                                        <input type="radio" name="payment_method" value="online"
+                                            <?php echo ($paymentMethod !== 'cod') ? 'checked' : ''; ?>
+                                            class="mt-1 w-4 h-4 text-accent cursor-pointer payment-method-input">
+
+                                        <div class="ml-3 text-sm">
+                                            <p class="font-semibold text-gray-900">
+                                                Pay Online
+                                            </p>
+                                            <p class="text-accent text-xs">
+                                                Full Amount: <?php echo formatCurrency($total); ?>
+                                            </p>
                                         </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                                            <input type="email" name="email" required
-                                                value="<?php echo e($_POST['email'] ?? $user['email'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent">
+                                    </label>
+
+                                    <!-- COD -->
+                                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition payment-method-option <?php echo ($paymentMethod === 'cod') ? 'border-accent bg-accent-50' : 'border-gray-200 hover:border-gray-300'; ?>" data-method="cod">
+                                        <input type="radio" name="payment_method" value="cod"
+                                            <?php echo ($paymentMethod === 'cod') ? 'checked' : ''; ?>
+                                            class="mt-1 w-4 h-4 text-accent cursor-pointer payment-method-input">
+
+                                        <div class="ml-3 text-sm">
+                                            <p class="font-semibold text-gray-900">Cash on Delivery</p>
+                                            <p class="text-accent text-xs">
+                                                Pay <?php echo COD_INITIAL_PAYMENT_PERCENTAGE; ?>% now: <?php echo formatCurrency(round($total * COD_INITIAL_PAYMENT_PERCENTAGE / 100, 2)); ?>
+                                            </p>
                                         </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
-                                            <input type="tel" name="mobile"
-                                                placeholder="Enter 10-digit mobile number"
-                                                pattern="[0-9]{10}" maxlength="10" required
-                                                value="<?php echo e($_POST['mobile'] ?? $selectedAddress['mobile'] ?? $user['mobile'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent">
-                                            <p class="text-xs text-gray-500 mt-1">Enter 10-digit mobile number without country code</p>
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Address *</label>
-                                            <textarea name="address" rows="3" required
-                                                class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent"><?php echo e($_POST['address'] ?? $selectedAddress['address'] ?? $user['address'] ?? ''); ?></textarea>
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">City *</label>
-                                            <input type="text" name="city" required
-                                                value="<?php echo e($_POST['city'] ?? $selectedAddress['city'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">State *</label>
-                                            <input type="text" name="state" required
-                                                value="<?php echo e($_POST['state'] ?? $selectedAddress['state'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-1">Pincode *</label>
-                                            <input type="text" name="pincode"
-                                                pattern="[0-9]{6}" maxlength="6" required
-                                                value="<?php echo e($_POST['pincode'] ?? $selectedAddress['pincode'] ?? ''); ?>"
-                                                class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent">
-                                        </div>
-                                    </div>
+                                    </label>
+
                                 </div>
                             </div>
 
-                            <hr class="my-6 border-gray-200">
-
-                            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                                <a href="<?php echo BASE_URL; ?>cart.php" class="group inline-flex items-center text-gray-600 hover:text-gray-900 font-medium">
-                                    <i class="fas fa-arrow-left mr-2 transition duration-300 group-hover:-translate-x-1"></i>Back to Cart
-                                </a>
-                                <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-lg transition hover:shadow-sm">
+                            <div class="flex justify-end sticky top-4">
+                                <button type="submit" <?php echo empty($savedAddresses) ? 'disabled' : ''; ?>
+                                    class="w-full md:w-auto bg-primary-500 hover:bg-primary-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-4 px-8 rounded-lg transition hover:shadow-sm self-end">
                                     <i class="fas fa-credit-card mr-2"></i>Continue to Payment
                                 </button>
                             </div>
+
                         </form>
                     <?php endif; ?>
                 </div>
@@ -478,7 +468,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <!-- LEFT SIDE -->
                                 <div class="flex min-w-0 flex-1 gap-2 text-sm">
                                     <span class="text-gray-600 truncate">
-                                        <?php echo e($item['name']); ?> 
+                                        <?php echo e($item['name']); ?>
                                     </span>
                                     <span class="text-gray-400">
                                         (x<?php echo $item['quantity']; ?>)
@@ -535,6 +525,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "amount": "<?php echo ($_SESSION['checkout_data']['payment_method'] === 'cod' ? $_SESSION['checkout_data']['initial_payment_amount'] : $total) * 100; ?>",
             "currency": "<?php echo RAZORPAY_CURRENCY; ?>",
             "name": "Earthence",
+            "image": "<?php echo PUBLIC_URL; ?>logo.png",
             "description": "<?php echo ($_SESSION['checkout_data']['payment_method'] === 'cod' ? 'COD Initial Payment' : 'Order Payment'); ?>",
             "order_id": "<?php echo $_SESSION['razorpay_order_id']; ?>",
             "handler": function(response) {
@@ -574,7 +565,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "contact": "<?php echo e($_SESSION['checkout_data']['mobile'] ?? ''); ?>"
             },
             "theme": {
-                "color": "#f84183"
+                "color": "#FBC02D"
             }
         };
 
@@ -588,45 +579,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endif; ?>
 
 <script>
-    // Form validation
+    const checkoutAddresses = <?php echo json_encode($savedAddresses, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
+    const addressSelect = document.getElementById('selected_address_id');
+
+    function findCheckoutAddress(addressId) {
+        return checkoutAddresses.find(function(address) {
+            return Number(address.id) === Number(addressId);
+        });
+    }
+
+    function setText(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value || '';
+        }
+    }
+
+    function updateAddressPreview() {
+        if (!addressSelect) {
+            return;
+        }
+
+        const address = findCheckoutAddress(addressSelect.value);
+        if (!address) {
+            return;
+        }
+
+        setText('previewName', address.name);
+        setText('previewMobile', address.mobile);
+        setText('previewFullAddress', `${address.address}, ${address.city}, ${address.state} - ${address.pincode}`);
+
+        const defaultBadge = document.getElementById('previewDefaultBadge');
+        if (defaultBadge) {
+            defaultBadge.classList.toggle('hidden', !Number(address.is_default));
+            defaultBadge.classList.toggle('inline-flex', Boolean(Number(address.is_default)));
+        }
+    }
+
     document.getElementById('checkoutForm')?.addEventListener('submit', function(e) {
-        var mobile = document.querySelector('input[name="mobile"]');
-        var pincode = document.querySelector('input[name="pincode"]');
-
-        // Mobile validation - exactly 10 digits
-        if (!/^[0-9]{10}$/.test(mobile.value)) {
+        if (addressSelect && !addressSelect.value) {
             e.preventDefault();
-            alert('Please enter a valid 10-digit mobile number');
-            mobile.focus();
-            return false;
+            alert('Please select a delivery address');
+            addressSelect.focus();
         }
-
-        // Pincode validation - exactly 6 digits
-        if (!/^[0-9]{6}$/.test(pincode.value)) {
-            e.preventDefault();
-            alert('Please enter a valid 6-digit pincode');
-            pincode.focus();
-            return false;
-        }
-
-        return true;
     });
 
-    // Real-time mobile validation
-    document.querySelector('input[name="mobile"]')?.addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
-    });
-
-    // Real-time pincode validation
-    document.querySelector('input[name="pincode"]')?.addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
-    });
+    addressSelect?.addEventListener('change', updateAddressPreview);
 
     // Payment method selection handling
     document.querySelectorAll('.payment-method-input')?.forEach(function(input) {
         input.addEventListener('change', function() {
             const selectedMethod = this.value;
-            
+
             // Update all payment method options styling
             document.querySelectorAll('.payment-method-option').forEach(function(label) {
                 if (label.getAttribute('data-method') === selectedMethod) {

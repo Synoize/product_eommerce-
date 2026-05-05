@@ -92,14 +92,13 @@ $pageTitle = 'My Wishlist';
             </ol>
         </nav>
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900">My Wishlist</h1>
-        <p class="text-gray-600 mt-2">Save your favorite products for later</p>
     </div>
 </section>
 
 <!-- Wishlist Section -->
 <section>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    
+
         <?php if (empty($wishlistItems)): ?>
             <div class="p-12 text-center">
                 <div class="mb-4">
@@ -112,115 +111,121 @@ $pageTitle = 'My Wishlist';
                 </a>
             </div>
         <?php else: ?>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                    <?php foreach ($wishlistItems as $product): ?>
-                        <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                <?php foreach ($wishlistItems as $product): ?>
+                    <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
 
-                            <!-- IMAGE -->
-                            <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">
-                                <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
+                        <!-- IMAGE -->
+                        <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">
+                            <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
 
-                                <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
-                                    <img
-                                        src="<?php echo $imageUrl; ?>"
-                                        alt="<?php echo e($product['name']); ?>"
-                                        class="h-28 sm:h-40 md:h-44 object-contain 
+                            <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
+                                <img
+                                    src="<?php echo $imageUrl; ?>"
+                                    alt="<?php echo e($product['name']); ?>"
+                                    class="h-28 sm:h-40 md:h-44 object-contain 
                        group-hover:scale-105 transition duration-300">
-                                </a>
+                            </a>
 
-                                <!-- BADGES -->
-                                <?php if ($product['stock'] <= 10 && $product['stock'] > 0): ?>
-                                    <span class="absolute top-3 left-3 bg-spice/10 backdrop-blur-sm text-spice text-xs font-semibold px-2 py-1 rounded-full shadow">
-                                        Only <?php echo $product['stock']; ?> left
-                                    </span>
-                                <?php endif; ?>
+                            <!-- BADGES -->
+                            <?php if ($product['stock'] <= 10 && $product['stock'] > 0): ?>
+                                <span class="absolute top-3 left-3 bg-spice/10 backdrop-blur-sm text-spice text-xs font-semibold px-2 py-1 rounded-full shadow">
+                                    Only <?php echo $product['stock']; ?> left
+                                </span>
+                            <?php endif; ?>
 
-                                <?php renderWishlistIconButton($product['id'], 'absolute top-3 right-3 z-10'); ?>
-                            </div>
+                            <?php renderWishlistIconButton($product['id'], 'absolute top-3 right-3 z-10'); ?>
+                        </div>
 
-                            <!-- CONTENT -->
-                            <div class="p-3 md:p-4 flex flex-col justify-between h-[160px]">
+                        <!-- CONTENT -->
+                        <div class="p-3 md:p-4 flex flex-col justify-between h-[160px]">
 
-                                <!-- CATEGORY -->
-                                <!-- <small class="text-gray-400 text-xs uppercase tracking-wide">
+                            <!-- CATEGORY -->
+                            <!-- <small class="text-gray-400 text-xs uppercase tracking-wide">
                             <?php echo e($product['category_name']); ?>
                         </small> -->
 
-                                <!-- NAME -->
-                                <h3 class="font-semibold text-gray-900 text-xs sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
-                                    <?php echo e($product['name']); ?>
-                                </h3>
+                            <!-- NAME -->
+                            <h3 class="font-semibold text-gray-900 text-xs sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
+                                <?php echo e($product['name']); ?>
+                            </h3>
 
-                                <!-- DESCRIPTION -->
-                                <!-- <p class="text-gray-500 text-xs sm:text-sm line-clamp-2">
+                            <!-- DESCRIPTION -->
+                            <!-- <p class="text-gray-500 text-xs sm:text-sm line-clamp-2">
                             <?php echo substr(e($product['description']), 0, 60) . '...'; ?>
                         </p> -->
 
 
-                                <!-- PRICE -->
-                                <div class="w-full flex justify-between items-center">
+                            <!-- PRICE -->
+                            <div class="w-full flex justify-between items-center">
 
-                                    <!-- LEFT: PRICE -->
-                                    <div class="flex items-baseline flex-wrap md:gap-2">
+                                <!-- LEFT: PRICE -->
+                                <div class="flex items-baseline flex-wrap md:gap-2">
 
-                                        <span class="text-primary-600 font-bold text-base sm:text-lg md:text-xl">
-                                            <?php echo formatCurrency($product['price']); ?>
-                                        </span>
+                                    <span class="text-primary-600 font-bold text-base sm:text-lg md:text-xl">
+                                        <?php echo formatCurrency($product['price']); ?>
+                                    </span>
 
-                                        <?php if ($product['original_price'] > $product['price']): ?>
-                                            <span class="text-gray-400 line-through text-xs sm:text-sm">
-                                                <?php echo formatCurrency($product['original_price']); ?>
-                                            </span>
-                                        <?php endif; ?>
-
-                                    </div>
-
-                                    <!-- RIGHT: DISCOUNT -->
                                     <?php if ($product['original_price'] > $product['price']): ?>
-                                        <span class="bg-green-100 text-green-700 text-[8px] md:text-xs text-center md:font-semibold px-2 py-1 rounded-full">
-                                            <?php
-                                            $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
-                                            echo $discount . '% OFF';
-                                            ?>
+                                        <span class="text-gray-400 line-through text-xs sm:text-sm">
+                                            <?php echo formatCurrency($product['original_price']); ?>
                                         </span>
                                     <?php endif; ?>
 
                                 </div>
 
-                                <!-- BUTTON -->
-                                <?php if ($product['stock'] > 0): ?>
-                                    <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
-                                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                                        <input type="hidden" name="action" value="add">
-                                        <input type="hidden" name="quantity" value="1">
-
-                                        <button type="submit"
-                                            class="w-full p-2.5 flex items-center justify-center 
-                       bg-accent hover:bg-accent-800 text-white text-xs md:text-base font-semibold 
-                       rounded-full gap-2 ">
-                                            <i class="fas fa-cart-plus text-xs"></i>
-                                            Add to Cart
-                                        </button>
-                                    </form>
-                                <?php elseif ($product['stock'] <= 0): ?>
-                                    <button disabled
-                                        class="w-full p-2.5 flex items-center justify-center 
-                   bg-red-500 text-white text-xs md:text-base font-semibold rounded-full cursor-not-allowed">
-                                        Out of Stock
-                                    </button>
+                                <!-- RIGHT: DISCOUNT -->
+                                <?php if ($product['original_price'] > $product['price']): ?>
+                                    <span class="bg-green-100 text-green-700 text-[8px] md:text-xs text-center md:font-semibold px-2 py-1 rounded-full">
+                                        <?php
+                                        $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
+                                        echo $discount . '% OFF';
+                                        ?>
+                                    </span>
                                 <?php endif; ?>
 
-
                             </div>
+
+                            <!-- BUTTON -->
+                            <?php if ($product['stock'] > 0): ?>
+                                <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
+                                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                                    <input type="hidden" name="action" value="add">
+                                    <input type="hidden" name="quantity" value="1">
+
+                                    <button type="submit"
+                                        class="w-full p-2.5 flex items-center justify-center 
+                       bg-accent hover:bg-accent-800 text-white text-xs md:text-base font-semibold 
+                       rounded-full gap-2 ">
+                                        <i class="fas fa-cart-plus text-xs"></i>
+                                        Add to Cart
+                                    </button>
+                                </form>
+                            <?php elseif ($product['stock'] <= 0): ?>
+                                <button disabled
+                                    class="w-full p-2.5 flex items-center justify-center 
+                   bg-red-500 text-white text-xs md:text-base font-semibold rounded-full cursor-not-allowed">
+                                    Out of Stock
+                                </button>
+                            <?php endif; ?>
+
+
                         </div>
-                    <?php endforeach; ?>
-                </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
             <!-- Continue Shopping -->
-            <div class="mt-12 text-center">
-                <a href="<?php echo BASE_URL; ?>shop.php" class="group inline-flex items-center border-2 border-accent text-accent hover:bg-accent-800 hover:text-white font-medium py-3 px-6 rounded-full transition">
-                        <i class="fas fa-arrow-left mr-2 transition duration-300 group-hover:-translate-x-1 "></i>Continue Shopping
-                    </a>
+            <div class="mt-12 flex justify-center">
+                <a href="<?php echo BASE_URL; ?>shop.php"
+                    class="group inline-flex items-center gap-2 border-2 border-accent text-accent 
+        hover:bg-accent hover:text-white font-medium py-3 px-6 rounded-full 
+        transition whitespace-nowrap">
+
+                    <i class="fas fa-arrow-left transition-transform duration-300 group-hover:-translate-x-1"></i>
+                    Continue Shopping
+
+                </a>
             </div>
         <?php endif; ?>
     </div>

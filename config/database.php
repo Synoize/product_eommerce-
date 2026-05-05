@@ -18,6 +18,7 @@ define('BASE_URL', $protocol . $host . $folder);
 
 // Asset URLs
 define('ASSETS_URL', BASE_URL . 'assets/');
+define('PUBLIC_URL', ASSETS_URL . 'public/');
 define('IMAGES_URL', ASSETS_URL . 'images/');
 define('PRODUCTS_URL', IMAGES_URL . 'products/');
 define('CATEGORIES_URL', IMAGES_URL . 'categories/');

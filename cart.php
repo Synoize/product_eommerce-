@@ -227,16 +227,16 @@ $total = $subtotal - $discount;
                 </a>
             </div>
         <?php else: ?>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="flex flex-col-reverse lg:grid lg:grid-cols-3 gap-8">
                 <!-- Cart Items -->
                 <div class="lg:col-span-2">
                     <!-- Clear Cart Button -->
-                    <div class="flex justify-between items-center mb-6">
+                    <div class="flex justify-between items-center mb-6 text-sm">
                         <p class="text-gray-500"><?php echo count($_SESSION['cart']); ?> item(s) in cart</p>
                         <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
                             <input type="hidden" name="action" value="clear">
                             <button type="submit" class="text-red-500 hover:text-red-600 text-sm font-medium" onclick="return confirm('Clear your cart?')">
-                                <i class="fas fa-trash mr-1"></i>Clear Cart
+                                <i class="fas fa-trash mr-1"></i>
                             </button>
                         </form>
                     </div>
@@ -244,85 +244,104 @@ $total = $subtotal - $discount;
                     <!-- Cart Items List -->
                     <div class="space-y-4 mb-8">
                         <?php foreach ($_SESSION['cart'] as $productId => $item): ?>
-                            <div class="bg-white border rounded-xl shadow-sm p-4 flex items-center gap-4">
-                                <div class="w-20 h-20 flex-shrink-0">
-                                    <?php $imageUrl = getImageUrl($item['image'], 'products'); ?>
-                                    <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo (int)$item['id']; ?>">
-                                        <img src="<?php echo $imageUrl; ?>" alt="<?php echo e($item['name']); ?>" class="w-full h-full object-cover rounded-lg">
-                                    </a>
-                                </div>
-                                <div class="flex-grow min-w-0">
-                                    <h5 class="font-semibold text-gray-900 truncate">
-                                        <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo (int)$item['id']; ?>" class="hover:text-primary-500">
+                            <div class="bg-white border rounded-xl shadow-sm p-4 flex flex-col sm:flex-row gap-4">
+
+                                <!-- TOP (Mobile) / LEFT (Desktop) -->
+                                <div class="flex items-start gap-4 flex-1">
+
+                                    <!-- Image -->
+                                    <div class="w-20 h-20 flex-shrink-0">
+                                        <?php $imageUrl = getImageUrl($item['image'], 'products'); ?>
+                                        <img src="<?php echo $imageUrl; ?>" class="w-full h-full object-cover rounded-lg">
+                                    </div>
+
+                                    <!-- Info -->
+                                    <div class="flex-1 min-w-0">
+                                        <h5 class="font-semibold text-gray-900 truncate">
                                             <?php echo e($item['name']); ?>
-                                        </a>
-                                    </h5>
-                                    <?php if (!empty($item['weight'])): ?>
-                                        <p class="text-blue-600 text-sm font-medium"><?php echo e($item['weight']); ?></p>
-                                    <?php endif; ?>
-                                    <p class="text-gray-500 text-sm"><?php echo formatCurrency($item['price']); ?></p>
-                                    <p class="text-xs font-medium text-gray-600">
-                                        <?php if ($item['stock'] > 20): ?>
-                                            <span class="text-green-600">In Stock</span> – Ready to ship
-                                        <?php elseif ($item['stock'] > 0): ?>
-                                            <span class="text-orange-500">Only <?php echo $item['stock']; ?> left in stock!</span>
-                                        <?php else: ?>
-                                            <span class="text-red-500">Out of Stock</span>
+                                        </h5>
+
+                                        <?php if (!empty($item['weight'])): ?>
+                                            <p class="text-blue-600 text-sm"><?php echo e($item['weight']); ?></p>
                                         <?php endif; ?>
-                                    </p>
+
+                                        <p class="text-gray-500 text-sm"><?php echo formatCurrency($item['price']); ?></p>
+
+                                        <p class="text-xs font-medium mt-1">
+                                            <?php if ($item['stock'] > 20): ?>
+                                                <span class="text-green-600">In Stock</span>
+                                            <?php elseif ($item['stock'] > 0): ?>
+                                                <span class="text-orange-500">Only <?php echo $item['stock']; ?> left</span>
+                                            <?php else: ?>
+                                                <span class="text-red-500">Out of Stock</span>
+                                            <?php endif; ?>
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="flex items-center">
+
+                                <!-- BOTTOM (Mobile) / RIGHT (Desktop) -->
+                                <div class="flex items-center justify-between sm:justify-end gap-4">
+
+                                    <!-- Quantity -->
+                                    <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="flex items-center border rounded-lg px-2 py-1">
                                         <input type="hidden" name="action" value="update">
                                         <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
+
                                         <button type="button" onclick="this.form.quantity.stepDown(); this.form.submit();"
-                                            class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition">
+                                            class="w-7 h-7 flex items-center justify-center text-gray-600">
                                             <i class="fas fa-minus text-xs"></i>
                                         </button>
-                                        <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1" max="<?php echo $item['stock']; ?>" onchange="this.form.submit()"
-                                            class="ml-3 w-12 text-center text-sm font-medium outline-none">
+
+                                        <input type="number" name="quantity" value="<?php echo $item['quantity']; ?>" min="1"
+                                            class="w-10 text-center text-sm outline-none">
+
                                         <button type="button" onclick="this.form.quantity.stepUp(); this.form.submit();"
-                                            class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition">
-                                        <i class="fas fa-plus text-xs"></i>
+                                            class="w-7 h-7 flex items-center justify-center text-gray-600">
+                                            <i class="fas fa-plus text-xs"></i>
                                         </button>
                                     </form>
-                                </div>
-                                <div class="text-right min-w-[80px]">
-                                    <p class="font-bold text-gray-900"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></p>
-                                </div>
-                                <div>
+
+                                    <!-- Price -->
+                                    <p class="font-bold text-gray-900 whitespace-nowrap">
+                                        <?php echo formatCurrency($item['price'] * $item['quantity']); ?>
+                                    </p>
+
+                                    <!-- Remove -->
                                     <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
                                         <input type="hidden" name="action" value="remove">
                                         <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
-                                        <button type="submit" class="w-8 h-8 border border-red-500 rounded-full text-red-400 hover:text-red-500 transition" onclick="return confirm('Remove this item?')">
-                                            <i class="fas fa-times text-lg"></i>
+                                        <button type="submit"
+                                            class="w-8 h-8 flex items-center justify-center text-red-500 hover:bg-red-50 rounded-full transition">
+                                            <i class="fas fa-trash text-sm"></i>
                                         </button>
                                     </form>
+
                                 </div>
+
                             </div>
                         <?php endforeach; ?>
                     </div>
 
                     <!-- Continue Shopping -->
-                    <a href="<?php echo BASE_URL; ?>shop.php" class="group inline-flex items-center border-2 border-accent text-accent hover:bg-accent-800 hover:text-white font-medium py-3 px-6 rounded-full transition">
+                    <a href="<?php echo BASE_URL; ?>shop.php" class="group inline-flex items-center border border-accent text-accent hover:bg-accent-800 hover:text-white font-medium py-3 px-6 rounded-full transition">
                         <i class="fas fa-arrow-left mr-2 transition duration-300 group-hover:-translate-x-1 "></i>Continue Shopping
                     </a>
                 </div>
 
                 <!-- Cart Summary -->
                 <div>
-                    <div class="bg-white border rounded-2xl shadow-sm p-6 sticky top-24">
+                    <div class="bg-white border rounded-2xl shadow-sm p-6 sticky md:top-24">
                         <h5 class="text-xl font-bold text-gray-900 mb-6">Order Summary</h5>
 
                         <!-- Coupon Section -->
                         <?php if (!isset($_SESSION['coupon'])): ?>
                             <div class="mb-6">
                                 <p class="font-semibold text-gray-700 mb-3"><i class="fas fa-tag mr-2 text-primary-500"></i>Have a coupon?</p>
-                                <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
+                                <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="w-full">
                                     <input type="hidden" name="action" value="apply_coupon">
                                     <div class="flex">
                                         <input type="text" name="coupon_code" placeholder="Enter coupon code" required
-                                            class="flex-1 px-4 py-2 border rounded-l-lg text-sm outline-none focus:border-accent">
+                                            class="w-full px-4 py-2 border rounded-l-lg text-sm outline-none focus:border-accent">
                                         <button type="submit" class="bg-accent hover:bg-accent-700/90 text-white font-medium px-4 py-2 rounded-r-lg transition">Apply</button>
                                     </div>
                                 </form>
@@ -368,7 +387,7 @@ $total = $subtotal - $discount;
                         </div>
 
                         <!-- Checkout Button -->
-                        <a href="<?php echo BASE_URL; ?>checkout.php" class="block w-full bg-accent hover:bg-accent-800 text-white font-semibold py-4 px-6 rounded-lg text-center transition hover:shadow-lg">
+                        <a href="<?php echo BASE_URL; ?>checkout.php" class="block w-full bg-accent hover:bg-accent-800 text-white font-semibold py-4 px-6 rounded-lg text-center text-sm transition hover:shadow-sm">
                             <i class="fas fa-credit-card mr-2"></i>Proceed to Checkout
                         </a>
                     </div>
