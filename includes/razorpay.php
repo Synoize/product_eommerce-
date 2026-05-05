@@ -6,8 +6,8 @@
 
 // Razorpay Credentials - Replace with your actual credentials
 // Test Mode Credentials (provided by user)
-define('RAZORPAY_KEY_ID', 'rzp_test_RIzm0y12l0CJSx');
-define('RAZORPAY_KEY_SECRET', 'xUHJipUjdw38XWLHjZihV1IZD');
+define('RAZORPAY_KEY_ID', 'rzp_test_WZSJ554e7F8dDX');
+define('RAZORPAY_KEY_SECRET', 's70J331w9UC32nTO80DIjJoX');
 define('RAZORPAY_CURRENCY', 'INR');
 
 // Razorpay API Endpoint

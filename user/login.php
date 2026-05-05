@@ -55,15 +55,13 @@ $pageTitle = 'Login';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
+<div class="h-[calc(100vh-80px)] py-12 md:py-20 px-4">
     <div class="max-w-md mx-auto">
-        <div class="bg-white rounded-2xl shadow-xl p-8">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-user-circle text-4xl text-primary-500"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900">Welcome Back</h3>
-                <p class="text-gray-500">Sign in to your account</p>
+        <div class="bg-white md:border md:rounded-lg md:shadow-sm md:p-8 text-sm">
+            <div class="mb-6">
+                <img src="<?php echo ASSETS_URL; ?>/public/logo.png" alt="logo" class="h-20 mx-auto mb-2">
+                <h3 class="text-xl text-gray-900">Sign in</h3>
+                <p class="text-sm text-gray-500">Login to your account</p>
             </div>
             
             <?php if (!empty($errors)): ?>
@@ -78,34 +76,34 @@ require_once __DIR__ . '/../includes/header.php';
             
             <form action="<?php echo BASE_URL; ?>user/login.php" method="POST" class="space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <label class="block font-medium text-gray-700 mb-1">Email Address</label>
                     <input type="email" name="email" required 
                            value="<?php echo isset($_POST['email']) ? e($_POST['email']) : ''; ?>"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                           class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent transition">
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <label class="block font-medium text-gray-700 mb-1">Password</label>
                     <input type="password" name="password" required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                           class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent transition">
                 </div>
                 
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center text-xs md:text-sm">
                     <label class="flex items-center">
                         <input type="checkbox" id="remember" class="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500">
-                        <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                        <span class="ml-2 text-gray-600">Remember me</span>
                     </label>
-                    <a href="<?php echo BASE_URL; ?>user/forgot-password.php" class="text-sm text-primary-500 hover:text-primary-600 font-medium">Forgot password?</a>
+                    <a href="<?php echo BASE_URL; ?>user/forgot-password.php" class="text-blue-500 hover:text-blue-600 font-medium">Forgot password?</a>
                 </div>
                 
-                <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 rounded-full transition shadow-lg hover:shadow-xl">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                <button type="submit" class="w-full bg-accent hover:bg-accent-700/90 text-black py-3 rounded-lg transition hover:shadow-sm">
+                    Continue
                 </button>
             </form>
             
             <div class="text-center mt-6">
                 <p class="text-gray-600">Don't have an account? 
-                    <a href="<?php echo BASE_URL; ?>user/signup.php" class="font-semibold text-primary-500 hover:text-primary-600">Sign up</a>
+                    <a href="<?php echo BASE_URL; ?>user/signup.php" class="text-accent hover:text-accent-700/90">Sign up</a>
                 </p>
             </div>
         </div>

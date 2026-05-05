@@ -93,7 +93,7 @@ function formatCurrency($amount) {
 // Image URL helper
 function getImageUrl($image, $type = 'products') {
     if (empty($image)) {
-        return ASSETS_URL . 'images/placeholder.jpg';
+        return ASSETS_URL . 'images/placeholder.png';
     }
     
     // Check if external URL
@@ -221,7 +221,7 @@ function renderWishlistIconButton($productId, $formClass = '', $buttonClass = ''
     $stateClass = $inWishlist
         ? 'bg-red-500 text-white hover:bg-red-600'
         : 'bg-white/95 text-gray-600 hover:bg-white hover:text-red-500';
-    $classes = trim($stateClass . ' w-10 h-10 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition ' . $buttonClass);
+    $classes = trim($stateClass . ' w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition ' . $buttonClass);
     ?>
     <form action="<?php echo BASE_URL; ?>wishlist_action.php" method="POST" class="<?php echo e($formClass); ?>">
         <input type="hidden" name="product_id" value="<?php echo $productId; ?>">

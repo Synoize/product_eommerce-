@@ -5,7 +5,7 @@
  * eCommerce Website Main Landing Page
  */
 
-$pageTitle = 'Home';
+$pageTitle = 'Makhana';
 require_once 'includes/header.php';
 
 // Fetch featured products
@@ -67,7 +67,7 @@ try {
             <!-- TEXT (SHOW BELOW ON MOBILE) -->
             <div class="order-2 md:order-1 text-center md:text-left">
 
-                <h1 class="text-4xl sm:text-6xl leading-[1.2] mb-6 font-luckiest animate-slide-left">
+                <h1 class="text-4xl sm:text-6xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-left">
                     Discover
                     <span class="text-accent" style="-webkit-text-stroke: 1px black;">
                         Delicious Snacks
@@ -145,7 +145,7 @@ try {
 
         <!-- Heading -->
         <div class="text-center mb-12 scroll-animate-top">
-            <h2 class="text-3xl md:text-5xl font-luckiest text-gray-900 mb-2">
+            <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-2">
                 Shop by
                 <span class="text-accent" style="-webkit-text-stroke: 1px black;">
                     Category
@@ -173,7 +173,7 @@ try {
                         <?php if ($category['image']): ?>
                             <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>"
                                 alt="<?php echo e($category['name']); ?>"
-                                class="w-full h-24 md:h-48 object-contain 
+                                class="w-full h-20 md:h-48 object-contain 
                           mx-auto">
                         <?php else: ?>
                             <div class="w-full h-24 md:h-48 bg-gradient-to-br from-primary-400 to-primary-600 
@@ -205,8 +205,8 @@ try {
 <section>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-end mb-12">
-            <div class="scroll-animate-left">
-                <h2 class="text-3xl md:text-5xl font-luckiest text-gray-900 mb-2">Featured <span class="text-accent" style="-webkit-text-stroke: 1px black;">Products</span></h2>
+            <div class="scroll-animate-top md:scroll-animate-left mx-auto md:mx-0 text-center md:text-left">
+                <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-2">Featured <span class="text-accent" style="-webkit-text-stroke: 1px black;">Products</span></h2>
                 <p class="text-gray-500 text-base">Handpicked items just for you</p>
             </div>
             <a href="<?php echo BASE_URL; ?>shop.php"
@@ -227,7 +227,7 @@ try {
                 <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
 
                     <!-- IMAGE -->
-                    <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">
+                    <div class="relative overflow-hidden p-3 md:p-4 bg-accent-50/50">
                         <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
 
                         <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
@@ -334,20 +334,134 @@ try {
     </div>
 </section>
 
+<!-- Every Mood -->
+<section class="my-20 relative bg-accent">
+
+    <!-- SCALLOP TOP FULL WIDTH -->
+    <div class="absolute -top-0.5 left-0 w-full leading-none">
+        <svg
+            class="w-full h-[40px] md:h-[80px]"
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none">
+            <defs>
+                <pattern
+                    id="scallop"
+                    width="80"
+                    height="80"
+                    patternUnits="userSpaceOnUse">
+                    <circle cx="40" cy="0" r="40" fill="white" />
+                </pattern>
+            </defs>
+
+            <!-- FULL HEIGHT RECT -->
+            <rect width="100%" height="100%" fill="url(#scallop)" />
+        </svg>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="max-w-7xl mx-auto px-6 pt-24 pb-16 grid lg:grid-cols-2 gap-12 items-center">
+
+        <!-- LEFT IMAGE -->
+        <div class="flex justify-center lg:justify-start">
+            <div class="relative">
+
+                <!-- Circle -->
+                <div class="w-64 h-64 sm:w-80 sm:h-80 lg:w-[420px] lg:h-[420px] flex items-center justify-center animate-float ">
+                    <img
+                        src="<?php echo IMAGES_URL; ?>/makhana_bowl.png"
+                        class="w-full h-full object-contain" />
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div class="text-center lg:text-left space-y-6">
+
+            <h2 class="scroll-animate-top text-3xl md:text-5xl font-luckiest text-primary-600 mb-3">From Classic to Bold — Discover a Flavor for Every <span class="text-white" style="-webkit-text-stroke: 1px black;">Mood.</span></h2>
+
+            <!-- FEATURES -->
+            <ul class="space-y-4 text-xs sm:text-base text-gray-800 max-w-lg mx-auto lg:mx-0">
+
+                <li class="scroll-animate-left flex items-center gap-3 justify-start">
+                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png" class="w-8 opacity-80 mt-1" />
+                    Pure crunch with perfectly balanced salt.
+                </li>
+
+                <li class="scroll-animate-left flex items-center gap-3 justify-start">
+                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png" class="w-8 opacity-80 mt-1" />
+                    A bold, fiery blend that excites your taste buds.
+                </li>
+
+                <li class="scroll-animate-left flex items-center gap-3 justify-start">
+                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png" class="w-8 opacity-80 mt-1" />
+                    Creamy, rich cheese in every crispy bite.
+                </li>
+
+                <li class="scroll-animate-left flex items-center gap-3 justify-start">
+                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png" class="w-8 opacity-80 mt-1" />
+                    Smooth, tangy flavor with a savory twist.
+                </li>
+
+            </ul>
+
+            <!-- BUTTON -->
+            <div class="flex justify-center lg:justify-start">
+                <a href="<?php echo BASE_URL; ?>about-us.php"
+                    class="bg-primary-600 text-white font-semibold 
+            py-3 px-8 rounded-full 
+            shadow-[3px_3px_0_#000] hover:shadow-[4px_3px_0_#000] 
+            transition duration-150 scroll-animate-top">
+                    Explore Flavors
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCALLOP (OPPOSITE / FLIPPED) -->
+    <div class="absolute -bottom-0.5 left-0 w-full leading-none">
+        <svg
+            class="w-full h-[50px] sm:h-[60px] md:h-[80px]"
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none">
+            <defs>
+                <pattern
+                    id="scallop-bottom"
+                    width="80"
+                    height="80"
+                    patternUnits="userSpaceOnUse">
+                    <!-- MOVE CIRCLE TO BOTTOM -->
+                    <circle cx="40" cy="80" r="40" fill="white" />
+                </pattern>
+            </defs>
+
+            <rect width="100%" height="100%" fill="url(#scallop-bottom)" />
+        </svg>
+    </div>
+
+    <!-- RIGHT FLOATING PRODUCT -->
+    <div class="hidden lg:block absolute right-10 bottom-10 rotate-12 animate-float">
+        <img
+            src="https://cdn-icons-png.flaticon.com/512/2553/2553691.png"
+            class="w-20 drop-shadow-xl" />
+    </div>
+
+</section>
+
 <!-- Trending Products Section -->
-<section class="py-20 bg-white">
+<section class="bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="scroll-animate-top text-center mb-12">
-            <h2 class="text-3xl md:text-5xl font-luckiest text-gray-900 mb-2">Trending <span class="text-accent" style="-webkit-text-stroke: 1px black;">Now</span></h2>
+            <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-2">Trending <span class="text-accent" style="-webkit-text-stroke: 1px black;">Now</span></h2>
             <p class="text-gray-500 text-base">Most popular items this week</p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8">
             <?php foreach ($trendingProducts as $product): ?>
                 <div class="bg-white rounded-2xl border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden group">
 
                     <!-- IMAGE -->
-                    <div class="relative bg-gray-50 flex items-center justify-center p-3 sm:p-4">
+                    <div class="relative bg-accent-50/50 flex items-center justify-center p-3 sm:p-4">
                         <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
 
                         <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
@@ -380,7 +494,7 @@ try {
                         <div class="flex justify-between items-center">
 
                             <!-- PRICE -->
-                            <div class="flex items-center gap-1 flex-wrap">
+                            <div class="flex items-center md:gap-2 flex-wrap">
                                 <span class="text-primary-600 font-bold text-sm sm:text-base md:text-lg">
                                     <?php echo formatCurrency($product['price']); ?>
                                 </span>
@@ -394,7 +508,7 @@ try {
 
                             <!-- DISCOUNT -->
                             <?php if ($product['original_price'] > $product['price']): ?>
-                                <span class="bg-green-100 text-green-700 text-[9px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
+                                <span class="bg-green-100 text-green-700 text-[8px] sm:text-xs text-center px-2 py-0.5 rounded-full">
                                     <?php
                                     $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
                                     echo $discount . '% OFF';
@@ -437,51 +551,182 @@ try {
 </section>
 
 <!-- Features Section -->
-<section class="py-20 bg-gradient-to-r from-pink-100/50 to-purple-100/50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div class="p-6">
-                <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-shipping-fast text-2xl text-primary-500"></i>
+<section class="my-20">
+    <svg
+        viewBox="0 0 1440 200"
+        class="w-full h-8 md:h-10"
+        preserveAspectRatio="none">
+
+        <path
+            fill="#43a047"
+            d="
+        M0,100
+        C180,20 360,200 540,100
+        S900,20 1080,100
+        S1260,200 1440,100
+        L1440,200 L0,200 Z
+        " />
+    </svg>
+
+    <div class="py-8 md:py-20 bg-primary-600 text-white">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+
+            <!-- TITLE -->
+            <h2 class="text-3xl md:text-5xl font-luckiest text-white mb-12 md:mb-20 scroll-animate-top">Why Choose <span class="text-accent" style="-webkit-text-stroke: 1px black;">Earthance?</span></h2>
+
+            <!-- FEATURES -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+
+                <!-- ITEM 1 -->
+                <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
+                    <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
+                        <i class="fas fa-shopping-bag text-2xl md:text-5xl text-primary-500"></i>
+                    </span>
+                    <div>
+                        <h3 class="font-semibold">Premium Ingredients</h3>
+                        <p class="text-sm text-white/80">
+                            Only high-quality potatoes & natural seasonings.
+                        </p>
+                    </div>
                 </div>
-                <h5 class="font-bold text-gray-900 mb-2">Free Shipping</h5>
-                <p class="text-gray-500 text-sm">On orders over ₹999</p>
-            </div>
-            <div class="p-6">
-                <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-shield-alt text-2xl text-primary-500"></i>
+
+                <!-- ITEM 2 -->
+                <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
+                    <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
+                        <i class="fas fa-shipping-fast text-2xl md:text-5xl text-primary-500"></i>
+                    </span>
+                    <div>
+                        <h3 class="font-semibold">Fast Delivery</h3>
+                        <p class="text-sm text-white/80">
+                            Fresh, crunchy snacks delivered to your doorstep.
+                        </p>
+                    </div>
                 </div>
-                <h5 class="font-bold text-gray-900 mb-2">Secure Payment</h5>
-                <p class="text-gray-500 text-sm">100% secure checkout</p>
-            </div>
-            <div class="p-6">
-                <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-undo text-2xl text-primary-500"></i>
+
+                <!-- ITEM 3 -->
+                <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
+                    <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
+                        <i class="fas fa-heart text-2xl md:text-5xl text-primary-500"></i>
+                    </span>
+                    <div>
+                        <h3 class="font-semibold">Loved Nationwide</h3>
+                        <p class="text-sm text-white/80">
+                            Trusted by thousands of snack lovers.
+                        </p>
+                    </div>
                 </div>
-                <h5 class="font-bold text-gray-900 mb-2">Easy Returns</h5>
-                <p class="text-gray-500 text-sm">30 day return policy</p>
+
             </div>
-            <div class="p-6">
-                <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-headset text-2xl text-primary-500"></i>
-                </div>
-                <h5 class="font-bold text-gray-900 mb-2">24/7 Support</h5>
-                <p class="text-gray-500 text-sm">Dedicated support</p>
-            </div>
+
         </div>
+    </div>
+
+    <svg
+        viewBox="0 0 1440 200"
+        class="w-full h-8 md:h-10"
+        preserveAspectRatio="none">
+
+        <path
+            fill="#43a047"
+            d="
+        M0,100
+        C240,160 480,20 720,100
+        S1200,160 1440,100
+        L1440,0 L0,0 Z
+        " />
+    </svg>
+
+</section>
+
+<!-- Authentic Spices -->
+<section class="mb-20">
+    <!-- CONTENT -->
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 items-center gap-10">
+
+        <!-- LEFT FEATURES -->
+        <div class="space-y-10 text-center md:text-right scroll-animate-left">
+            
+            <div>
+                <div class="text-orange-600 text-5xl mb-2">🌶️</div>
+                <h3 class="font-semibold text-gray-800">Authentic Spices</h3>
+                <p class="text-sm text-gray-600">
+                    Rich aroma and traditional blends to enhance every dish.
+                </p>
+            </div>
+
+            <div>
+                <div class="text-orange-600 text-5xl mb-2">🍘</div>
+                <h3 class="font-semibold text-gray-800">Crispy Snacks</h3>
+                <p class="text-sm text-gray-600">
+                    Freshly prepared snacks with perfect crunch and taste.
+                </p>
+            </div>
+
+            <div>
+                <div class="text-orange-600 text-5xl mb-2">🧂</div>
+                <h3 class="font-semibold text-gray-800">Premium Quality</h3>
+                <p class="text-sm text-gray-600">
+                    Handpicked ingredients ensuring purity and freshness.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- CENTER IMAGE -->
+        <div class="flex justify-center relative">
+            <img 
+                  src="<?php echo IMAGES_URL; ?>/makhana_bowl.png"
+                alt="Snacks and Spices"
+                class="w-60 md:w-80 drop-shadow-xl rounded-2xl animate-float "
+            />
+        </div>
+
+        <!-- RIGHT FEATURES -->
+        <div class="space-y-10 text-center md:text-left scroll-animate-right">
+
+            <div>
+                <div class="text-orange-600 text-5xl mb-2">🥨</div>
+                <h3 class="font-semibold text-gray-800">Variety of Snacks</h3>
+                <p class="text-sm text-gray-600">
+                    From namkeen to traditional treats, something for everyone.
+                </p>
+            </div>
+
+            <div>
+                <div class="text-orange-600 text-5xl mb-2">🌿</div>
+                <h3 class="font-semibold text-gray-800">Natural Ingredients</h3>
+                <p class="text-sm text-gray-600">
+                    No artificial flavors, only real and natural goodness.
+                </p>
+            </div>
+
+            <div>
+                <div class="text-orange-600 text-5xl mb-2">📦</div>
+                <h3 class="font-semibold text-gray-800">Fresh Packaging</h3>
+                <p class="text-sm text-gray-600">
+                    Hygienically packed to preserve taste and quality.
+                </p>
+            </div>
+
+        </div>
+
     </div>
 </section>
 
-<!-- Newsletter Section -->
-<section class="py-20 bg-gray-900">
+<!-- Newsletter -->
+<section>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-2xl mx-auto text-center">
-            <h2 class="text-3xl font-bold text-white mb-4">Subscribe to Our Newsletter</h2>
-            <p class="text-gray-400 mb-8">Get the latest updates on new products and exclusive offers</p>
+            <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-6 scroll-animate-top">Subscribe to <span class="text-accent" style="-webkit-text-stroke: 1px black;">Our Newsletter</span></h2>
+            <p class="text-gray-600 text-base mb-12 scroll-animate-top">Get the latest updates on new products and exclusive offers</p>
+
             <form class="flex flex-col sm:flex-row gap-4" action="<?php echo BASE_URL; ?>subscribe.php" method="POST">
                 <input type="email" name="email" placeholder="Enter your email" required
-                    class="flex-1 px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-full transition flex items-center justify-center">
+                    class="flex-1 px-6 py-4 rounded-full bg-white border text-gray-800 placeholder-gray-400 outline-none focus:border-black shadow-[3px_3px_0_#000] hover:shadow-[4px_3px_0_#000] scroll-animate-left">
+                <button type="submit" class="bg-accent-500 text-gray-900 font-semibold 
+            py-3 px-8 rounded-full 
+            shadow-[3px_3px_0_#000] hover:shadow-[4px_3px_0_#000] 
+            transition duration-150 scroll-animate-right">
                     <i class="fas fa-paper-plane mr-2"></i>Subscribe
                 </button>
             </form>

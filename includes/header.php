@@ -29,7 +29,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($pageTitle) ? e($pageTitle) . ' - ' : ''; ?>WebStore</title>
+    <title><?php echo isset($pageTitle) ? e($pageTitle) . ' - ' : ''; ?>Earthence</title>
     <link rel="icon" href="<?= ASSETS_URL; ?>/public/favicon.ico">
     <link rel="stylesheet" href="<?php echo ASSETS_URL; ?>/public/css/styles.css">
 
@@ -42,6 +42,7 @@ try {
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Tailwind Config -->
     <script>
@@ -161,6 +162,7 @@ try {
                         float: 'float 3s ease-in-out infinite',
 
                         // NEW
+                        'slide-pop': 'pop 0.8s ease-out forwards',
                         'slide-left': 'slideLeft 0.8s ease-out forwards',
                         'slide-right': 'slideRight 0.8s ease-out forwards',
                         'slide-top': 'slideTop 0.8s ease-out forwards',
@@ -218,7 +220,7 @@ try {
                 </a>
 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center gap-8">
+                <div class="hidden md:flex items-center gap-8 text-sm">
                     <a href="<?php echo BASE_URL; ?>" class="text-gray-700 hover:text-primary-500 font-medium <?php echo basename($_SERVER['PHP_SELF']) === 'index.php' ? 'text-primary-500' : ''; ?>">
                         Home
                     </a>
@@ -232,7 +234,7 @@ try {
                         <!-- Button -->
                         <button class="text-gray-700 hover:text-primary-600 font-medium flex items-center gap-1">
                             Categories
-                            <i class="fas fa-chevron-down text-xs transition-transform duration-300 group-hover:rotate-180"></i>
+                            <i class="fas fa-chevron-up text-xs transition-transform duration-300 group-hover:rotate-90"></i>
                         </button>
 
                         <!-- Dropdown -->
@@ -283,9 +285,9 @@ try {
                     <form action="<?php echo BASE_URL; ?>shop.php" method="GET" class="hidden md:flex items-center">
 
                         <div class="
-        flex items-center w-64 
+        flex items-center w-64 h-10
         bg-gray-50 border 
-        rounded-full px-2 py-1
+        rounded-full px-2
         focus-within:bg-white
         focus-within:border-primary-400
         transition-all duration-300
@@ -299,23 +301,22 @@ try {
                                 value="<?php echo isset($_GET['search']) ? e($_GET['search']) : ''; ?>"
 
                                 class="
-            flex-1 px-3 py-2 
+            flex-1 h-full px-3
             bg-transparent text-sm text-gray-700
             placeholder-gray-400
             outline-none
-            ">
+        ">
 
                             <!-- Button -->
                             <button
                                 type="submit"
                                 class="
-            h-9 w-9 flex items-center justify-center
-            
+            h-8 w-8 flex items-center justify-center
             bg-primary-500 text-white rounded-full
             hover:bg-primary-600
             shadow-sm hover:shadow-md
             transition-all duration-200
-            ">
+        ">
                                 <i class="fas fa-search text-sm"></i>
                             </button>
 
@@ -324,26 +325,28 @@ try {
                     </form>
 
                     <!-- Wishlist -->
-                    <a href="<?php echo BASE_URL; ?>user/wishlist.php"
-                        class="relative text-red-500 hover:text-red-400 transition">
+                    <!-- <?php if (isLoggedIn()): ?>
+                        <a href="<?php echo BASE_URL; ?>user/wishlist.php"
+                            class="relative text-red-500 hover:text-red-400 transition">
 
-                        <i class="fas fa-heart text-xl"></i>
+                            <i class="fas fa-heart text-xl"></i>
 
-                        <?php
-                        $wishlistCount = getWishlistCount();
-                        if ($wishlistCount > 0):
-                        ?>
-                            <span class="
+                            <?php
+                            $wishlistCount = getWishlistCount();
+                            if ($wishlistCount > 0):
+                            ?>
+                                <span class="
                 absolute -top-1.5 -right-1.5 
                 text-red-500 bg-white 
                 text-[10px] font-semibold 
                 rounded-full h-5 min-w-[20px] px-1
                 flex items-center justify-center
                 shadow">
-                                <?php echo $wishlistCount; ?>
-                            </span>
-                        <?php endif; ?>
-                    </a>
+                                    <?php echo $wishlistCount; ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+                    <?php endif; ?> -->
 
                     <!-- Cart -->
                     <a href="<?php echo BASE_URL; ?>cart.php"
@@ -380,7 +383,7 @@ try {
                                     <?php echo e($_SESSION['user_name'] ?? 'User'); ?>
                                 </span>
 
-                                <i class="fas fa-chevron-down text-xs transition-transform duration-300 group-hover:rotate-180"></i>
+                                <i class="fas fa-chevron-up text-xs transition-transform duration-300 group-hover:rotate-90"></i>
                             </button>
 
                             <!-- Dropdown -->
