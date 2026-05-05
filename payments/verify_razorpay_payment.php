@@ -1,7 +1,8 @@
 <?php
 /**
  * Razorpay Payment Verification
- * Verifies payment and creates order
+ * Verifies payment and creates/updates order
+ * Handles both Online Payments and COD Initial Payments
  */
 
 require_once __DIR__ . '/../includes/db_connect.php';
@@ -45,37 +46,67 @@ try {
         redirect(BASE_URL . 'checkout.php');
     }
     
-    // Signature verified - create order
+    // Signature verified
     $checkoutData = $_SESSION['checkout_data'];
     $userId = $_SESSION['user_id'];
     $cart = $_SESSION['cart'];
+    $paymentMethod = $checkoutData['payment_method'] ?? 'online';
+    $isCodInitialPayment = !empty($_SESSION['is_cod_initial_payment']);
     
     try {
         // Start transaction
         $pdo->beginTransaction();
         
-        // Insert order
-        $orderQuery = "INSERT INTO orders (user_id, total_amount, discount_amount, coupon_code, status, 
-                       payment_method, payment_status, razorpay_payment_id, razorpay_order_id,
-                       name, email, mobile, address, city, state, pincode, created_at) 
-                       VALUES (?, ?, ?, ?, 'pending', 'razorpay', 'paid', ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
-        
-        $orderStmt = $pdo->prepare($orderQuery);
-        $orderStmt->execute([
-            $userId,
-            $checkoutData['total'],
-            $checkoutData['discount'],
-            $checkoutData['coupon_code'],
-            $razorpayPaymentId,
-            $razorpayOrderId,
-            $checkoutData['name'],
-            $checkoutData['email'],
-            $checkoutData['mobile'],
-            $checkoutData['address'],
-            $checkoutData['city'],
-            $checkoutData['state'],
-            $checkoutData['pincode']
-        ]);
+        if ($isCodInitialPayment) {
+            // COD Initial Payment - Create order with initial payment marked as paid
+            $orderQuery = "INSERT INTO orders (user_id, total_amount, discount_amount, coupon_code, status, 
+                           payment_method, payment_status, initial_payment_amount, remaining_payment_amount,
+                           initial_payment_status, razorpay_payment_id, razorpay_order_id,
+                           name, email, mobile, address, city, state, pincode, created_at) 
+                           VALUES (?, ?, ?, ?, 'pending', 'cod', 'pending', ?, ?, 'paid', ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            
+            $orderStmt = $pdo->prepare($orderQuery);
+            $orderStmt->execute([
+                $userId,
+                $checkoutData['total'],
+                $checkoutData['discount'],
+                $checkoutData['coupon_code'],
+                $checkoutData['initial_payment_amount'],
+                $checkoutData['remaining_payment_amount'],
+                $razorpayPaymentId,
+                $razorpayOrderId,
+                $checkoutData['name'],
+                $checkoutData['email'],
+                $checkoutData['mobile'],
+                $checkoutData['address'],
+                $checkoutData['city'],
+                $checkoutData['state'],
+                $checkoutData['pincode']
+            ]);
+        } else {
+            // Online Payment - Create order with full payment
+            $orderQuery = "INSERT INTO orders (user_id, total_amount, discount_amount, coupon_code, status, 
+                           payment_method, payment_status, razorpay_payment_id, razorpay_order_id,
+                           name, email, mobile, address, city, state, pincode, created_at) 
+                           VALUES (?, ?, ?, ?, 'pending', 'online', 'paid', ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+            
+            $orderStmt = $pdo->prepare($orderQuery);
+            $orderStmt->execute([
+                $userId,
+                $checkoutData['total'],
+                $checkoutData['discount'],
+                $checkoutData['coupon_code'],
+                $razorpayPaymentId,
+                $razorpayOrderId,
+                $checkoutData['name'],
+                $checkoutData['email'],
+                $checkoutData['mobile'],
+                $checkoutData['address'],
+                $checkoutData['city'],
+                $checkoutData['state'],
+                $checkoutData['pincode']
+            ]);
+        }
         
         $orderId = $pdo->lastInsertId();
         
@@ -137,12 +168,18 @@ try {
         unset($_SESSION['coupon']);
         unset($_SESSION['checkout_data']);
         unset($_SESSION['razorpay_order_id']);
+        unset($_SESSION['is_cod_initial_payment']);
         
         // Store order ID for success page
         $_SESSION['last_order_id'] = $orderId;
+        $_SESSION['payment_method_used'] = $paymentMethod;
         
         // Redirect to success page
-        setFlash('Order placed successfully! Thank you for your purchase.', 'success');
+        if ($isCodInitialPayment) {
+            setFlash('Initial payment received! Your order is confirmed. The remaining amount will be collected on delivery.', 'success');
+        } else {
+            setFlash('Order placed successfully! Thank you for your purchase.', 'success');
+        }
         redirect(BASE_URL . 'order-success.php');
         
     } catch (Exception $e) {

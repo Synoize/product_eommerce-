@@ -54,7 +54,15 @@ unset($_SESSION['last_order_id']);
             </div>
             
             <h2 class="text-3xl font-bold text-gray-900 mb-3">Order Placed Successfully!</h2>
-            <p class="text-gray-500 mb-8">Thank you for your purchase. Your order has been confirmed.</p>
+            <p class="text-gray-500 mb-8">
+                <?php 
+                if ($order['payment_method'] === 'cod') {
+                    echo 'Thank you for your purchase. Your initial payment has been received. Please pay the remaining amount on delivery.';
+                } else {
+                    echo 'Thank you for your purchase. Your payment has been confirmed.';
+                }
+                ?>
+            </p>
             
             <!-- Order Details -->
             <div class="bg-gray-50 rounded-xl p-6 mb-8">
@@ -115,12 +123,24 @@ unset($_SESSION['last_order_id']);
             <!-- Payment Info -->
             <div class="text-left mb-8">
                 <h5 class="font-bold text-gray-900 mb-4">Payment Information</h5>
-                <p class="text-gray-600 mb-1">Payment Method: <span class="font-medium text-gray-900"><?php echo ucfirst(e($order['payment_method'])); ?></span></p>
-                <p class="text-gray-600 mb-1">Payment Status: 
-                    <span class="inline-block bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium"><?php echo ucfirst(e($order['payment_status'])); ?></span>
-                </p>
-                <?php if ($order['razorpay_payment_id']): ?>
-                <p class="text-gray-400 text-xs">Payment ID: <?php echo e($order['razorpay_payment_id']); ?></p>
+                <p class="text-gray-600 mb-1">Payment Method: <span class="font-medium text-gray-900"><?php echo $order['payment_method'] === 'cod' ? 'Cash on Delivery (COD)' : 'Online Payment'; ?></span></p>
+                
+                <?php if ($order['payment_method'] === 'cod'): ?>
+                    <!-- COD Payment Details -->
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-3">
+                        <p class="text-gray-600 mb-2">Total Amount: <span class="font-bold text-gray-900"><?php echo formatCurrency($order['total_amount']); ?></span></p>
+                        <p class="text-gray-600 mb-2">Initial Payment (Paid): <span class="font-bold text-green-600"><?php echo formatCurrency($order['initial_payment_amount']); ?></span></p>
+                        <p class="text-gray-600">Remaining Payment (On Delivery): <span class="font-bold text-orange-600"><?php echo formatCurrency($order['remaining_payment_amount']); ?></span></p>
+                        <p class="text-gray-600 text-xs mt-2">Initial Payment Status: <span class="inline-block bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium"><?php echo ucfirst(e($order['initial_payment_status'])); ?></span></p>
+                    </div>
+                <?php else: ?>
+                    <!-- Online Payment Details -->
+                    <p class="text-gray-600 mb-1">Payment Status: 
+                        <span class="inline-block bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium"><?php echo ucfirst(e($order['payment_status'])); ?></span>
+                    </p>
+                    <?php if ($order['razorpay_payment_id']): ?>
+                    <p class="text-gray-400 text-xs">Payment ID: <?php echo e($order['razorpay_payment_id']); ?></p>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             
