@@ -83,6 +83,9 @@ CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
+  `ingredients` text DEFAULT NULL,
+  `shipping_return` text DEFAULT NULL,
+  `legal_mandatories` text DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `original_price` decimal(10,2) DEFAULT NULL,
@@ -260,6 +263,40 @@ SET @exists = (SELECT COUNT(*) FROM information_schema.columns
 SET @sql = IF(@exists = 0, 
               'ALTER TABLE products ADD COLUMN gallery JSON DEFAULT NULL', 
               'SELECT "gallery column already exists"');
+              
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+-- Add product detail columns if not exists (for existing installations)
+SET @exists = (SELECT COUNT(*) FROM information_schema.columns 
+               WHERE table_name = 'products' AND column_name = 'ingredients');
+
+SET @sql = IF(@exists = 0, 
+              'ALTER TABLE products ADD COLUMN ingredients TEXT DEFAULT NULL AFTER description', 
+              'SELECT "ingredients column already exists"');
+              
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @exists = (SELECT COUNT(*) FROM information_schema.columns 
+               WHERE table_name = 'products' AND column_name = 'shipping_return');
+
+SET @sql = IF(@exists = 0, 
+              'ALTER TABLE products ADD COLUMN shipping_return TEXT DEFAULT NULL AFTER ingredients', 
+              'SELECT "shipping_return column already exists"');
+              
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @exists = (SELECT COUNT(*) FROM information_schema.columns 
+               WHERE table_name = 'products' AND column_name = 'legal_mandatories');
+
+SET @sql = IF(@exists = 0, 
+              'ALTER TABLE products ADD COLUMN legal_mandatories TEXT DEFAULT NULL AFTER shipping_return', 
+              'SELECT "legal_mandatories column already exists"');
               
 PREPARE stmt FROM @sql;
 EXECUTE stmt;

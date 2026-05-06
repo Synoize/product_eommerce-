@@ -23,8 +23,8 @@ INSERT INTO `users` (`name`, `email`, `mobile`, `password`, `role`, `status`, `a
 --
 
 INSERT INTO `categories` (`name`, `image`) VALUES
-('Snacks & Namkeen', 'snacks.jpg'),
-('Masala & Spices', 'spices.jpg');
+('Snacks & Namkeen', 'snacks.png'),
+('Masala & Spices', 'spices.png');
 
 -- --------------------------------------------------------
 
@@ -59,46 +59,18 @@ INSERT INTO `products` (`name`, `description`, `category_id`, `price`, `original
 ('Cardamom Green Whole', 'Premium green elaichi whole. Aromatic and flavorful. 50g pack.', 2, 199.00, 299.00, 50, 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400', NULL, 1, NOW()),
 ('Black Pepper Powder', 'Freshly ground kali mirch. Strong aroma and pungent flavor. 100g pack.', 2, 119.00, 179.00, 80, 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400', NULL, 1, NOW());
 
--- --------------------------------------------------------
-
---
--- Dumping data for table `coupons`
---
-
-INSERT INTO `coupons` (`code`, `type`, `value`, `min_order`, `max_discount`, `expiry_date`, `usage_limit`, `used_count`, `status`, `created_at`) VALUES
-('WELCOME10', 'percent', 10.00, 500.00, 500.00, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 100, 0, 1, NOW()),
-('FLAT200', 'fixed', 200.00, 1000.00, NULL, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 50, 0, 1, NOW()),
-('SUMMER25', 'percent', 25.00, 2000.00, 1000.00, DATE_ADD(CURDATE(), INTERVAL 60 DAY), 200, 0, 1, NOW()),
-('NEWUSER15', 'percent', 15.00, 0.00, 750.00, DATE_ADD(CURDATE(), INTERVAL 15 DAY), 1, 0, 1, NOW()),
-('SNACKS20', 'percent', 20.00, 300.00, 100.00, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 100, 0, 1, NOW()),
-('SPICES10', 'percent', 10.00, 200.00, 50.00, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 100, 0, 1, NOW());
-
--- --------------------------------------------------------
-
---
--- Dumping data for table `contact_messages`
---
-
-INSERT INTO `contact_messages` (`name`, `email`, `phone`, `message`, `created_at`) VALUES
-('Rahul Sharma', 'rahul@example.com', '9876543210', 'I am interested in becoming a seller on your platform. Please provide more information about the vendor registration process.', DATE_SUB(NOW(), INTERVAL 5 DAY)),
-('Priya Patel', 'priya@example.com', '9876543211', 'My order #123 has not been delivered yet. It has been 10 days since I placed the order. Please check the status.', DATE_SUB(NOW(), INTERVAL 3 DAY)),
-('Amit Kumar', 'amit@example.com', '9876543212', 'Great website! I love the product variety. Do you have any upcoming sales on electronics?', DATE_SUB(NOW(), INTERVAL 2 DAY)),
-('Sneha Gupta', 'sneha@example.com', '9876543213', 'I want to return a product I purchased last week. The size is not fitting. How can I initiate the return?', DATE_SUB(NOW(), INTERVAL 1 DAY)),
-('Vikram Singh', 'vikram@example.com', '9876543214', 'Do you offer cash on delivery option? I prefer paying after receiving the product.', NOW());
-
--- --------------------------------------------------------
-
---
--- Dumping data for table `reviews`
---
-
-INSERT INTO `reviews` (`product_id`, `user_id`, `rating`, `comment`, `created_at`) VALUES
-(1, 1, 5, 'Best makhana I have tasted! Crispy and perfectly salted. Great healthy snack option.', DATE_SUB(NOW(), INTERVAL 5 DAY)),
-(2, 1, 5, 'Masala makhana is so addictive! Spicy but not overwhelming. Ordering more soon.', DATE_SUB(NOW(), INTERVAL 4 DAY)),
-(4, 1, 4, 'Classic moong dal, very fresh and crispy. Perfect with evening tea.', DATE_SUB(NOW(), INTERVAL 3 DAY)),
-(11, 1, 5, 'Authentic garam masala! Perfect blend, makes my curries taste like restaurant style.', DATE_SUB(NOW(), INTERVAL 6 DAY)),
-(12, 1, 5, 'Turmeric powder has beautiful color and aroma. Very pure and authentic.', DATE_SUB(NOW(), INTERVAL 4 DAY)),
-(16, 1, 4, 'Pav bhaji masala is excellent! Tastes just like Mumbai street food.', DATE_SUB(NOW(), INTERVAL 3 DAY));
+UPDATE `products` p
+JOIN `categories` c ON p.category_id = c.id
+SET
+  p.ingredients = CASE
+    WHEN c.name LIKE '%Spice%' OR c.name LIKE '%Masala%' THEN CONCAT(p.name, '. Packed fresh to preserve natural aroma and flavor. Please check the product pack for the complete ingredient list.')
+    ELSE CONCAT(p.name, ', seasoning, spices, and permitted ingredients as applicable. Please check the product pack for complete ingredients and allergen information.')
+  END,
+  p.shipping_return = 'Orders are usually shipped within 2-4 business days. Returns are accepted for eligible unopened products as per store policy.',
+  p.legal_mandatories = CONCAT('Product: ', p.name, '\nCategory: ', c.name, '\nCountry of Origin: India\nPlease refer to the product packaging for manufacturer details, batch number, expiry date, MRP, net quantity, and other statutory information.')
+WHERE p.ingredients IS NULL
+   OR p.shipping_return IS NULL
+   OR p.legal_mandatories IS NULL;
 
 -- --------------------------------------------------------
 
@@ -241,3 +213,33 @@ INSERT INTO `product_weights` (`product_id`, `weight`, `price`, `stock`, `sort_o
 (22, '50g', 59.00, 65, 0),
 (22, '100g', 119.00, 80, 1),
 (22, '200g', 229.00, 60, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Dumping data for table `coupons`
+--
+
+INSERT INTO `coupons` (`code`, `type`, `value`, `min_order`, `max_discount`, `expiry_date`, `usage_limit`, `used_count`, `status`, `created_at`) VALUES
+('WELCOME10', 'percent', 10.00, 500.00, 500.00, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 100, 0, 1, NOW()),
+('FLAT10', 'percent', 10.00, 200.00, 50.00, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 100, 0, 1, NOW());
+
+-- --------------------------------------------------------
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`product_id`, `user_id`, `rating`, `comment`, `created_at`) VALUES
+(1, 1, 5, 'Best makhana I have tasted! Crispy and perfectly salted. Great healthy snack option.', DATE_SUB(NOW(), INTERVAL 5 DAY)),
+(16, 1, 4, 'Pav bhaji masala is excellent! Tastes just like Mumbai street food.', DATE_SUB(NOW(), INTERVAL 3 DAY));
+
+-- --------------------------------------------------------
+
+--
+-- Dumping data for table `contact_messages`
+--
+
+INSERT INTO `contact_messages` (`name`, `email`, `phone`, `message`, `created_at`) VALUES
+('Rahul Sharma', 'rahul@example.com', '9876543210', 'I am interested in becoming a seller on your platform. Please provide more information about the vendor registration process.', DATE_SUB(NOW(), INTERVAL 5 DAY)),
+('Vikram Singh', 'vikram@example.com', '9876543214', 'Do you offer cash on delivery option? I prefer paying after receiving the product.', NOW());

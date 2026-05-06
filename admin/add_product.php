@@ -22,6 +22,9 @@ $success = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = isset($_POST['name']) ? trim($_POST['name']) : '';
     $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+    $ingredients = isset($_POST['ingredients']) ? trim($_POST['ingredients']) : '';
+    $shippingReturn = isset($_POST['shipping_return']) ? trim($_POST['shipping_return']) : '';
+    $legalMandatories = isset($_POST['legal_mandatories']) ? trim($_POST['legal_mandatories']) : '';
     $categoryId = isset($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
     $price = isset($_POST['price']) ? (float)$_POST['price'] : 0;
     $originalPrice = isset($_POST['original_price']) ? (float)$_POST['original_price'] : 0;
@@ -126,9 +129,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $galleryJson = !empty($galleryImages) ? json_encode($galleryImages) : null;
             
-            $stmt = $pdo->prepare("INSERT INTO products (name, description, category_id, price, original_price, stock, image, gallery, status, created_at) 
-                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
-            $stmt->execute([$name, $description, $categoryId, $price, $originalPrice, $stock, $imageName, $galleryJson]);
+            $stmt = $pdo->prepare("INSERT INTO products (name, description, ingredients, shipping_return, legal_mandatories, category_id, price, original_price, stock, image, gallery, status, created_at) 
+                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
+            $stmt->execute([$name, $description, $ingredients, $shippingReturn, $legalMandatories, $categoryId, $price, $originalPrice, $stock, $imageName, $galleryJson]);
             
             $productId = $pdo->lastInsertId();
             
@@ -199,6 +202,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
                             <textarea name="description" rows="4" required
                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"><?php echo isset($_POST['description']) ? e($_POST['description']) : ''; ?></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ingredients</label>
+                            <textarea name="ingredients" rows="3"
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                                      placeholder="Add product ingredients, separated by commas or lines"><?php echo isset($_POST['ingredients']) ? e($_POST['ingredients']) : ''; ?></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Shipping & Return</label>
+                            <textarea name="shipping_return" rows="3"
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                                      placeholder="Add delivery timing, shipping notes, and return policy for this product"><?php echo isset($_POST['shipping_return']) ? e($_POST['shipping_return']) : ''; ?></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Legal Mandatories</label>
+                            <textarea name="legal_mandatories" rows="3"
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                                      placeholder="Add FSSAI, manufacturer, country of origin, shelf life, or other required details"><?php echo isset($_POST['legal_mandatories']) ? e($_POST['legal_mandatories']) : ''; ?></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹) *</label>

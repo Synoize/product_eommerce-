@@ -60,6 +60,9 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = isset($_POST['name']) ? trim($_POST['name']) : '';
     $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+    $ingredients = isset($_POST['ingredients']) ? trim($_POST['ingredients']) : '';
+    $shippingReturn = isset($_POST['shipping_return']) ? trim($_POST['shipping_return']) : '';
+    $legalMandatories = isset($_POST['legal_mandatories']) ? trim($_POST['legal_mandatories']) : '';
     $categoryId = isset($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
     $price = isset($_POST['price']) ? (float)$_POST['price'] : 0;
     $originalPrice = isset($_POST['original_price']) ? (float)$_POST['original_price'] : 0;
@@ -176,10 +179,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $galleryJson = !empty($galleryImages) ? json_encode(array_values($galleryImages)) : null;
             
             $stmt = $pdo->prepare("UPDATE products SET 
-                name = ?, description = ?, category_id = ?, price = ?, original_price = ?, 
+                name = ?, description = ?, ingredients = ?, shipping_return = ?, legal_mandatories = ?, category_id = ?, price = ?, original_price = ?, 
                 stock = ?, image = ?, gallery = ?, status = ?, updated_at = NOW() 
                 WHERE id = ?");
-            $stmt->execute([$name, $description, $categoryId, $price, $originalPrice, 
+            $stmt->execute([$name, $description, $ingredients, $shippingReturn, $legalMandatories, $categoryId, $price, $originalPrice, 
                           $stock, $imageName, $galleryJson, $status, $productId]);
             
             // Delete existing weights and insert new ones
@@ -250,6 +253,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
                                 <textarea name="description" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" rows="4" required><?php echo e($_POST['description'] ?? $product['description']); ?></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Ingredients</label>
+                                <textarea name="ingredients" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" rows="3" placeholder="Add product ingredients, separated by commas or lines"><?php echo e($_POST['ingredients'] ?? ($product['ingredients'] ?? '')); ?></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Shipping & Return</label>
+                                <textarea name="shipping_return" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" rows="3" placeholder="Add delivery timing, shipping notes, and return policy for this product"><?php echo e($_POST['shipping_return'] ?? ($product['shipping_return'] ?? '')); ?></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Legal Mandatories</label>
+                                <textarea name="legal_mandatories" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" rows="3" placeholder="Add FSSAI, manufacturer, country of origin, shelf life, or other required details"><?php echo e($_POST['legal_mandatories'] ?? ($product['legal_mandatories'] ?? '')); ?></textarea>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹) *</label>

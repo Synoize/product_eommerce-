@@ -87,33 +87,6 @@ try {
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
                     }
-
-
-
-                    //     primary: {
-                    //         DEFAULT: '#f84183',
-                    //         50: '#fef1f5',
-                    //         100: '#fde4ec',
-                    //         200: '#fdcde0',
-                    //         300: '#fca6c6',
-                    //         400: '#f970a2',
-                    //         500: '#f84183',
-                    //         600: '#e91e63',
-                    //         700: '#c2185b',
-                    //         800: '#9d174d',
-                    //         900: '#831843',
-                    //     },
-                    //     secondary: {
-                    //         DEFAULT: '#6366f1',
-                    //         50: '#eef2ff',
-                    //         100: '#e0e7ff',
-                    //         500: '#6366f1',
-                    //         600: '#4f46e5',
-                    //     }
-                    // },
-                    // fontFamily: {
-                    //     sans: ['Inter', 'sans-serif'],
-                    // }
                 }
 
             }
@@ -128,7 +101,7 @@ try {
 
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 bg-slate-50 shadow-sm z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
                 <a href="<?php echo BASE_URL; ?>" class="flex items-center text-primary-500 font-bold text-xl">

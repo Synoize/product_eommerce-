@@ -5,7 +5,6 @@
  * eCommerce Website Main Landing Page
  */
 
-$pageTitle = 'Makhana';
 require_once 'includes/header.php';
 
 // Fetch featured products
