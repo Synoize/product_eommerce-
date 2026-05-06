@@ -38,38 +38,15 @@ foreach ($orders as $order) {
 }
 ?>
 
-<div class="min-h-screen bg-gray-50 py-12">
+<div class="min-h-screen mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- Sidebar -->
-            <div class="md:col-span-1">
-                <div class="bg-white rounded-2xl shadow-md p-6 sticky top-24">
-                    <div class="text-center mb-6">
-                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['user_name']); ?>&background=f84183&color=fff&size=128" 
-                             class="w-24 h-24 rounded-full mx-auto mb-3" alt="Profile">
-                        <h5 class="font-bold text-gray-900 mb-1"><?php echo e($_SESSION['user_name']); ?></h5>
-                        <p class="text-gray-500 text-sm"><?php echo e($_SESSION['user_email']); ?></p>
-                    </div>
-                    <nav class="space-y-2">
-                        <a href="<?php echo BASE_URL; ?>user/profile.php" class="flex items-center px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition">
-                            <i class="fas fa-user mr-3"></i>My Profile
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/addresses.php" class="flex items-center px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition">
-                            <i class="fas fa-map-marker-alt mr-3"></i>Addresses
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/orders.php" class="flex items-center px-4 py-2 rounded-lg bg-primary-50 text-primary-600 font-medium">
-                            <i class="fas fa-box mr-3"></i>My Orders
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/logout.php" class="flex items-center px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition">
-                            <i class="fas fa-sign-out-alt mr-3"></i>Logout
-                        </a>
-                    </nav>
-                </div>
-            </div>
+            <?php require_once __DIR__ . '/../includes/profile_sidebar.php'; ?>
             
             <!-- Orders List -->
             <div class="md:col-span-3">
-                <div class="bg-white rounded-2xl shadow-md p-6 md:p-8">
+                <div class="bg-white md:border md:rounded-lg md:shadow-sm md:p-8">
                     <h4 class="text-2xl font-bold text-gray-900 mb-6">My Orders</h4>
                     
                     <?php if (empty($orders)): ?>
@@ -77,7 +54,7 @@ foreach ($orders as $order) {
                         <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
                         <h5 class="text-xl font-semibold text-gray-900 mb-2">No orders yet</h5>
                         <p class="text-gray-500 mb-6">Start shopping to see your orders here!</p>
-                        <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl">
+                        <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-800 text-white font-semibold py-3 px-6 rounded-full transition hover:shadow-sm">
                             <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
                         </a>
                     </div>

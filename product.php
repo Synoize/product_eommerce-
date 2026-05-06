@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Product Detail Page
  * Shows product information with gallery, reviews, and add to cart
@@ -21,9 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wishlist_action'])) {
         setFlash('Please login to manage wishlist', 'warning');
         redirect(BASE_URL . 'user/login.php');
     }
-    
+
     $action = $_POST['wishlist_action'];
-    
+
     if ($action === 'add') {
         if (addToWishlist($productId)) {
             setFlash('Added to wishlist!', 'success');
@@ -37,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wishlist_action'])) {
             setFlash('Error removing from wishlist', 'danger');
         }
     }
-    
+
     redirect(BASE_URL . 'product.php?id=' . $productId);
 }
 
@@ -49,7 +50,7 @@ try {
                           WHERE p.id = ? AND p.status = 1");
     $stmt->execute([$productId]);
     $product = $stmt->fetch();
-    
+
     if (!$product) {
         setFlash('Product not found', 'danger');
         redirect(BASE_URL . 'shop.php');
@@ -154,7 +155,7 @@ try {
                           ORDER BY r.created_at DESC");
     $stmt->execute([$productId]);
     $reviews = $stmt->fetchAll();
-    
+
     if (count($reviews) > 0) {
         $avgRating = array_sum(array_column($reviews, 'rating')) / count($reviews);
     }
@@ -195,6 +196,20 @@ $productDetailFallbacks = [
     'Shipping & Return' => 'Orders are usually shipped within 2-4 business days. Returns are accepted for eligible unopened products as per store policy.',
     'Legal Mandatories' => "Product: {$productName}\nCategory: {$productCategory}\nCountry of Origin: India\nPlease refer to the product packaging for manufacturer details, batch number, expiry date, MRP, net quantity, and other statutory information.",
 ];
+
+$selectedWeightIndex = 0;
+foreach ($productWeights as $index => $weight) {
+    if ((int)$weight['stock'] > 0) {
+        $selectedWeightIndex = $index;
+        break;
+    }
+}
+
+$selectedWeight = $productWeights[$selectedWeightIndex] ?? null;
+$selectedPrice = $selectedWeight ? (float)$selectedWeight['price'] : (float)$product['price'];
+$selectedStock = $selectedWeight ? (int)$selectedWeight['stock'] : (int)$product['stock'];
+$selectedWeightLabel = $selectedWeight ? $selectedWeight['weight'] : 'Default';
+$productOriginalPrice = (float)($product['original_price'] ?? 0);
 ?>
 
 <!-- Breadcrumb -->
@@ -221,38 +236,38 @@ $productDetailFallbacks = [
                 <div class="space-y-4">
                     <!-- Main Image -->
                     <div class="rounded-2xl border overflow-hidden shadow-sm bg-gray-50">
-                        <?php 
+                        <?php
                         $mainImageUrl = !empty($gallery) ? getImageUrl($gallery[0], 'products') : getImageUrl($product['image'], 'products');
                         ?>
                         <img src="<?php echo $mainImageUrl; ?>" id="mainProductImage" alt="<?php echo e($product['name']); ?>" class="w-full max-h-96 min-h-92 object-contain">
                     </div>
-                    
+
                     <!-- Thumbnail Images -->
                     <?php if (count($gallery) > 1): ?>
-                    <div class="grid grid-cols-4 gap-3">
-                        <?php foreach ($gallery as $index => $image): ?>
-                        <img src="<?php echo getImageUrl($image, 'products'); ?>" 
-                             alt="<?php echo e($product['name']); ?> - <?php echo $index + 1; ?>"
-                             class="w-full max-h-24 min-h-18 object-cover rounded-xl border cursor-pointer transition hover:opacity-75 <?php echo $index === 0 ? 'ring-2 ring-accent' : ''; ?>"
-                             onclick="changeMainImage(this.src)">
-                        <?php endforeach; ?>
-                    </div>
+                        <div class="grid grid-cols-4 gap-3">
+                            <?php foreach ($gallery as $index => $image): ?>
+                                <img src="<?php echo getImageUrl($image, 'products'); ?>"
+                                    alt="<?php echo e($product['name']); ?> - <?php echo $index + 1; ?>"
+                                    class="w-full max-h-24 min-h-18 object-cover rounded-xl border cursor-pointer transition hover:opacity-75 <?php echo $index === 0 ? 'ring-2 ring-accent' : ''; ?>"
+                                    onclick="changeMainImage(this.src)">
+                            <?php endforeach; ?>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>
-            
+
             <!-- Product Info -->
             <div>
                 <div class="lg:pl-8">
                     <!-- Category -->
-                    <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $product['category_id']; ?>" 
-                       class="text-gray-500 hover:text-accent text-sm font-medium">
+                    <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $product['category_id']; ?>"
+                        class="text-gray-500 hover:text-accent text-sm font-medium">
                         <?php echo e($product['category_name'] ?? 'Uncategorized'); ?>
                     </a>
-                    
+
                     <!-- Title -->
                     <h1 class="text-2xl md:text-4xl font-bold text-gray-900 mt-2 mb-4 line-clamp-2"><?php echo e($product['name']); ?></h1>
-                    
+
                     <!-- Rating -->
                     <div class="flex items-center mb-4">
                         <div class="flex items-center mr-3">
@@ -262,21 +277,21 @@ $productDetailFallbacks = [
                         </div>
                         <span class="text-gray-500">(<?php echo count($reviews); ?> reviews)</span>
                     </div>
-                    
+
                     <!-- Price -->
                     <div class="mb-6 flex items-center">
-                        <span class="text-4xl font-bold text-primary-500"><?php echo formatCurrency($product['price']); ?></span>
+                        <span id="displayProductPrice" class="text-4xl font-bold text-primary-500"><?php echo formatCurrency($selectedPrice); ?></span>
                         <?php if ($product['original_price'] > $product['price']): ?>
-                        <span class="text-xl text-gray-400 line-through ml-3"><?php echo formatCurrency($product['original_price']); ?></span>
-                        <span class="inline-block bg-green-500 text-white text-xs font-bold px-2 py-1 rounded ml-5">
-                            <?php echo round((($product['original_price'] - $product['price']) / $product['original_price']) * 100); ?>% OFF
-                        </span>
+                            <span id="displayOriginalPrice" class="text-xl text-gray-400 line-through ml-3"><?php echo formatCurrency($product['original_price']); ?></span>
+                            <span id="displayDiscountBadge" class="inline-block bg-green-500 text-white text-xs font-bold px-2 py-1 rounded ml-5">
+                                <?php echo round((($product['original_price'] - $product['price']) / $product['original_price']) * 100); ?>% OFF
+                            </span>
                         <?php endif; ?>
                     </div>
-                    
+
                     <!-- Description -->
                     <p class="text-gray-600 mb-6 text-sm leading-relaxed"><?php echo nl2br(e($product['description'])); ?></p>
-                    
+
                     <!-- Stock Status -->
                     <div class="mb-6">
                         <?php if ($product['stock'] > 10): ?>
@@ -287,114 +302,242 @@ $productDetailFallbacks = [
                             <span class="inline-flex items-center bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium"><i data-lucide="frown" class="w-4 h-4 mr-1"></i> Out of Stock</span>
                         <?php endif; ?>
                     </div>
-                    
+
                     <!-- Add to Cart Form -->
                     <?php if ($product['stock'] > 0): ?>
-                    <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="mb-6">
-                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                        <input type="hidden" name="action" value="add">
-                        
-                        <!-- Weight Selection -->
-                        <?php if (!empty($productWeights)): ?>
-                        <div class="mb-4">
-                            <label class="block font-semibold text-gray-700 mb-2">Select Weight:</label>
-                            <div class="space-y-2">
-                                <?php foreach ($productWeights as $weight): ?>
-                                    <label class="flex items-center">
-                                        <input type="radio" name="weight_id" value="<?php echo $weight['id']; ?>" 
-                                               class="mr-3 text-primary-500 focus:ring-primary-500" 
-                                               onchange="updatePrice(<?php echo $weight['price']; ?>, <?php echo $weight['stock']; ?>)"
-                                               <?php echo $weight === $productWeights[0] ? 'checked' : ''; ?>>
-                                        <span class="text-gray-700">
-                                            <?php echo htmlspecialchars($weight['weight']); ?> - ₹<?php echo number_format($weight['price'], 2); ?>
-                                            <?php if ($weight['stock'] <= 0): ?>
-                                                <span class="text-red-500 text-sm">(Out of Stock)</span>
-                                            <?php elseif ($weight['stock'] <= 5): ?>
-                                                <span class="text-yellow-600 text-sm">(Only <?php echo $weight['stock']; ?> left)</span>
-                                            <?php endif; ?>
-                                        </span>
-                                    </label>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-                        
-                        <div class="flex flex-wrap items-center gap-4">
-                            <label class="font-semibold text-gray-700">Quantity:</label>
-                            <div class="flex items-center border-2 border-gray-300 rounded-full overflow-hidden">
-                                <button type="button" onclick="decreaseQty()" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition text-lg font-medium">-</button>
-                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="<?php echo !empty($productWeights) ? $productWeights[0]['stock'] : $product['stock']; ?>" class="w-14 text-center text-lg font-semibold border-x-2 border-gray-300">
-                                <button type="button" onclick="increaseQty(<?php echo !empty($productWeights) ? $productWeights[0]['stock'] : $product['stock']; ?>)" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition text-lg font-medium">+</button>
-                            </div>
-                            <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-full transition shadow-lg hover:shadow-xl inline-flex items-center">
-                                <i class="fas fa-cart-plus mr-2"></i>Add to Cart
-                            </button>
-                        </div>
-                    </form>
-                    <?php endif; ?>
-                    
-                    <!-- Wishlist Button -->
-                    <div class="mb-6">
-                        <form method="POST" class="inline">
-                            <input type="hidden" name="wishlist_action" value="<?php echo $inWishlist ? 'remove' : 'add'; ?>">
-                            <?php if (isLoggedIn()): ?>
-                                <button type="submit" class="<?php echo $inWishlist ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-200 hover:bg-gray-300'; ?> text-<?php echo $inWishlist ? 'white' : 'gray-900'; ?> font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl inline-flex items-center">
-                                    <i class="fas fa-heart mr-2"></i><?php echo $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'; ?>
-                                </button>
-                            <?php else: ?>
-                                <a href="<?php echo BASE_URL; ?>user/login.php" class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl inline-flex items-center">
-                                    <i class="fas fa-heart mr-2"></i>Add to Wishlist
-                                </a>
+                        <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="mb-6">
+                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                            <input type="hidden" name="action" value="add">
+
+                            <!-- Weight Selection -->
+                            <?php if (!empty($productWeights)): ?>
+                                <div class="mb-4">
+                                    <label class="block font-semibold text-gray-700 mb-2">Select Weight:</label>
+                                    <div class="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                                        <?php foreach ($productWeights as $index => $weight): ?>
+                                            <label
+                                                class="relative flex items-center justify-center overflow-hidden rounded-lg border px-4 py-3 text-sm text-nowrap font-medium transition-all duration-300
+    <?php echo (int)$weight['stock'] <= 0
+                                                ? 'cursor-not-allowed bg-gray-100 opacity-60 border-gray-200'
+                                                : 'cursor-pointer bg-white hover:border-accent hover:shadow-sm'; ?>">
+
+                                                <!-- Radio -->
+                                                <input
+                                                    type="radio"
+                                                    name="weight_id"
+                                                    value="<?php echo $weight['id']; ?>"
+                                                    class="peer sr-only"
+                                                    data-weight="<?php echo e($weight['weight']); ?>"
+                                                    data-price="<?php echo (float)$weight['price']; ?>"
+                                                    data-stock="<?php echo (int)$weight['stock']; ?>"
+                                                    onchange="updatePrice(this)"
+                                                    <?php echo $index === $selectedWeightIndex ? 'checked' : ''; ?>
+                                                    <?php echo (int)$weight['stock'] <= 0 ? 'disabled' : ''; ?>>
+
+                                                <!-- Selected Background -->
+                                                <span
+                                                    class="absolute inset-0 rounded-lg border-2 border-transparent transition-all duration-300
+        peer-checked:border-accent peer-checked:bg-accent/5">
+                                                </span>
+
+                                                <!-- Content -->
+                                                <div class="relative z-10 flex flex-col items-center justify-center text-center">
+
+                                                    <!-- Weight -->
+                                                    <span
+                                                        class="text-sm text- font-semibold transition-colors duration-300
+            <?php echo (int)$weight['stock'] <= 0
+                                                ? 'text-gray-400'
+                                                : 'text-gray-800 peer-checked:text-accent'; ?>">
+                                                        <?php echo e($weight['weight']); ?>
+                                                    </span>
+
+                                                    <!-- Stock Status -->
+                                                    <?php if ((int)$weight['stock'] <= 0): ?>
+                                                        <span class="mt-1 text-xs font-medium text-red-500">
+                                                            Out of Stock
+                                                        </span>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
                             <?php endif; ?>
+
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4 my-8">
+
+                                <!-- Quantity Selector -->
+                                <div class="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden w-fit">
+
+                                    <!-- Decrease -->
+                                    <button
+                                        type="button"
+                                        onclick="decreaseQty()"
+                                        class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xl font-semibold text-gray-700 hover:bg-gray-100 active:scale-95 transition-all duration-200">
+                                        <i class="fas fa-minus text-xs md:text-sm"></i>
+                                    </button>
+
+                                    <!-- Quantity Input -->
+                                    <input
+                                        type="number"
+                                        name="quantity"
+                                        id="quantity"
+                                        value="1"
+                                        min="1"
+                                        max="<?php echo $selectedStock; ?>"
+                                        onchange="updatePriceSummary()"
+                                        oninput="updatePriceSummary()"
+                                        class="w-12 md:w-16 h-10 md:h-12 text-center font-bold text-sm md:text-lg border-x border-gray-200 focus:outline-none appearance-none bg-gray-50">
+
+                                    <!-- Increase -->
+                                    <button
+                                        type="button"
+                                        onclick="increaseQty(<?php echo $selectedStock; ?>)"
+                                        class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xl font-semibold text-gray-700 hover:bg-gray-100 active:scale-95 transition-all duration-200">
+                                        <i class="fas fa-plus text-xs md:text-sm"></i>
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-2 md:flex-1 gap-3 text-sm ">
+                                    <!-- Add To Cart Button -->
+                                    <button
+                                        type="submit"
+                                        class="group relative overflow-hidden bg-accent hover:bg-accent text-white font-semibold md:px-8 p-3.5 rounded-lg hover:shadow-sm transition-all duration-300 inline-flex items-center justify-center">
+
+                                        <span class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+
+                                        <i class="fas fa-cart-plus mr-2 relative z-10 group-hover:scale-110 transition-transform duration-300"></i>
+
+                                        <span class="relative z-10">
+                                            Add to Cart
+                                        </span>
+                                    </button>
+
+                                    <!-- Buy Now Button -->
+                                    <button
+                                        type="submit"
+                                        name="redirect_to"
+                                        value="cart"
+                                        class="group relative overflow-hidden bg-primary-500 hover:bg-primary-600 text-white font-semibold md:px-8 p-3.5 rounded-lg hover:shadow-sm transition-all duration-300 inline-flex items-center justify-center">
+
+                                        <span class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+
+                                        <i class="fas fa-cart-plus mr-2 relative z-10 group-hover:scale-110 transition-transform duration-300"></i>
+
+                                        <span class="relative z-10">
+                                            Buy Now
+                                        </span>
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <div id="priceSummary" class="mb-5  rounded-xl border border-gray-200 bg-gray-50 p-4">
+                                <div class="flex items-center justify-between gap-4 border-b border-gray-200 pb-3 mb-3">
+                                    <h3 class="font-bold text-gray-900">Price Summary</h3>
+                                    <span id="summaryStock" class="text-xs font-semibold <?php echo $selectedStock > 0 ? 'text-green-600' : 'text-red-500'; ?>">
+                                        <?php echo $selectedStock > 0 ? 'In Stock' : 'Out of Stock'; ?>
+                                    </span>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between gap-4">
+                                        <span class="text-gray-500">Weight</span>
+                                        <span id="summaryWeight" class="font-medium text-gray-900"><?php echo e($selectedWeightLabel); ?></span>
+                                    </div>
+                                    <div class="flex justify-between gap-4">
+                                        <span class="text-gray-500">Unit Price</span>
+                                        <span id="summaryUnitPrice" class="font-medium text-gray-900"><?php echo formatCurrency($selectedPrice); ?></span>
+                                    </div>
+                                    <div id="summaryOriginalPriceRow" class="<?php echo $productOriginalPrice > $selectedPrice ? 'flex' : 'hidden'; ?> justify-between gap-4">
+                                        <span class="text-gray-500">Original Price</span>
+                                        <span id="summaryOriginalPrice" class="font-medium text-gray-400 line-through"><?php echo formatCurrency($productOriginalPrice); ?></span>
+                                    </div>
+                                    <div id="summarySavingsRow" class="<?php echo $productOriginalPrice > $selectedPrice ? 'flex' : 'hidden'; ?> justify-between gap-4">
+                                        <span class="text-gray-500">Savings</span>
+                                        <span id="summarySavings" class="font-medium text-green-600"><?php echo formatCurrency(max(0, $productOriginalPrice - $selectedPrice)); ?></span>
+                                    </div>
+                                    <div class="flex justify-between gap-4">
+                                        <span class="text-gray-500">Quantity</span>
+                                        <span id="summaryQuantity" class="font-medium text-gray-900">1</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 border-t border-gray-200 pt-3 flex justify-between gap-4">
+                                    <span class="font-bold text-gray-900">Total</span>
+                                    <span id="summaryTotal" class="font-bold text-lg text-primary-500"><?php echo formatCurrency($selectedPrice); ?></span>
+                                </div>
+                            </div>
                         </form>
-                        <a href="<?php echo BASE_URL; ?>user/wishlist.php" class="ml-3 text-primary-500 hover:text-primary-600 font-medium inline-flex items-center">
-                            <i class="fas fa-list mr-1"></i>View Wishlist
-                        </a>
-                    </div>
-                    
-                    <!-- Additional Info -->
-                    <div class="border-t border-gray-200 pt-6">
-                        <div class="grid grid-cols-3 gap-4 text-center">
-                            <div>
-                                <i class="fas fa-truck text-3xl text-primary-500 mb-2"></i>
-                                <p class="text-sm text-gray-600">Free Shipping</p>
-                            </div>
-                            <div>
-                                <i class="fas fa-undo text-3xl text-primary-500 mb-2"></i>
-                                <p class="text-sm text-gray-600">Easy Returns</p>
-                            </div>
-                            <div>
-                                <i class="fas fa-shield-alt text-3xl text-primary-500 mb-2"></i>
-                                <p class="text-sm text-gray-600">Secure Payment</p>
-                            </div>
+                    <?php endif; ?>
+
+                    <div class="flex flex-col justify-center gap-5 pb-8">
+                        <h3 class="text-sm text-gray-500">Accepted Payment Methods</h3>
+                        <div class="flex flex-wrap items-center gap-3" aria-label="Accepted payment methods">
+                            <span class="inline-flex h-8 items-center rounded bg-gray-50 px-3 text-sm font-black italic text-blue-700">VISA</span>
+                            <span class="inline-flex h-8 items-center rounded bg-gray-50 px-3 text-sm font-black text-red-600">Master<span class="text-yellow-500">Card</span></span>
+                            <span class="inline-flex h-8 items-center rounded bg-gray-50 px-3 text-sm font-black text-blue-700">RuPay</span>
+                            <span class="inline-flex h-8 items-center rounded bg-gray-50 px-3 text-sm font-black text-green-700">UPI</span>
+                            <span class="inline-flex h-8 items-center rounded bg-gray-50 px-3 text-sm font-black text-blue-600">Maestro</span>
                         </div>
                     </div>
+
+                    <!-- Additional Features -->
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+
+                        <!-- Fresh Products -->
+                        <div class="group bg-white border border-gray-100 rounded-2xl p-4 text-center hover:shadow-md transition-all duration-300">
+                            <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-primary-50 flex items-center justify-center group-hover:scale-110 transition">
+                                <i class="fas fa-leaf text-2xl text-primary-500"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800 text-sm">100% Fresh</h4>
+                            <p class="text-xs text-gray-500 mt-1">Premium quality products</p>
+                        </div>
+
+                        <!-- Fast Delivery -->
+                        <div class="group bg-white border border-gray-100 rounded-2xl p-4 text-center hover:shadow-md transition-all duration-300">
+                            <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-orange-50 flex items-center justify-center group-hover:scale-110 transition">
+                                <i class="fas fa-shipping-fast text-2xl text-orange-500"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800 text-sm">Fast Delivery</h4>
+                            <p class="text-xs text-gray-500 mt-1">Quick doorstep service</p>
+                        </div>
+
+                        <!-- Safe Packaging -->
+                        <div class="group bg-white border border-gray-100 rounded-2xl p-4 text-center hover:shadow-md transition-all duration-300">
+                            <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-blue-50 flex items-center justify-center group-hover:scale-110 transition">
+                                <i class="fas fa-box-open text-2xl text-blue-500"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800 text-sm">Safe Packing</h4>
+                            <p class="text-xs text-gray-500 mt-1">Handled with care</p>
+                        </div>
+
+                        <!-- Trusted Service -->
+                        <div class="group bg-white border border-gray-100 rounded-2xl p-4 text-center hover:shadow-md transition-all duration-300">
+                            <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-green-50 flex items-center justify-center group-hover:scale-110 transition">
+                                <i class="fas fa-award text-2xl text-green-500"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800 text-sm">Trusted Brand</h4>
+                            <p class="text-xs text-gray-500 mt-1">Loved by customers</p>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
-        
-        <!-- Product Details Accordion -->
-        <div class="mt-16 bg-neutral-dark text-white rounded-2xl p-6 md:p-8">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5 pb-8">
-                <h3 class="text-xl font-bold">Accepted Payment Methods</h3>
-                <div class="flex flex-wrap items-center gap-3 md:justify-end" aria-label="Accepted payment methods">
-                    <span class="inline-flex h-8 items-center rounded bg-white px-3 text-sm font-black italic text-blue-700">VISA</span>
-                    <span class="inline-flex h-8 items-center rounded bg-white px-3 text-sm font-black text-red-600">Master<span class="text-yellow-500">Card</span></span>
-                    <span class="inline-flex h-8 items-center rounded bg-white px-3 text-sm font-black text-blue-700">RuPay</span>
-                    <span class="inline-flex h-8 items-center rounded bg-white px-3 text-sm font-black text-green-700">UPI</span>
-                    <span class="inline-flex h-8 items-center rounded bg-white px-3 text-sm font-black text-blue-600">Maestro</span>
-                </div>
-            </div>
 
+        <!-- Product Details Accordion -->
+        <div class="mt-16 bg-primary-600 text-white rounded-lg p-4 md:p-8">
             <div class="divide-y divide-white/15">
                 <?php foreach ($productDetailSections as $sectionTitle => $sectionContent): ?>
                     <?php $detailContent = $sectionContent !== '' ? $sectionContent : ($productDetailFallbacks[$sectionTitle] ?? 'Details will be updated soon.'); ?>
                     <details class="group" <?php echo $sectionTitle === 'Description' ? 'open' : ''; ?>>
-                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-6 text-lg font-bold">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-6 text-sm md:text-lg font-semibold">
                             <span><?php echo e($sectionTitle); ?></span>
-                            <i class="fas fa-chevron-down text-sm transition group-open:rotate-180"></i>
+                            <i class="fas fa-chevron-up text-sm transition group-open:rotate-90"></i>
                         </summary>
-                        <div class="pb-6 leading-relaxed text-gray-300">
+                        <div class="pb-6 leading-relaxed text-gray-200 text-xs md:text-sm">
                             <?php echo nl2br(e($detailContent)); ?>
                         </div>
                     </details>
@@ -404,280 +547,444 @@ $productDetailFallbacks = [
 
         <!-- Reviews Section -->
         <div class="mt-16" id="reviews">
-            <h3 class="text-2xl font-bold text-gray-900 mb-8">Customer Reviews</h3>
+            <h3 class="text-3xl md:text-4xl font-luckiest text-primary-600 text-center md:text-start mb-8">Customer <span class="text-accent" style="-webkit-text-stroke: 1px black;">Reviews</span></h3>
 
             <div class="mb-8">
-                <div class="bg-[#111111] text-white px-6 md:px-10 py-6">
+                <div class="bg-primary-600 text-white px-6 md:px-10 py-6">
                     <div class="grid grid-cols-1 md:grid-cols-[1fr_1px_300px] items-center gap-6 md:gap-10">
                         <div>
-                            <div class="flex items-center gap-1.5 text-orange-400 text-xl mb-1">
+                            <div class="flex items-center gap-1.5 text-accent text-xl mb-4">
                                 <?php for ($i = 1; $i <= 5; $i++): ?>
                                     <i class="far fa-star"></i>
                                 <?php endfor; ?>
                             </div>
-                            <p class="text-lg font-bold">
+                            <p class="text-sm md:text-lg">
                                 <?php echo count($reviews) === 0 ? 'Be the first to write a review' : 'Share your experience with this product'; ?>
                             </p>
                         </div>
                         <div class="hidden md:block h-20 bg-white/15"></div>
                         <div>
                             <?php if (isLoggedIn()): ?>
-                            <button type="button" onclick="toggleReviewForm()" class="w-full bg-orange-400 hover:bg-orange-500 text-white text-lg font-bold py-4 px-8 transition">
-                                <?php echo $userReview ? 'Update review' : 'Write a review'; ?>
-                            </button>
+                                <button type="button" onclick="toggleReviewForm()" class="w-full bg-accent-800 hover:bg-accent text-white text-sm font-semibold py-4 px-8 transition">
+                                    <?php echo $userReview ? 'Update review' : 'Write a review'; ?>
+                                </button>
                             <?php else: ?>
-                            <a href="<?php echo BASE_URL; ?>user/login.php" class="w-full bg-orange-400 hover:bg-orange-500 text-white text-lg font-bold py-4 px-8 transition inline-flex items-center justify-center">
-                                Write a review
-                            </a>
+                                <a href="<?php echo BASE_URL; ?>user/login.php" class="w-full bg-accent-800 hover:bg-accent text-white text-sm font-semibold py-4 px-8 transition inline-flex items-center justify-center">
+                                    Write a review
+                                </a>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
 
                 <?php if (isLoggedIn()): ?>
-                <div id="reviewFormPanel" class="hidden bg-white border border-gray-100 shadow-sm p-6">
-                    <h4 class="text-xl font-bold text-gray-900 mb-4"><?php echo $userReview ? 'Update Your Review' : 'Write a Review'; ?></h4>
-                    <form method="POST" action="<?php echo BASE_URL; ?>product.php?id=<?php echo $productId; ?>#reviews" class="space-y-5">
-                        <input type="hidden" name="review_action" value="save">
-
-                        <div>
-                            <label class="block font-semibold text-gray-700 mb-2">Your Rating</label>
-                            <div class="review-star-rating flex flex-row-reverse justify-end gap-2 text-3xl">
-                                <?php for ($ratingValue = 5; $ratingValue >= 1; $ratingValue--): ?>
-                                <input type="radio" id="rating<?php echo $ratingValue; ?>" name="rating" value="<?php echo $ratingValue; ?>" class="sr-only" <?php echo ((int)($userReview['rating'] ?? 5) === $ratingValue) ? 'checked' : ''; ?>>
-                                <label for="rating<?php echo $ratingValue; ?>" class="cursor-pointer text-gray-300 transition hover:text-orange-400" aria-label="<?php echo $ratingValue; ?> star<?php echo $ratingValue > 1 ? 's' : ''; ?>">
-                                    <i class="fas fa-star"></i>
-                                </label>
-                                <?php endfor; ?>
+                    <div id="reviewFormPanel"
+                        class="border-t hidden relative overflow-hidden bg-primary-600 rounded-b-lg p-6 md:p-8">
+                        <div class="relative z-10">
+                            <!-- Heading -->
+                            <div class="mb-6">
+                                <h4 class="text-2xl font-semibold text-white tracking-tight">
+                                    <?php echo $userReview ? 'Update Your Review' : 'Write a Review'; ?>
+                                </h4>
+                                <p class="text-sm text-gray-200 mt-1">
+                                    Share your genuine experience to help other customers.
+                                </p>
                             </div>
-                        </div>
 
-                        <div>
-                            <label for="reviewComment" class="block font-semibold text-gray-700 mb-2">Your Review</label>
-                            <textarea id="reviewComment" name="comment" rows="4" maxlength="1000" required class="w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:border-orange-400 transition" placeholder="Share your experience with this product"><?php echo e($userReview['comment'] ?? ''); ?></textarea>
-                        </div>
+                            <form method="POST"
+                                action="<?php echo BASE_URL; ?>product.php?id=<?php echo $productId; ?>#reviews"
+                                class="space-y-6">
 
-                        <button type="submit" class="bg-orange-400 hover:bg-orange-500 text-white font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl inline-flex items-center">
-                            <i class="fas fa-paper-plane mr-2"></i><?php echo $userReview ? 'Update Review' : 'Submit Review'; ?>
-                        </button>
-                    </form>
-                </div>
+                                <input type="hidden" name="review_action" value="save">
+
+                                <!-- Rating -->
+                                <div>
+                                    <!-- <label class="block text-sm font-bold uppercase tracking-wide text-gray-200 mb-3">
+                                        Your Rating
+                                    </label> -->
+
+                                    <div class="flex items-center gap-4 flex-wrap">
+
+                                        <!-- Stars -->
+                                        <div class="review-star-rating flex flex-row-reverse justify-end gap-2 text-4xl">
+
+                                            <?php for ($ratingValue = 5; $ratingValue >= 1; $ratingValue--): ?>
+                                                <input
+                                                    type="radio"
+                                                    id="rating<?php echo $ratingValue; ?>"
+                                                    name="rating"
+                                                    value="<?php echo $ratingValue; ?>"
+                                                    class="peer sr-only"
+                                                    <?php echo ((int)($userReview['rating'] ?? 5) === $ratingValue) ? 'checked' : ''; ?>>
+
+                                                <label
+                                                    for="rating<?php echo $ratingValue; ?>"
+                                                    aria-label="<?php echo $ratingValue; ?> star<?php echo $ratingValue > 1 ? 's' : ''; ?>"
+                                                    class="cursor-pointer text-white transition-all duration-200 hover:scale-125 hover:text-accent
+                                peer-checked:text-accent">
+                                                    <i class="fas fa-star drop-shadow-sm"></i>
+                                                </label>
+                                            <?php endfor; ?>
+
+                                        </div>
+
+                                        <!-- Rating Text -->
+                                        <span class="text-sm text-gray-200">
+                                            Tap a star to rate this product
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Review Box -->
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <label for="reviewComment"
+                                            class="text-sm font-semibold uppercase tracking-wide text-gray-200">
+                                            Your Review
+                                        </label>
+
+                                        <span class="text-xs text-gray-200">
+                                            Max 1000 characters
+                                        </span>
+                                    </div>
+
+                                    <div class="relative">
+                                        <textarea
+                                            id="reviewComment"
+                                            name="comment"
+                                            rows="4"
+                                            maxlength="1000"
+                                            required
+                                            placeholder="Tell others what you liked, quality, delivery experience, packaging, etc..."
+                                            class="w-full resize-none rounded-lg border bg-white px-5 py-4 text-gray-700 shadow-sm outline-none transition-all duration-300 placeholder:text-gray-400 focus:border-accent"><?php echo e($userReview['comment'] ?? ''); ?></textarea>
+
+                                        <div class="absolute bottom-4 right-4 text-gray-500 text-sm">
+                                            <i class="fas fa-pen"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="flex flex-col sm:flex-row items-center gap-4 pt-2">
+
+                                    <button type="submit"
+                                        class="group inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 font-semibold text-white text-sm hover:bg-accent-800">
+
+                                        <?php echo $userReview ? 'Update Review' : 'Submit Review'; ?>
+                                    </button>
+
+                                    <p class="text-sm text-gray-200 flex items-center gap-2">
+                                        <i class="fas fa-shield-alt text-accent"></i>
+                                        Your review will be publicly visible.
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 <?php endif; ?>
             </div>
-            
+
             <?php if (count($reviews) > 0): ?>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div>
-                    <div class="bg-white rounded-2xl shadow-md p-6 text-center">
-                        <h2 class="text-5xl font-bold text-gray-900 mb-2"><?php echo number_format($avgRating, 1); ?></h2>
-                        <div class="flex justify-center items-center my-3">
-                            <?php for ($i = 1; $i <= 5; $i++): ?>
-                                <i class="fas fa-star <?php echo $i <= round($avgRating) ? 'text-yellow-400' : 'text-gray-300'; ?>"></i>
-                            <?php endfor; ?>
-                        </div>
-                        <p class="text-gray-500">Based on <?php echo count($reviews); ?> reviews</p>
-                    </div>
-                </div>
-                <div class="lg:col-span-2 space-y-4">
-                    <?php foreach ($reviews as $review): ?>
-                    <div class="bg-white rounded-2xl shadow-sm p-6">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <h6 class="font-bold text-gray-900"><?php echo e($review['user_name']); ?></h6>
-                                <div class="flex items-center mt-1">
-                                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                                        <i class="fas fa-star <?php echo $i <= $review['rating'] ? 'text-yellow-400' : 'text-gray-300'; ?>"></i>
-                                    <?php endfor; ?>
-                                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div>
+                        <div class="bg-white border rounded-lg shadow-sm p-6 text-center">
+                            <h2 class="text-5xl font-bold text-gray-900 mb-2"><?php echo number_format($avgRating, 1); ?></h2>
+                            <div class="flex justify-center items-center my-3">
+                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                    <i class="fas fa-star <?php echo $i <= round($avgRating) ? 'text-yellow-400' : 'text-gray-300'; ?>"></i>
+                                <?php endfor; ?>
                             </div>
-                            <small class="text-gray-400"><?php echo date('M d, Y', strtotime($review['created_at'])); ?></small>
+                            <p class="text-gray-500">Based on <?php echo count($reviews); ?> reviews</p>
                         </div>
-                        <p class="text-gray-600"><?php echo e($review['comment']); ?></p>
                     </div>
-                    <?php endforeach; ?>
+                    <div class="lg:col-span-2 max-h-[600px] overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden space-y-4">
+                        <?php foreach ($reviews as $review): ?>
+                            <div class="bg-white border rounded-lg shadow-sm p-4">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div>
+                                        <h6 class="font-semibold text-gray-900"><?php echo e($review['user_name']); ?></h6>
+
+                                        <div class="flex items-center mt-1">
+                                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                <i class="fas fa-star <?php echo $i <= $review['rating'] ? 'text-accent' : 'text-gray-300'; ?>"></i>
+                                            <?php endfor; ?>
+                                        </div>
+                                    </div>
+
+                                    <small class="text-gray-400">
+                                        <?php echo date('M d, Y', strtotime($review['created_at'])); ?>
+                                    </small>
+                                </div>
+
+                                <p class="text-gray-600 text-xs">
+                                    <?php echo e($review['comment']); ?>
+                                </p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
             <?php else: ?>
-            <div class="text-center py-12">
-                <i class="fas fa-comment-slash text-5xl text-gray-300 mb-4"></i>
-                <p class="text-gray-500">No reviews yet. Be the first to review!</p>
-            </div>
+                <div class="text-center py-12">
+                    <i class="fas fa-comment-slash text-5xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">No reviews yet. Be the first to review!</p>
+                </div>
             <?php endif; ?>
         </div>
-        
+
         <!-- Related Products -->
         <?php if (!empty($relatedProducts)): ?>
-        <div class="mt-16">
-            <h3 class="text-2xl font-bold text-gray-900 mb-8">Related Products</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <?php foreach ($relatedProducts as $product): ?>
-                <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold text-gray-900 mb-8">Related Products</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+                    <?php foreach ($relatedProducts as $product): ?>
+                        <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
 
-                        <!-- IMAGE -->
-                        <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">
-                            <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
+                            <!-- IMAGE -->
+                            <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">
+                                <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
 
-                            <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
-                                <img
-                                    src="<?php echo $imageUrl; ?>"
-                                    alt="<?php echo e($product['name']); ?>"
-                                    class="h-28 sm:h-40 md:h-44 object-contain 
+                                <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
+                                    <img
+                                        src="<?php echo $imageUrl; ?>"
+                                        alt="<?php echo e($product['name']); ?>"
+                                        class="h-28 sm:h-40 md:h-44 object-contain 
                        group-hover:scale-105 transition duration-300">
-                            </a>
+                                </a>
 
-                            <!-- BADGES -->
-                            <?php if ($product['stock'] <= 10 && $product['stock'] > 0): ?>
-                                <span class="absolute top-3 left-3 bg-spice/10 backdrop-blur-sm text-spice text-xs font-semibold px-2 py-1 rounded-full shadow">
-                                    Only <?php echo $product['stock']; ?> left
-                                </span>
-                            <?php endif; ?>
+                                <!-- BADGES -->
+                                <?php if ($product['stock'] <= 10 && $product['stock'] > 0): ?>
+                                    <span class="absolute top-3 left-3 bg-spice/10 backdrop-blur-sm text-spice text-xs font-semibold px-2 py-1 rounded-full shadow">
+                                        Only <?php echo $product['stock']; ?> left
+                                    </span>
+                                <?php endif; ?>
 
-                            <?php renderWishlistIconButton($product['id'], 'absolute top-3 right-3 z-10'); ?>
-                        </div>
+                                <?php renderWishlistIconButton($product['id'], 'absolute top-3 right-3 z-10'); ?>
+                            </div>
 
-                        <!-- CONTENT -->
-                        <div class="p-3 md:p-4 flex flex-col justify-between h-[160px]">
+                            <!-- CONTENT -->
+                            <div class="p-3 md:p-4 flex flex-col justify-between h-[160px]">
 
-                            <!-- CATEGORY -->
-                            <!-- <small class="text-gray-400 text-xs uppercase tracking-wide">
+                                <!-- CATEGORY -->
+                                <!-- <small class="text-gray-400 text-xs uppercase tracking-wide">
                             <?php echo e($product['category_name']); ?>
                         </small> -->
 
-                            <!-- NAME -->
-                            <h3 class="font-semibold text-gray-900 text-xs sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
-                                <?php echo e($product['name']); ?>
-                            </h3>
+                                <!-- NAME -->
+                                <h3 class="font-semibold text-gray-900 text-xs sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
+                                    <?php echo e($product['name']); ?>
+                                </h3>
 
-                            <!-- DESCRIPTION -->
-                            <!-- <p class="text-gray-500 text-xs sm:text-sm line-clamp-2">
+                                <!-- DESCRIPTION -->
+                                <!-- <p class="text-gray-500 text-xs sm:text-sm line-clamp-2">
                             <?php echo substr(e($product['description']), 0, 60) . '...'; ?>
                         </p> -->
 
 
-                            <!-- PRICE -->
-                            <div class="w-full flex justify-between items-center">
+                                <!-- PRICE -->
+                                <div class="w-full flex justify-between items-center">
 
-                                <!-- LEFT: PRICE -->
-                                <div class="flex items-baseline flex-wrap md:gap-2">
+                                    <!-- LEFT: PRICE -->
+                                    <div class="flex items-baseline flex-wrap md:gap-2">
 
-                                    <span class="text-primary-600 font-bold text-base sm:text-lg md:text-xl">
-                                        <?php echo formatCurrency($product['price']); ?>
-                                    </span>
+                                        <span class="text-primary-600 font-bold text-base sm:text-lg md:text-xl">
+                                            <?php echo formatCurrency($product['price']); ?>
+                                        </span>
 
+                                        <?php if ($product['original_price'] > $product['price']): ?>
+                                            <span class="text-gray-400 line-through text-xs sm:text-sm">
+                                                <?php echo formatCurrency($product['original_price']); ?>
+                                            </span>
+                                        <?php endif; ?>
+
+                                    </div>
+
+                                    <!-- RIGHT: DISCOUNT -->
                                     <?php if ($product['original_price'] > $product['price']): ?>
-                                        <span class="text-gray-400 line-through text-xs sm:text-sm">
-                                            <?php echo formatCurrency($product['original_price']); ?>
+                                        <span class="bg-green-100 text-green-700 text-[8px] md:text-xs text-center md:font-semibold px-2 py-1 rounded-full">
+                                            <?php
+                                            $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
+                                            echo $discount . '% OFF';
+                                            ?>
                                         </span>
                                     <?php endif; ?>
 
                                 </div>
 
-                                <!-- RIGHT: DISCOUNT -->
-                                <?php if ($product['original_price'] > $product['price']): ?>
-                                    <span class="bg-green-100 text-green-700 text-[8px] md:text-xs text-center md:font-semibold px-2 py-1 rounded-full">
-                                        <?php
-                                        $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
-                                        echo $discount . '% OFF';
-                                        ?>
-                                    </span>
-                                <?php endif; ?>
+                                <!-- BUTTON -->
+                                <?php if ($product['stock'] > 0): ?>
+                                    <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
+                                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                                        <input type="hidden" name="action" value="add">
+                                        <input type="hidden" name="quantity" value="1">
 
-                            </div>
-
-                            <!-- BUTTON -->
-                            <?php if ($product['stock'] > 0): ?>
-                                <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
-                                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                                    <input type="hidden" name="action" value="add">
-                                    <input type="hidden" name="quantity" value="1">
-
-                                    <button type="submit"
-                                        class="w-full p-2.5 flex items-center justify-center 
+                                        <button type="submit"
+                                            class="w-full p-2.5 flex items-center justify-center 
                        bg-accent hover:bg-accent-800 text-white text-xs md:text-base font-semibold 
                        rounded-full gap-2 ">
-                                        <i class="fas fa-cart-plus text-xs"></i>
-                                        Add to Cart
-                                    </button>
-                                </form>
-                            <?php elseif ($product['stock'] <= 0): ?>
-                                <button disabled
-                                    class="w-full p-2.5 flex items-center justify-center 
+                                            <i class="fas fa-cart-plus text-xs"></i>
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                <?php elseif ($product['stock'] <= 0): ?>
+                                    <button disabled
+                                        class="w-full p-2.5 flex items-center justify-center 
                    bg-red-500 text-white text-xs md:text-base font-semibold rounded-full cursor-not-allowed">
-                                    Out of Stock
-                                </button>
-                            <?php endif; ?>
+                                        Out of Stock
+                                    </button>
+                                <?php endif; ?>
 
 
+                            </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
         <?php endif; ?>
     </div>
 </section>
 
 <style>
-.review-star-rating input:checked ~ label,
-.review-star-rating label:hover,
-.review-star-rating label:hover ~ label {
-    color: #fb923c;
-}
+    .review-star-rating input:checked~label,
+    .review-star-rating label:hover,
+    .review-star-rating label:hover~label {
+        color: #fb923c;
+    }
 </style>
 
 <script>
-function changeMainImage(src) {
-    document.getElementById('mainProductImage').src = src;
-    
-    // Update active state on thumbnails
-    document.querySelectorAll('.grid-cols-4 img').forEach(img => {
-        img.classList.remove('ring-2', 'ring-accent');
-        if (img.src === src) {
-            img.classList.add('ring-2', 'ring-accent');
+    function changeMainImage(src) {
+        document.getElementById('mainProductImage').src = src;
+
+        // Update active state on thumbnails
+        document.querySelectorAll('.grid-cols-4 img').forEach(img => {
+            img.classList.remove('ring-2', 'ring-accent');
+            if (img.src === src) {
+                img.classList.add('ring-2', 'ring-accent');
+            }
+        });
+    }
+
+    let selectedUnitPrice = <?php echo json_encode($selectedPrice); ?>;
+    const productOriginalPrice = <?php echo json_encode($productOriginalPrice); ?>;
+
+    function formatMoney(amount) {
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR'
+        }).format(Number(amount) || 0);
+    }
+
+    function increaseQty(max) {
+        const qtyInput = document.getElementById('quantity');
+        let val = parseInt(qtyInput.value);
+        if (val < max) {
+            qtyInput.value = val + 1;
+            updatePriceSummary();
         }
-    });
-}
-
-function increaseQty(max) {
-    const qtyInput = document.getElementById('quantity');
-    let val = parseInt(qtyInput.value);
-    if (val < max) {
-        qtyInput.value = val + 1;
     }
-}
 
-function decreaseQty() {
-    const qtyInput = document.getElementById('quantity');
-    let val = parseInt(qtyInput.value);
-    if (val > 1) {
-        qtyInput.value = val - 1;
+    function decreaseQty() {
+        const qtyInput = document.getElementById('quantity');
+        let val = parseInt(qtyInput.value);
+        if (val > 1) {
+            qtyInput.value = val - 1;
+            updatePriceSummary();
+        }
     }
-}
 
-function updatePrice(price, stock) {
-    // Update quantity max based on selected weight stock
-    const qtyInput = document.getElementById('quantity');
-    qtyInput.max = stock;
-    
-    // Reset quantity to 1 if current value exceeds new stock
-    if (parseInt(qtyInput.value) > stock) {
-        qtyInput.value = 1;
+    function updatePrice(input) {
+        const price = Number(input.dataset.price || selectedUnitPrice);
+        const stock = Number(input.dataset.stock || 0);
+        selectedUnitPrice = price;
+
+        const qtyInput = document.getElementById('quantity');
+        qtyInput.max = stock;
+
+        if (parseInt(qtyInput.value) > stock || parseInt(qtyInput.value) < 1) {
+            qtyInput.value = 1;
+        }
+
+        const increaseBtn = qtyInput.nextElementSibling;
+        increaseBtn.onclick = function() {
+            increaseQty(stock);
+        };
+
+        updatePriceSummary(input);
     }
-    
-    // Update the increase button's onclick to use new stock
-    const increaseBtn = qtyInput.nextElementSibling;
-    increaseBtn.onclick = function() { increaseQty(stock); };
-}
 
-function toggleReviewForm() {
-    const panel = document.getElementById('reviewFormPanel');
-    if (!panel) return;
+    function updatePriceSummary(selectedInput = null) {
+        const qtyInput = document.getElementById('quantity');
+        if (!qtyInput) return;
 
-    panel.classList.toggle('hidden');
-    if (!panel.classList.contains('hidden')) {
-        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const activeWeight = selectedInput || document.querySelector('input[name="weight_id"]:checked');
+        const rawQuantity = Math.max(1, parseInt(qtyInput.value) || 1);
+        const stock = activeWeight ? Number(activeWeight.dataset.stock || 0) : Number(qtyInput.max || 0);
+        const quantity = stock > 0 ? Math.min(rawQuantity, stock) : rawQuantity;
+        const weight = activeWeight ? activeWeight.dataset.weight : 'Default';
+        const unitPrice = activeWeight ? Number(activeWeight.dataset.price || selectedUnitPrice) : selectedUnitPrice;
+        const total = unitPrice * quantity;
+
+        selectedUnitPrice = unitPrice;
+        qtyInput.value = quantity;
+
+        const displayPrice = document.getElementById('displayProductPrice');
+        const summaryWeight = document.getElementById('summaryWeight');
+        const summaryUnitPrice = document.getElementById('summaryUnitPrice');
+        const summaryQuantity = document.getElementById('summaryQuantity');
+        const summaryTotal = document.getElementById('summaryTotal');
+        const summaryStock = document.getElementById('summaryStock');
+        const displayOriginalPrice = document.getElementById('displayOriginalPrice');
+        const displayDiscountBadge = document.getElementById('displayDiscountBadge');
+        const summaryOriginalPriceRow = document.getElementById('summaryOriginalPriceRow');
+        const summarySavingsRow = document.getElementById('summarySavingsRow');
+        const summarySavings = document.getElementById('summarySavings');
+        const hasSavings = productOriginalPrice > unitPrice;
+
+        if (displayPrice) displayPrice.textContent = formatMoney(unitPrice);
+        if (summaryWeight) summaryWeight.textContent = weight;
+        if (summaryUnitPrice) summaryUnitPrice.textContent = formatMoney(unitPrice);
+        if (summaryQuantity) summaryQuantity.textContent = quantity;
+        if (summaryTotal) summaryTotal.textContent = formatMoney(total);
+        if (displayOriginalPrice) displayOriginalPrice.classList.toggle('hidden', !hasSavings);
+        if (displayDiscountBadge) {
+            displayDiscountBadge.classList.toggle('hidden', !hasSavings);
+            if (hasSavings) {
+                displayDiscountBadge.textContent = `${Math.round(((productOriginalPrice - unitPrice) / productOriginalPrice) * 100)}% OFF`;
+            }
+        }
+        if (summaryOriginalPriceRow) {
+            summaryOriginalPriceRow.classList.toggle('hidden', !hasSavings);
+            summaryOriginalPriceRow.classList.toggle('flex', hasSavings);
+        }
+        if (summarySavingsRow) {
+            summarySavingsRow.classList.toggle('hidden', !hasSavings);
+            summarySavingsRow.classList.toggle('flex', hasSavings);
+        }
+        if (summarySavings && hasSavings) {
+            summarySavings.textContent = formatMoney((productOriginalPrice - unitPrice) * quantity);
+        }
+
+        if (summaryStock) {
+            summaryStock.textContent = stock > 0 ? 'In Stock' : 'Out of Stock';
+            summaryStock.classList.toggle('text-green-600', stock > 0);
+            summaryStock.classList.toggle('text-red-500', stock <= 0);
+        }
     }
-}
+
+    updatePriceSummary();
+
+    function toggleReviewForm() {
+        const panel = document.getElementById('reviewFormPanel');
+        if (!panel) return;
+
+        panel.classList.toggle('hidden');
+        if (!panel.classList.contains('hidden')) {
+            panel.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+    }
 </script>
 
 <?php require_once 'includes/footer.php'; ?>

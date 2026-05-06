@@ -78,8 +78,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 setFlash('Error adding product to cart.', 'danger');
             }
 
-            // Redirect back to referring page or shop
-            $redirect = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : BASE_URL . 'shop.php';
+            // Buy Now submits with redirect_to=cart; normal Add to Cart returns to the product page.
+            $redirect = ($_POST['redirect_to'] ?? '') === 'cart'
+                ? BASE_URL . 'cart.php'
+                : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : BASE_URL . 'shop.php');
             redirect($redirect);
             exit;
 

@@ -122,33 +122,15 @@ $pageTitle = 'Manage Addresses';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="min-h-screen bg-gray-50 py-12">
+<div class="min-h-screen mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- Sidebar -->
-            <div class="md:col-span-1">
-                <div class="bg-white rounded-2xl shadow-md p-6 sticky top-24">
-                    <h5 class="font-bold text-gray-900 mb-4">My Account</h5>
-                    <nav class="space-y-2">
-                        <a href="<?php echo BASE_URL; ?>user/profile.php" class="flex items-center px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition">
-                            <i class="fas fa-user mr-3"></i>Profile
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/addresses.php" class="flex items-center px-4 py-2 rounded-lg bg-primary-50 text-primary-600 font-medium">
-                            <i class="fas fa-map-marker-alt mr-3"></i>Addresses
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/orders.php" class="flex items-center px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 transition">
-                            <i class="fas fa-shopping-bag mr-3"></i>Orders
-                        </a>
-                        <a href="<?php echo BASE_URL; ?>user/logout.php" class="flex items-center px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition">
-                            <i class="fas fa-sign-out-alt mr-3"></i>Logout
-                        </a>
-                    </nav>
-                </div>
-            </div>
+            <?php require_once __DIR__ . '/../includes/profile_sidebar.php'; ?>
             
             <!-- Main Content -->
             <div class="md:col-span-3">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6">Manage Addresses</h3>
+                <h4 class="text-2xl font-bold text-gray-900 mb-6">Manage Addresses</h4>
                 
                 <?php if (!empty($errors)): ?>
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
@@ -161,7 +143,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <?php endif; ?>
                 
                 <!-- Add/Edit Form -->
-                <div class="bg-white rounded-2xl shadow-md p-6 mb-6">
+                <div class="bg-white md:border md:rounded-lg md:shadow-sm md:p-8">
                     <h5 class="font-bold text-gray-900 mb-4"><?php echo $editAddress ? 'Edit Address' : 'Add New Address'; ?></h5>
                     <form method="POST" class="space-y-4">
                         <input type="hidden" name="action" value="<?php echo $editAddress ? 'edit' : 'add'; ?>">
@@ -174,20 +156,20 @@ require_once __DIR__ . '/../includes/header.php';
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                                 <input type="text" name="name" required
                                        value="<?php echo $editAddress ? e($editAddress['name']) : e($_SESSION['user_name']); ?>"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-accent transition">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
                                 <input type="tel" name="mobile" required pattern="[0-9]{10}" maxlength="10"
                                        value="<?php echo $editAddress ? e($editAddress['mobile']) : ''; ?>"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-accent transition">
                             </div>
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
                             <textarea name="address" rows="2" required
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"><?php echo $editAddress ? e($editAddress['address']) : ''; ?></textarea>
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-accent transition"><?php echo $editAddress ? e($editAddress['address']) : ''; ?></textarea>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -195,35 +177,35 @@ require_once __DIR__ . '/../includes/header.php';
                                 <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
                                 <input type="text" name="city" required
                                        value="<?php echo $editAddress ? e($editAddress['city']) : ''; ?>"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-accent transition">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
                                 <input type="text" name="state" required
                                        value="<?php echo $editAddress ? e($editAddress['state']) : ''; ?>"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-accent transition">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
                                 <input type="text" name="pincode" required pattern="[0-9]{6}" maxlength="6"
                                        value="<?php echo $editAddress ? e($editAddress['pincode']) : ''; ?>"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-accent transition">
                             </div>
                         </div>
                         
                         <div class="flex items-center">
                             <input type="checkbox" name="is_default" id="is_default" value="1"
                                    <?php echo ($editAddress && $editAddress['is_default']) || (!$editAddress && empty($addresses)) ? 'checked' : ''; ?>
-                                   class="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500">
+                                   class="w-4 h-4 text-primary-500 border-gray-300 rounded">
                             <label class="ml-2 text-sm text-gray-600" for="is_default">Set as default address</label>
                         </div>
                         
-                        <div class="flex gap-3">
-                            <button type="submit" class="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-full transition shadow-lg hover:shadow-xl">
+                        <div class="flex gap-3 text-sm">
+                            <button type="submit" class="bg-accent hover:bg-accent-800 text-white font-semibold py-3 px-6 rounded-lg transition hover:shadow-sm">
                                 <?php echo $editAddress ? 'Update Address' : 'Add Address'; ?>
                             </button>
                             <?php if ($editAddress): ?>
-                            <a href="<?php echo BASE_URL; ?>user/addresses.php" class="border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-medium py-3 px-6 rounded-full transition">
+                            <a href="<?php echo BASE_URL; ?>user/addresses.php" class="border-2 border-gray-300 hover:borbgder-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition">
                                 Cancel
                             </a>
                             <?php endif; ?>
@@ -233,25 +215,25 @@ require_once __DIR__ . '/../includes/header.php';
                 
                 <!-- Saved Addresses -->
                 <?php if (!empty($addresses)): ?>
-                <h5 class="font-bold text-gray-900 mb-4">Saved Addresses</h5>
+                <h5 class="font-semibold text-gray-900 mt-8 mb-4">Saved Addresses</h5>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <?php foreach ($addresses as $address): ?>
-                    <div class="bg-white rounded-xl shadow-md p-5 border-2 <?php echo $address['is_default'] ? 'border-primary-500' : 'border-transparent'; ?>">
+                    <div class="bg-white rounded-lg shadow-sm p-5 border-2 <?php echo $address['is_default'] ? 'border-accent' : 'border-transparent'; ?>">
                         <?php if ($address['is_default']): ?>
-                        <span class="inline-block bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded mb-2">Default</span>
+                        <span class="inline-block bg-accent text-white text-xs font-bold px-2 py-1 rounded mb-2">Default</span>
                         <?php endif; ?>
                         <h6 class="font-bold text-gray-900 mb-1"><?php echo e($address['name']); ?></h6>
-                        <p class="text-gray-600 text-sm mb-1"><?php echo e($address['mobile']); ?></p>
-                        <p class="text-gray-500 text-sm mb-4"><?php echo e($address['address']); ?>, <?php echo e($address['city']); ?>, <?php echo e($address['state']); ?> - <?php echo e($address['pincode']); ?></p>
+                        <p class="text-gray-600 text-xs mb-1"><?php echo e($address['mobile']); ?></p>
+                        <p class="text-gray-500 text-xs mb-4"><?php echo e($address['address']); ?>, <?php echo e($address['city']); ?>, <?php echo e($address['state']); ?> - <?php echo e($address['pincode']); ?></p>
                         
                         <div class="flex flex-wrap gap-2">
-                            <a href="?edit=<?php echo $address['id']; ?>" class="inline-flex items-center border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-2 px-4 rounded-lg transition text-sm">
+                            <a href="?edit=<?php echo $address['id']; ?>" class="inline-flex items-center border-2 border-accent-800 text-accent-800 hover:bg-accent-800 hover:text-white font-medium py-2 px-4 rounded-lg transition text-sm">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </a>
                             <form method="POST" class="inline" onsubmit="return confirm('Delete this address?')">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="address_id" value="<?php echo $address['id']; ?>">
-                                <button type="submit" class="inline-flex items-center border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-medium py-2 px-4 rounded-lg transition text-sm">
+                                <button type="submit" class="inline-flex items-center border-2 border-red-500 text-red-500 hover:bg-red-500 text-sm hover:text-white font-medium py-2 px-4 rounded-lg transition text-sm">
                                     <i class="fas fa-trash mr-1"></i> Delete
                                 </button>
                             </form>
@@ -259,7 +241,7 @@ require_once __DIR__ . '/../includes/header.php';
                             <form method="POST" class="inline">
                                 <input type="hidden" name="action" value="set_default">
                                 <input type="hidden" name="address_id" value="<?php echo $address['id']; ?>">
-                                <button type="submit" class="inline-flex items-center border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white font-medium py-2 px-4 rounded-lg transition text-sm">Set Default</button>
+                                <button type="submit" class="inline-flex items-center border-2 border-green-500 text-green-500 hover:bg-green-500 text-sm hover:text-white font-medium py-2 px-4 rounded-lg transition text-sm">Set Default</button>
                             </form>
                             <?php endif; ?>
                         </div>
@@ -267,7 +249,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <?php endforeach; ?>
                 </div>
                 <?php else: ?>
-                <div class="text-center py-12 bg-white rounded-2xl shadow-md">
+                <div class="text-center py-12 bg-white border rounded-lg shadow-sm mt-8">
                     <i class="fas fa-map-marker-alt text-5xl text-gray-300 mb-4"></i>
                     <p class="text-gray-500">No addresses saved yet.</p>
                 </div>

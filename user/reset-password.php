@@ -93,17 +93,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user) {
 $pageTitle = 'Reset Password';
 require_once __DIR__ . '/../includes/header.php';
 ?>
-
-<div class="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
+<div class="h-[calc(100vh-80px)] py-12 md:py-20 px-4">
     <div class="max-w-md mx-auto">
-        <div class="bg-white rounded-2xl shadow-xl p-8">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-key text-4xl text-primary-500"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-900">Reset Password</h3>
-                <p class="text-gray-500">Enter your new password</p>
+        <div class="bg-white md:border md:rounded-lg md:shadow-sm md:p-8 text-sm">
+            <div class="mb-6">
+                <img src="<?php echo ASSETS_URL; ?>/public/logo.png" alt="logo" class="h-20 mx-auto mb-2">
+                <h3 class="text-xl text-gray-900">Reset Password</h3>
+                <p class="text-sm text-gray-500">Enter your new password</p>
             </div>
+                
             
             <?php if (!empty($errors)): ?>
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6">
@@ -126,16 +124,16 @@ require_once __DIR__ . '/../includes/header.php';
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">New Password (min 6 characters)</label>
                     <input type="password" name="password" required minlength="6"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                           class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent transition">
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
                     <input type="password" name="confirm_password" required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                           class="w-full px-4 py-3 border rounded-lg outline-none focus:border-accent transition">
                 </div>
                 
-                <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 rounded-full transition shadow-lg hover:shadow-xl">
+                <button type="submit" class="w-full bg-accent hover:bg-accent-700/90 text-black py-3 rounded-lg transition hover:shadow-sm">
                     <i class="fas fa-save mr-2"></i>Reset Password
                 </button>
             </form>
