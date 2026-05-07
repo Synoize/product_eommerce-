@@ -119,7 +119,127 @@ if ($categoryId > 0) {
 <section class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <style>
+            @media (max-width: 1023px) {
+                #mobileFilterDrawer {
+                    transform: translateX(100%);
+                    transition: transform 250ms ease;
+                }
+
+                #mobileFilterDrawer.is-open {
+                    transform: translateX(0);
+                }
+            }
+        </style>
+
+        <!-- Mobile Filter Drawer -->
+        <div id="mobileFilterOverlay" class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden"></div>
+        <aside id="mobileFilterDrawer" class="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white z-50 lg:hidden shadow-2xl">
+            <div class="h-full flex flex-col">
+                <div class="flex items-center justify-between p-4 border-b">
+                    <h5 class="text-lg font-bold text-gray-700">
+                        <i class="fas fa-filter mr-2 text-accent"></i>Filters
+                    </h5>
+                    <button type="button" id="closeMobileFilterBtn" class="w-10 h-10 rounded-lg hover:bg-gray-100 text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="p-4 overflow-y-auto">
+                    <!-- Search -->
+                    <form action="<?php echo BASE_URL; ?>shop.php" method="GET" class="flex items-center mb-6 w-full">
+
+                        <div class="
+        flex items-center w-full 
+        bg-gray-50 border 
+        rounded-lg p-1
+        focus-within:bg-white
+        focus-within:border-accent
+        transition-all duration-300
+    ">
+
+                            <!-- Input -->
+                            <input
+                                type="search"
+                                name="search"
+                                placeholder="Search makhana, spices..."
+                                value="<?php echo isset($_GET['search']) ? e($_GET['search']) : ''; ?>"
+
+                                class="
+            flex-1 p-2 
+            bg-transparent text-sm text-gray-700
+            placeholder-gray-400
+            outline-none
+            min-w-0
+        ">
+
+                            <!-- Button -->
+                            <button
+                                type="submit"
+                                class="
+            flex items-center justify-center
+            bg-accent text-white rounded-lg
+            hover:bg-accent/90 px-3 py-2
+            shadow-sm hover:shadow-md
+            transition-all duration-200
+        ">
+                                <i class="fas fa-search text-sm"></i>
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                    <!-- Category Filter -->
+                    <div class="mb-6">
+                        <h6 class="font-semibold mb-3 text-gray-700">Categories</h6>
+                        <div class="space-y-2">
+                            <a href="<?php echo BASE_URL; ?>shop.php"
+                                class="block px-5 py-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == 0 ? 'bg-accent-50 font-medium' : 'hover:bg-gray-50'; ?>">
+                                <i class="fas fa-shop text-accent-900 mr-4"></i> All Categories
+                            </a>
+                            <?php foreach ($categories as $category): ?>
+                                <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $category['id']; ?>"
+                                    class="block py-2.5 px-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == $category['id'] ? 'bg-accent-50 font-medium' : 'hover:bg-gray-50'; ?>">
+                                    <?php if ($category['image']): ?>
+                                        <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" class="w-8 mr-2 object-contain inline">
+                                    <?php endif; ?>
+                                    <?php echo e($category['name']); ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <form action="<?php echo BASE_URL; ?>shop.php" method="GET">
+                        <?php if ($categoryId > 0): ?>
+                            <input type="hidden" name="category" value="<?php echo $categoryId; ?>">
+                        <?php endif; ?>
+                        <?php if (!empty($searchQuery)): ?>
+                            <input type="hidden" name="search" value="<?php echo e($searchQuery); ?>">
+                        <?php endif; ?>
+
+                        <div class="mb-6">
+                            <h6 class="font-semibold mb-3 text-gray-700">Price Range</h6>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="number" name="min_price" placeholder="Min"
+                                    value="<?php echo $minPrice > 0 ? $minPrice : ''; ?>"
+                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-accent">
+                                <input type="number" name="max_price" placeholder="Max"
+                                    value="<?php echo $maxPrice > 0 ? $maxPrice : ''; ?>"
+                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-accent">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-accent hover:bg-accent-700/80 text-white font-medium py-2.5 px-4 rounded-lg transition">
+                            <i class="fas fa-filter mr-2"></i>Apply Filters
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </aside>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 md:gap-8">
             <!-- Sidebar Filters -->
             <div class="lg:col-span-1">
                 <div>
@@ -133,10 +253,10 @@ if ($categoryId > 0) {
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
                         <?php echo $selectedCategory ? e($selectedCategory['name']) : 'All Products'; ?>
                     </h1>
-                    <p class="text-muted mb-0">Showing <?php echo count($products); ?> of <?php echo $totalProducts; ?> products</p>
+                    <p class="hidden md:block text-muted mb-0">Showing <?php echo count($products); ?> of <?php echo $totalProducts; ?> products</p>
                 </div>
 
-                <div class="bg-white sticky p-6 border rounded-lg mt-6 top-24">
+                <div class="hidden md:block bg-white sticky p-6 border rounded-lg mt-6 top-24">
                     <h5 class="text-lg font-bold mb-4 text-gray-600">
                         <i class="fas fa-filter mr-2 text-accent"></i>Filters
                     </h5>
@@ -234,7 +354,7 @@ if ($categoryId > 0) {
             </div>
 
             <!-- Product Grid -->
-            <div class="lg:col-span-3 mt-8">
+            <div class="lg:col-span-3 md:mt-8">
                 <!-- Sort and Results -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-11 gap-4">
                     <p class="text-gray-600">
@@ -245,30 +365,38 @@ if ($categoryId > 0) {
                         <?php endif; ?>
                     </p>
 
-                    <form action="<?php echo BASE_URL; ?>shop.php" method="GET" class="flex items-center space-x-2">
-                        <?php if ($categoryId > 0): ?>
-                            <input type="hidden" name="category" value="<?php echo $categoryId; ?>">
-                        <?php endif; ?>
-                        <?php if (!empty($searchQuery)): ?>
-                            <input type="hidden" name="search" value="<?php echo e($searchQuery); ?>">
-                        <?php endif; ?>
-                        <?php if ($minPrice > 0): ?>
-                            <input type="hidden" name="min_price" value="<?php echo $minPrice; ?>">
-                        <?php endif; ?>
-                        <?php if ($maxPrice > 0): ?>
-                            <input type="hidden" name="max_price" value="<?php echo $maxPrice; ?>">
-                        <?php endif; ?>
+                    <div class="w-full md:w-auto flex justify-between items-center gap-4">
+                        <!-- Mobile Filter Toggle -->
+                        <button type="button" id="openMobileFilterBtn" class="md:hidden inline-flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg text-sm">
+                            <i class="fas fa-filter"></i>
+                            Filter
+                        </button>
 
-                        <label class="text-sm text-gray-600">Sort by:</label>
-                        <select name="sort" onchange="this.form.submit()"
-                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
-                            <option value="newest" <?php echo $sortBy == 'newest' ? 'selected' : ''; ?>>Newest First</option>
-                            <option value="price_low" <?php echo $sortBy == 'price_low' ? 'selected' : ''; ?>>Price: Low to High</option>
-                            <option value="price_high" <?php echo $sortBy == 'price_high' ? 'selected' : ''; ?>>Price: High to Low</option>
-                            <option value="name_asc" <?php echo $sortBy == 'name_asc' ? 'selected' : ''; ?>>Name: A to Z</option>
-                            <option value="name_desc" <?php echo $sortBy == 'name_desc' ? 'selected' : ''; ?>>Name: Z to A</option>
-                        </select>
-                    </form>
+                        <form action="<?php echo BASE_URL; ?>shop.php" method="GET" class="flex items-center space-x-2">
+                            <?php if ($categoryId > 0): ?>
+                                <input type="hidden" name="category" value="<?php echo $categoryId; ?>">
+                            <?php endif; ?>
+                            <?php if (!empty($searchQuery)): ?>
+                                <input type="hidden" name="search" value="<?php echo e($searchQuery); ?>">
+                            <?php endif; ?>
+                            <?php if ($minPrice > 0): ?>
+                                <input type="hidden" name="min_price" value="<?php echo $minPrice; ?>">
+                            <?php endif; ?>
+                            <?php if ($maxPrice > 0): ?>
+                                <input type="hidden" name="max_price" value="<?php echo $maxPrice; ?>">
+                            <?php endif; ?>
+
+                            <label class="text-sm text-gray-600 hidden md:block">Sort by:</label>
+                            <select name="sort" onchange="this.form.submit()"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <option value="newest" <?php echo $sortBy == 'newest' ? 'selected' : ''; ?>>Newest First</option>
+                                <option value="price_low" <?php echo $sortBy == 'price_low' ? 'selected' : ''; ?>>Price: Low to High</option>
+                                <option value="price_high" <?php echo $sortBy == 'price_high' ? 'selected' : ''; ?>>Price: High to Low</option>
+                                <option value="name_asc" <?php echo $sortBy == 'name_asc' ? 'selected' : ''; ?>>Name: A to Z</option>
+                                <option value="name_desc" <?php echo $sortBy == 'name_desc' ? 'selected' : ''; ?>>Name: Z to A</option>
+                            </select>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Products Grid -->
@@ -425,5 +553,36 @@ if ($categoryId > 0) {
         </div>
     </div>
 </section>
+
+<script>
+    (function() {
+        var openBtn = document.getElementById('openMobileFilterBtn');
+        var closeBtn = document.getElementById('closeMobileFilterBtn');
+        var overlay = document.getElementById('mobileFilterOverlay');
+        var drawer = document.getElementById('mobileFilterDrawer');
+
+        if (!openBtn || !closeBtn || !overlay || !drawer) return;
+
+        function openDrawer() {
+            overlay.classList.remove('hidden');
+            drawer.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            drawer.classList.remove('is-open');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        openBtn.addEventListener('click', openDrawer);
+        closeBtn.addEventListener('click', closeDrawer);
+        overlay.addEventListener('click', closeDrawer);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeDrawer();
+        });
+    })();
+</script>
 
 <?php require_once 'includes/footer.php'; ?>

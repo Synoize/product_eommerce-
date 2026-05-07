@@ -264,14 +264,14 @@ $total = $subtotal - $discount;
                                         </h5>
 
                                         <?php if (!empty($item['weight'])): ?>
-                                            <p class="text-blue-600 text-sm"><?php echo e($item['weight']); ?></p>
+                                            <p class="text-accent text-sm"><?php echo e($item['weight']); ?></p>
                                         <?php endif; ?>
 
                                         <p class="text-gray-500 text-sm"><?php echo formatCurrency($item['price']); ?></p>
 
                                         <p class="text-xs font-medium mt-1">
                                             <?php if ($item['stock'] > 20): ?>
-                                                <span class="text-green-600">In Stock</span>
+                                                <!-- <span class="text-green-600">In Stock</span> -->
                                             <?php elseif ($item['stock'] > 0): ?>
                                                 <span class="text-orange-500">Only <?php echo $item['stock']; ?> left</span>
                                             <?php else: ?>
