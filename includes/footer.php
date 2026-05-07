@@ -17,7 +17,6 @@ try {
 ?>
 
 <!-- Footer -->
-
 <footer class="mt-20">
 
     <svg
@@ -45,7 +44,7 @@ try {
                         <img src="<?php echo ASSETS_URL; ?>/public/logo.png" alt="logo" class="h-24 md:h-32">
                     </a>
                     <p class="text-sm mb-6 text-gray-700 max-w-sm">
-                    We deliver a thoughtfully crafted range of snacks and spices, combining rich taste, freshness, and consistent quality you can trust every day.
+                        We deliver a thoughtfully crafted range of snacks and spices, combining rich taste, freshness, and consistent quality you can trust every day.
                     </p>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li class="flex items-start text-gray-600 max-w-sm">
@@ -163,34 +162,6 @@ try {
         </div>
     </div>
 </footer>
-
-<!-- Scroll to Top Button -->
-<button id="scrollToTop" class="fixed bottom-6 right-6 bg-primary-500 hover:bg-primary-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 z-50">
-    <i class="fas fa-chevron-up"></i>
-</button>
-
-<!-- Scripts -->
-<script>
-    // Scroll to Top Button
-    const scrollToTopBtn = document.getElementById('scrollToTop');
-
-    window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
-            scrollToTopBtn.classList.remove('opacity-0', 'invisible');
-            scrollToTopBtn.classList.add('opacity-100', 'visible');
-        } else {
-            scrollToTopBtn.classList.add('opacity-0', 'invisible');
-            scrollToTopBtn.classList.remove('opacity-100', 'visible');
-        }
-    });
-
-    scrollToTopBtn.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-</script>
 
 <script src="<?php echo ASSETS_URL; ?>/public/js/script.js"></script>
 <script>

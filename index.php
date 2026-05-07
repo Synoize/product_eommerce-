@@ -223,7 +223,7 @@ try {
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8">
             <?php foreach ($featuredProducts as $product): ?>
-                <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                     <!-- IMAGE -->
                     <div class="relative overflow-hidden p-3 md:p-4 bg-accent-50/50">
@@ -457,7 +457,7 @@ try {
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8">
             <?php foreach ($trendingProducts as $product): ?>
-                <div class="bg-white rounded-2xl border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                <div class="bg-white rounded-2xl border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                     <!-- IMAGE -->
                     <div class="relative bg-accent-50/50 flex items-center justify-center p-3 sm:p-4">
@@ -644,25 +644,28 @@ try {
 
         <!-- LEFT FEATURES -->
         <div class="space-y-10 text-center md:text-right scroll-animate-left">
-            
-            <div>
-                <div class="text-orange-600 text-5xl mb-2">🌶️</div>
+
+            <div class="flex flex-col items-center md:items-end">
+                <img src="<?php echo IMAGES_URL; ?>/chili.png"
+                    class="w-20 h-20 object-contain animate-float">
                 <h3 class="font-semibold text-gray-800">Authentic Spices</h3>
                 <p class="text-sm text-gray-600">
                     Rich aroma and traditional blends to enhance every dish.
                 </p>
             </div>
 
-            <div>
-                <div class="text-orange-600 text-5xl mb-2">🍘</div>
+            <div class="flex flex-col items-center md:items-end">
+                <img src="<?php echo IMAGES_URL; ?>/snacks.png"
+                    class="w-20 h-20 object-contain animate-float">
                 <h3 class="font-semibold text-gray-800">Crispy Snacks</h3>
                 <p class="text-sm text-gray-600">
                     Freshly prepared snacks with perfect crunch and taste.
                 </p>
             </div>
 
-            <div>
-                <div class="text-orange-600 text-5xl mb-2">🧂</div>
+            <div class="flex flex-col items-center md:items-end">
+                <img src="<?php echo IMAGES_URL; ?>/spices.png"
+                    class="w-20 h-20 object-contain animate-float">
                 <h3 class="font-semibold text-gray-800">Premium Quality</h3>
                 <p class="text-sm text-gray-600">
                     Handpicked ingredients ensuring purity and freshness.
@@ -673,34 +676,36 @@ try {
 
         <!-- CENTER IMAGE -->
         <div class="flex justify-center relative">
-            <img 
-                  src="<?php echo IMAGES_URL; ?>/makhana_bowl.png"
+            <img
+                src="<?php echo IMAGES_URL; ?>/makhana_bowl.png"
                 alt="Snacks and Spices"
-                class="w-60 md:w-80 drop-shadow-xl rounded-2xl animate-float "
-            />
+                class="w-60 md:w-80 drop-shadow-xl rounded-2xl animate-float " />
         </div>
 
         <!-- RIGHT FEATURES -->
         <div class="space-y-10 text-center md:text-left scroll-animate-right">
 
-            <div>
-                <div class="text-orange-600 text-5xl mb-2">🥨</div>
+             <div class="flex flex-col items-center md:items-start">
+                <img src="<?php echo IMAGES_URL; ?>/variety_snacks.png"
+                    class="w-20 h-20 object-contain animate-float">
                 <h3 class="font-semibold text-gray-800">Variety of Snacks</h3>
                 <p class="text-sm text-gray-600">
                     From namkeen to traditional treats, something for everyone.
                 </p>
             </div>
 
-            <div>
-                <div class="text-orange-600 text-5xl mb-2">🌿</div>
+            <div class="flex flex-col items-center md:items-start">
+                <img src="<?php echo IMAGES_URL; ?>/natural_ingredients.png"
+                    class="w-20 h-20 object-contain animate-float">
                 <h3 class="font-semibold text-gray-800">Natural Ingredients</h3>
                 <p class="text-sm text-gray-600">
                     No artificial flavors, only real and natural goodness.
                 </p>
             </div>
 
-            <div>
-                <div class="text-orange-600 text-5xl mb-2">📦</div>
+            <div class="flex flex-col items-center md:items-start">
+                <img src="<?php echo IMAGES_URL; ?>/packaging.png"
+                    class="w-20 h-20 object-contain animate-float">
                 <h3 class="font-semibold text-gray-800">Fresh Packaging</h3>
                 <p class="text-sm text-gray-600">
                     Hygienically packed to preserve taste and quality.
@@ -732,5 +737,7 @@ try {
         </div>
     </div>
 </section>
+
+ <?php require_once __DIR__ . '../includes/floating-icons.php'; ?>
 
 <?php require_once 'includes/footer.php'; ?>

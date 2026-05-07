@@ -224,7 +224,7 @@ $total = $subtotal - $discount;
                 <i class="fas fa-shopping-cart text-7xl text-gray-300 mb-6"></i>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h3>
                 <p class="text-gray-500 mb-6">Looks like you haven't added any products yet.</p>
-                <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-800 text-white font-semibold py-4 px-8 rounded-full transition shadow-lg hover:shadow-xl">
+                <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-800 text-white text-sm font-semibold py-4 px-8 rounded-full transition hover:shadow-sm">
                     <i class="fas fa-shopping-bag mr-2"></i>Continue Shopping
                 </a>
             </div>

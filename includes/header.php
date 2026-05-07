@@ -185,24 +185,107 @@ try {
     if ($flash): ?>
         <?php
         $alertColors = [
-            'success' => 'bg-green-100 border-green-400 text-green-700',
-            'danger' => 'bg-red-100 border-red-400 text-red-700',
-            'warning' => 'bg-yellow-100 border-yellow-400 text-yellow-700',
-            'info' => 'bg-blue-100 border-blue-400 text-blue-700'
+            'success' => 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            'danger'  => 'border-rose-200 bg-rose-50 text-rose-700',
+            'warning' => 'border-amber-200 bg-amber-50 text-amber-700',
+            'info'    => 'border-sky-200 bg-sky-50 text-sky-700'
         ];
+
+        $alertIcons = [
+            'success' => 'fa-circle-check',
+            'danger'  => 'fa-circle-xmark',
+            'warning' => 'fa-triangle-exclamation',
+            'info'    => 'fa-circle-info'
+        ];
+
         $alertClass = $alertColors[$flash['type']] ?? $alertColors['info'];
+        $alertIcon  = $alertIcons[$flash['type']] ?? $alertIcons['info'];
         ?>
-        <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-4 py-3 rounded border <?php echo $alertClass; ?> shadow-lg max-w-md w-full mx-4" role="alert" id="flashMessage">
-            <div class="flex justify-between items-center">
-                <span><?php echo e($flash['message']); ?></span>
-                <button type="button" onclick="document.getElementById('flashMessage').remove()" class="text-current hover:opacity-75">
-                    <i class="fas fa-times"></i>
+
+        <!-- Flash Wrapper -->
+        <div
+            id="flashWrapper"
+            class="fixed bottom-4 left-0 w-full max-w-md px-4 z-50">
+
+            <!-- Flash Message -->
+            <div
+                id="flashMessage"
+                class="
+                flex items-center justify-between gap-3
+                rounded-2xl border
+                px-4 py-2
+                text-sm shadow-xl
+                backdrop-blur-md
+                transition-all duration-500 ease-out
+                opacity-0 translate-y-10
+                <?= $alertClass; ?>
+            ">
+
+                <!-- Left Content -->
+                <div class="flex items-center gap-3 flex-1 min-w-0 text-sm">
+
+                    <!-- Icon -->
+                    <div class="shrink-0">
+                        <i class="fas <?= $alertIcon; ?> text-base"></i>
+                    </div>
+
+                    <!-- Message -->
+                    <span class="flex-1 font-medium leading-relaxed break-words">
+                        <?= e($flash['message']); ?>
+                    </span>
+
+                </div>
+
+                <!-- Close Button -->
+                <button
+                    id="closeFlash"
+                    class="
+                    shrink-0 rounded-full
+                    p-1.5 text-lg
+                    opacity-70 transition
+                    hover:bg-black/5 hover:opacity-100
+                ">
+                    <i class="fas fa-xmark"></i>
                 </button>
+
             </div>
+
         </div>
+
         <script>
-            setTimeout(() => document.getElementById('flashMessage')?.remove(), 5000);
+            document.addEventListener("DOMContentLoaded", () => {
+
+                const flash = document.getElementById("flashMessage");
+                const closeBtn = document.getElementById("closeFlash");
+
+                if (!flash) return;
+
+                // Show animation
+                setTimeout(() => {
+                    flash.classList.remove("opacity-0", "translate-y-10");
+                    flash.classList.add("opacity-100", "translate-y-0");
+                }, 100);
+
+                // Auto hide after 5 sec
+                setTimeout(() => {
+                    hideFlash();
+                }, 5000);
+
+                // Manual close
+                closeBtn.addEventListener("click", hideFlash);
+
+                function hideFlash() {
+                    flash.classList.remove("opacity-100", "translate-y-0");
+                    flash.classList.add("opacity-0", "translate-y-10");
+
+                    setTimeout(() => {
+                        flash.remove();
+                    }, 500);
+                }
+
+            });
         </script>
+
     <?php endif; ?>
 
     <!-- Navigation -->
@@ -272,10 +355,10 @@ try {
                     </div>
 
                     <a href="<?php echo BASE_URL; ?>about-us.php" class="text-gray-700 hover:text-primary-500 font-medium <?php echo basename($_SERVER['PHP_SELF']) === 'about-us.php' ? 'text-primary-500' : ''; ?>">
-                        About
+                        About Us
                     </a>
                     <a href="<?php echo BASE_URL; ?>contact-us.php" class="text-gray-700 hover:text-primary-500 font-medium <?php echo basename($_SERVER['PHP_SELF']) === 'contact-us.php' ? 'text-primary-500' : ''; ?>">
-                        Contact
+                        Contact Us
                     </a>
                 </div>
 
@@ -484,7 +567,7 @@ try {
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <div class="px-2 py-4 space-y-1 overflow-y-auto h-[calc(100%-65px)]">
+            <div class="px-2 py-4 space-y-1 overflow-y-auto h-[calc(100%-65px)] text-sm">
                 <a href="<?php echo BASE_URL; ?>" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
                     <i class="fas fa-home w-8"></i> Home
                 </a>
@@ -513,10 +596,10 @@ try {
                 <?php endif; ?>
 
                 <a href="<?php echo BASE_URL; ?>about-us.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                    <i class="fas fa-info-circle w-8"></i> About
+                    <i class="fas fa-info-circle w-8"></i> About Us
                 </a>
                 <a href="<?php echo BASE_URL; ?>contact-us.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                    <i class="fas fa-envelope w-8"></i> Contact
+                    <i class="fas fa-envelope w-8"></i> Contact Us
                 </a>
 
                 <!-- Mobile Auth Links -->
@@ -550,17 +633,15 @@ try {
                                 </span>
                             <?php endif; ?>
                         </a>
-                        <a href="">
-                            <a href="<?php echo BASE_URL; ?>checkout.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                                <i class="fas fa-shopping-cart w-8"></i> Checkout
-                            </a>
-                            <a href="">
-                                <a href="<?php echo BASE_URL; ?>help.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                                    <i class="fas fa-question-circle w-8"></i> Help & Support
-                                </a>
-                                <a href="<?php echo BASE_URL; ?>user/logout.php" class="flex items-center p-3 text-red-500 hover:bg-red-50 rounded-lg transition">
-                                    <i class="fas fa-sign-out-alt w-8"></i> Logout
-                                </a>
+                        <a href="<?php echo BASE_URL; ?>checkout.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                            <i class="fas fa-shopping-cart w-8"></i> Checkout
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>help.php" class="flex items-center p-3 text-gray-700 hover:bg-gray-50 rounded-lg transition">
+                            <i class="fas fa-question-circle w-8"></i> Help & Support
+                        </a>
+                        <a href="<?php echo BASE_URL; ?>user/logout.php" class="flex items-center p-3 text-red-500 hover:bg-red-50 rounded-lg transition">
+                            <i class="fas fa-sign-out-alt w-8"></i> Logout
+                        </a>
                     </div>
                 <?php else: ?>
                     <div class="border-t border-gray-100 pt-2 mt-2">

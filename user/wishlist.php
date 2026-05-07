@@ -106,14 +106,14 @@ $pageTitle = 'My Wishlist';
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900 mb-2">Your wishlist is empty</h2>
                 <p class="text-gray-600 mb-6">Start adding products you love to your wishlist</p>
-                <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-700/90 text-white font-semibold py-4 px-8 rounded-full transition hover:shadow-sm">
+                <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-700/90 text-white text-sm font-semibold py-4 px-6 rounded-full transition hover:shadow-sm">
                     <i class="fas fa-shopping-bag mr-2"></i>Continue Shopping
                 </a>
             </div>
         <?php else: ?>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 <?php foreach ($wishlistItems as $product): ?>
-                    <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                    <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                         <!-- IMAGE -->
                         <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">

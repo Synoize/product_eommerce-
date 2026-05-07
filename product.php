@@ -740,7 +740,7 @@ require_once __DIR__ . '/includes/header.php';
                 <h3 class="text-2xl font-bold text-gray-900 mb-8">Related Products</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
                     <?php foreach ($relatedProducts as $product): ?>
-                        <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                        <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                             <!-- IMAGE -->
                             <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">

@@ -13,7 +13,7 @@ define('DB_NAME', 'ecommerce_db');
 // Base URL Configuration
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'];
-$folder = '/kd/';
+$folder = '/product_ecommerce/';
 define('BASE_URL', $protocol . $host . $folder);
 
 // Asset URLs

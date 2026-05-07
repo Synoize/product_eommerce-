@@ -402,7 +402,7 @@ if ($categoryId > 0) {
                 <!-- Products Grid -->
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                     <?php foreach ($products as $product): ?>
-                        <div class="bg-white rounded-2xl border hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                        <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                             <!-- IMAGE -->
                             <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">
