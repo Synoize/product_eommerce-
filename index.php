@@ -40,7 +40,7 @@ try {
         ],
         [
             "badge" => "Trending",
-            "file_path" => "https://www.youtube.com/embed/9bZkp7q19f0"  // YouTube video
+            "file_path" => "https://www.youtube.com/embed/dQw4w9WgXcQ"  // YouTube video
         ],
         [
             "badge" => "Premium",
@@ -490,14 +490,10 @@ try {
 
                     <!-- Card -->
                     <div class="snap-center shrink-0
-                w-[80%]
-                sm:w-[58%]
-                md:w-[40%]
-                lg:w-[28%]
-                xl:w-[23%]">
+                w-[290px]">
 
-                        <div class="group relative overflow-hidden rounded-[2rem]
-                    h-[360px] sm:h-[390px] md:h-[430px]
+                        <div class="group relative overflow-hidden rounded-[1.5rem]
+                    h-[400px] md:h-[430px]
                     bg-white border border-gray-100 shadow-sm">
 
                             <!-- Video Wrapper -->
@@ -549,10 +545,9 @@ try {
 
             <!-- Left Button -->
             <button onclick="scrollCarousel(-1)"
-                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-30
+                class="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 z-30
         w-12 h-12 flex items-center justify-center
-        rounded-full bg-white/90 backdrop-blur-xl
-        border border-gray-100 shadow-lg
+        rounded-full bg-white/90 backdrop-blur-sm shadow-sm
         text-accent hover:bg-accent hover:text-white
         transition duration-300">
 
@@ -561,10 +556,9 @@ try {
 
             <!-- Right Button -->
             <button onclick="scrollCarousel(1)"
-                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-30
+                class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-30
         w-12 h-12 flex items-center justify-center
-        rounded-full bg-white/90 backdrop-blur-xl
-        border border-gray-100 shadow-lg
+        rounded-full bg-white/90 backdrop-blur-sm shadow-sm
         text-accent hover:bg-accent hover:text-white
         transition duration-300">
 
