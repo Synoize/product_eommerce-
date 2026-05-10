@@ -22,8 +22,16 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) as total FROM orders");
     $totalOrders = $stmt->fetch()['total'];
 
-    // Total sales
-    $stmt = $pdo->query("SELECT SUM(total_amount) as total FROM orders WHERE payment_status = 'paid'");
+    // Total sales - includes online paid orders + COD orders with initial payment
+    $stmt = $pdo->query("SELECT 
+                            SUM(CASE 
+                                WHEN payment_method = 'online' AND payment_status = 'paid' THEN total_amount
+                                WHEN payment_method = 'cod' AND initial_payment_status = 'paid' THEN initial_payment_amount
+                                ELSE 0 
+                            END) as total 
+                        FROM orders 
+                        WHERE (payment_method = 'online' AND payment_status = 'paid') 
+                               OR (payment_method = 'cod' AND initial_payment_status = 'paid')");
     $totalSales = $stmt->fetch()['total'] ?? 0;
 
     // Recent orders
@@ -34,12 +42,17 @@ try {
                         LIMIT 10");
     $recentOrders = $stmt->fetchAll();
 
-    // Monthly sales data for chart
+    // Monthly sales data for chart - includes online paid orders + COD orders with initial payment
     $stmt = $pdo->query("SELECT 
                             DATE_FORMAT(created_at, '%Y-%m') as month,
-                            SUM(total_amount) as total 
+                            SUM(CASE 
+                                WHEN payment_method = 'online' AND payment_status = 'paid' THEN total_amount
+                                WHEN payment_method = 'cod' AND initial_payment_status = 'paid' THEN initial_payment_amount
+                                ELSE 0 
+                            END) as total 
                         FROM orders 
-                        WHERE payment_status = 'paid' 
+                        WHERE ((payment_method = 'online' AND payment_status = 'paid') 
+                               OR (payment_method = 'cod' AND initial_payment_status = 'paid'))
                         AND created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
                         GROUP BY DATE_FORMAT(created_at, '%Y-%m')
                         ORDER BY month ASC");

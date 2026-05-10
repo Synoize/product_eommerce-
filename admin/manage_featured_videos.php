@@ -324,7 +324,7 @@ require_once __DIR__ . '/includes/header.php';
                         <p class="text-gray-500">No featured videos found. Add your first video above.</p>
                     </div>
                 <?php else: ?>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <?php foreach ($featuredVideos as $video): 
                             $videoIsYouTube = strpos($video['file_path'], 'youtube.com/embed') !== false;
                         ?>
@@ -333,7 +333,7 @@ require_once __DIR__ . '/includes/header.php';
                                     <?php if ($videoIsYouTube): ?>
                                         <iframe 
                                             src="<?php echo e($video['file_path']); ?>" 
-                                            class="w-full h-48 rounded-lg bg-gray-100"
+                                            class="w-full h-[380px] rounded-lg bg-gray-100"
                                             frameborder="0"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowfullscreen>
@@ -345,7 +345,7 @@ require_once __DIR__ . '/includes/header.php';
                                         </div>
                                     <?php else: ?>
                                         <video src="<?php echo $videosUploadUrl . e($video['file_path']); ?>" 
-                                               class="w-full h-48 object-cover rounded-lg bg-gray-100" controls muted loop>
+                                               class="w-full h-[380px] object-cover rounded-lg bg-gray-100" controls muted loop>
                                         </video>
                                         <div class="absolute top-2 right-2">
                                             <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">

@@ -35,6 +35,9 @@
         <a href="<?php echo BASE_URL; ?>admin/manage_coupons.php" class="<?php echo $adminNavLinkClass('manage_coupons.php'); ?>">
             <i class="fas fa-ticket-alt w-6"></i>Coupons
         </a>
+        <a href="<?php echo BASE_URL; ?>admin/manage_reviews.php" class="<?php echo $adminNavLinkClass('manage_reviews.php'); ?>">
+            <i class="fas fa-star w-6"></i>Reviews
+        </a>
         <a href="<?php echo BASE_URL; ?>admin/manage_users.php" class="<?php echo $adminNavLinkClass('manage_users.php'); ?>">
             <i class="fas fa-users w-6"></i>Users
         </a>

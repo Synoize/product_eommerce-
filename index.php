@@ -545,7 +545,7 @@ try {
 
             <!-- Left Button -->
             <button onclick="scrollCarousel(-1)"
-                class="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 z-30
+                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-30
         w-12 h-12 flex items-center justify-center
         rounded-full bg-white/90 backdrop-blur-sm shadow-sm
         text-accent hover:bg-accent hover:text-white
@@ -556,7 +556,7 @@ try {
 
             <!-- Right Button -->
             <button onclick="scrollCarousel(1)"
-                class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-30
+                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-30
         w-12 h-12 flex items-center justify-center
         rounded-full bg-white/90 backdrop-blur-sm shadow-sm
         text-accent hover:bg-accent hover:text-white
