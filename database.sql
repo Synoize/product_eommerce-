@@ -194,10 +194,30 @@ CREATE TABLE IF NOT EXISTS `coupons` (
   `expiry_date` date NOT NULL,
   `usage_limit` int(11) DEFAULT NULL,
   `used_count` int(11) DEFAULT 0,
+  `allow_multiple_uses` tinyint(1) DEFAULT 0,
   `status` tinyint(1) DEFAULT 1,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Table structure for table `coupon_uses`
+-- Tracks which user used which coupon
+--
+
+CREATE TABLE IF NOT EXISTS `coupon_uses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `coupon_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `used_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_coupon_user` (`coupon_id`, `user_id`),
+  KEY `coupon_id` (`coupon_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `fk_coupon_uses_coupon` FOREIGN KEY (`coupon_id`) REFERENCES `coupons` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_coupon_uses_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -380,3 +400,13 @@ CREATE TABLE IF NOT EXISTS hero_features (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+CREATE TABLE IF NOT EXISTS featured_products_video (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+  badge VARCHAR(20) DEFAULT 'Healthy Snack',
+
+  file_path VARCHAR(255) NOT NULL,
+
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

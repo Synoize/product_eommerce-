@@ -8,12 +8,45 @@
 require_once 'includes/header.php';
 
 $heroFeatures = [];
-
 try {
     $stmt = $pdo->query("SELECT * FROM hero_features ORDER BY id DESC");
     $heroFeatures = $stmt->fetchAll();
 } catch (PDOException $e) {
     // hero_features table might not exist yet
+}
+
+
+$featuredProductsVideo = [];
+
+try {
+
+    $stmt = $pdo->query("SELECT * FROM featured_products_video ORDER BY id DESC");
+    $featuredProductsVideo = $stmt->fetchAll();
+} catch (PDOException $e) {
+
+    // Fallback Videos
+    $featuredProductsVideo = [
+        [
+            "badge" => "Best Seller",
+            "file_path" => "makhana-classic.mp4"
+        ],
+        [
+            "badge" => "Cheesy",
+            "file_path" => "cheese-makhana.mp4"
+        ],
+        [
+            "badge" => "Spicy",
+            "file_path" => "peri-peri-makhana.mp4"
+        ],
+        [
+            "badge" => "Hot Deal",
+            "file_path" => "spicy-masala.mp4"
+        ],
+        [
+            "badge" => "Premium",
+            "file_path" => "premium-spices.mp4"
+        ],
+    ];
 }
 
 // Fetch featured products
@@ -141,78 +174,78 @@ try {
             </div>
 
             <script>
-            document.addEventListener("DOMContentLoaded", () => {
+                document.addEventListener("DOMContentLoaded", () => {
 
-    const images = document.querySelectorAll(".pkg");
+                    const images = document.querySelectorAll(".pkg");
 
-    const animations = [
-        "animate-slide-left",
-        "animate-slide-right",
-        "animate-slide-top",
-        "animate-slide-bottom",
-        "animate-pop",
-    ];
+                    const animations = [
+                        "animate-slide-left",
+                        "animate-slide-right",
+                        "animate-slide-top",
+                        "animate-slide-bottom",
+                        "animate-pop",
+                    ];
 
-    let current = 0;
+                    let current = 0;
 
-    function showNextImage() {
+                    function showNextImage() {
 
-        // Hide current image smoothly
-        images.forEach((img) => {
+                        // Hide current image smoothly
+                        images.forEach((img) => {
 
-            img.classList.remove(
-                "opacity-100",
-                "scale-100",
-                "animate-pop",
-                "animate-float",
-                "animate-slide-left",
-                "animate-slide-right",
-                "animate-slide-top",
-                "animate-slide-bottom"
-            );
+                            img.classList.remove(
+                                "opacity-100",
+                                "scale-100",
+                                "animate-pop",
+                                "animate-float",
+                                "animate-slide-left",
+                                "animate-slide-right",
+                                "animate-slide-top",
+                                "animate-slide-bottom"
+                            );
 
-            img.classList.add(
-                "opacity-0",
-                "scale-95",
-                "transition-all",
-                "duration-700",
-                "ease-in-out"
-            );
-        });
+                            img.classList.add(
+                                "opacity-0",
+                                "scale-95",
+                                "transition-all",
+                                "duration-700",
+                                "ease-in-out"
+                            );
+                        });
 
-        // Active image
-        const activeImage = images[current];
+                        // Active image
+                        const activeImage = images[current];
 
-        const randomAnimation =
-            animations[Math.floor(Math.random() * animations.length)];
+                        const randomAnimation =
+                            animations[Math.floor(Math.random() * animations.length)];
 
-        activeImage.classList.remove(
-            "opacity-0",
-            "scale-95"
-        );
+                        activeImage.classList.remove(
+                            "opacity-0",
+                            "scale-95"
+                        );
 
-        activeImage.classList.add(
-            "opacity-100",
-            "scale-100",
-            randomAnimation,
-            "transition-all",
-            "duration-700",
-            "ease-in-out"
-        );
+                        activeImage.classList.add(
+                            "opacity-100",
+                            "scale-100",
+                            randomAnimation,
+                            "transition-all",
+                            "duration-700",
+                            "ease-in-out"
+                        );
 
-        // Floating effect after entrance
-        setTimeout(() => {
-            activeImage.classList.add("animate-float");
-        }, 700);
+                        // Floating effect after entrance
+                        setTimeout(() => {
+                            activeImage.classList.add("animate-float");
+                        }, 700);
 
-        current = (current + 1) % images.length;
-    }
+                        current = (current + 1) % images.length;
+                    }
 
-    showNextImage();
+                    showNextImage();
 
-    setInterval(showNextImage, 4500);
-});    
-                </script>
+                    setInterval(showNextImage, 4500);
+                });
+            </script>
 
         </div>
     </div>
@@ -419,6 +452,135 @@ try {
         </div>
     </div>
 </section>
+
+<!-- Featured Videos Section -->
+<section class="pt-20">
+
+    <div class="relative mx-auto max-w-7xl">
+
+        <!-- Heading -->
+        <div class="text-center px-4 scroll-animate-top">
+            <h2 class="text-3xl sm:text-5xl font-luckiest text-primary-600 leading-tight">
+                Crunch. Watch.
+                <span class="text-accent" style="-webkit-text-stroke:1px black;">
+                    Enjoy.
+                </span>
+            </h2>
+
+            <p class="mt-4 text-gray-500 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+                Premium makhana & authentic Indian spices in every bite.
+            </p>
+
+        </div>
+
+        <!-- Carousel Wrapper -->
+        <div class="relative mt-12">
+
+            <!-- Carousel -->
+            <div id="featureCarousel"
+                class="flex gap-5 md:gap-7 overflow-x-auto scroll-smooth px-4 md:px-6 lg:px-2 pb-2
+    [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+
+                <?php foreach ($featuredProductsVideo as $video): ?>
+
+                    <!-- Card -->
+                    <div class="shrink-0
+            w-[78%]
+            sm:w-[58%]
+            md:w-[38%]
+            lg:w-[28%]
+            xl:w-[23%] scroll-animate-bottom">
+
+                        <div class="group relative overflow-hidden rounded-xl
+                h-[360px] sm:h-[380px] md:h-[430px]
+                bg-white transition duration-500 border">
+
+                            <!-- Video -->
+                            <video
+                                src="<?php echo UPLOADS_URL . $video['file_path']; ?>"
+                                class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+                                autoplay
+                                muted
+                                loop
+                                playsinline>
+                            </video>
+
+                            <!-- Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/10 via-black/10 to-transparent"></div>
+
+                            <!-- Badge -->
+                            <div class="absolute top-4 left-4">
+                                <span class="bg-white/90 backdrop-blur-md text-accent text-xs font-bold px-4 py-2 rounded-full border">
+                                    <?= e($video['badge']); ?>
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            </div>
+
+            <!-- Left Button -->
+            <button onclick="scrollCarousel(-1)"
+                class="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 z-20
+                w-10 h-10 flex items-center justify-center
+                rounded-full bg-white/90 backdrop-blur-md shadow-md
+                text-accent hover:bg-gray-100
+                transition duration-300">
+
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Right Button -->
+            <button onclick="scrollCarousel(1)"
+                class="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-20
+                w-10 h-10 flex items-center justify-center
+                rounded-full bg-white/90 backdrop-blur-md shadow-md
+                text-accent hover:bg-gray-100
+                transition duration-300">
+
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const container = document.getElementById("featureCarousel");
+
+        if (!container) return;
+
+        function getScrollAmount() {
+
+            const firstCard = container.children[0];
+
+            if (!firstCard) return 300;
+
+            const style = window.getComputedStyle(container);
+            const gap = parseInt(style.gap) || 20;
+
+            return firstCard.offsetWidth + gap;
+        }
+
+        window.scrollCarousel = function(direction) {
+
+            container.scrollBy({
+                left: direction * getScrollAmount(),
+                behavior: "smooth"
+            });
+
+        };
+
+    });
+</script>
 
 <!-- Every Mood -->
 <section class="my-20 relative bg-accent">

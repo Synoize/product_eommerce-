@@ -138,6 +138,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // Check usage limit
                         elseif ($coupon['usage_limit'] > 0 && $coupon['used_count'] >= $coupon['usage_limit']) {
                             setFlash('Coupon usage limit reached.', 'danger');
+                        }
+                        // Check if user already used this coupon (unless allow_multiple_uses is enabled)
+                        elseif (empty($coupon['allow_multiple_uses']) && isLoggedIn()) {
+                            $checkStmt = $pdo->prepare("SELECT COUNT(*) as used FROM coupon_uses WHERE coupon_id = ? AND user_id = ?");
+                            $checkStmt->execute([$coupon['id'], $_SESSION['user_id']]);
+                            $alreadyUsed = $checkStmt->fetch()['used'] > 0;
+
+                            if ($alreadyUsed) {
+                                setFlash('You have already used this coupon.', 'danger');
+                            } else {
+                                // Calculate subtotal
+                                $subtotal = 0;
+                                foreach ($_SESSION['cart'] as $item) {
+                                    $subtotal += $item['price'] * $item['quantity'];
+                                }
+
+                                // Check minimum order
+                                if ($coupon['min_order'] > 0 && $subtotal < $coupon['min_order']) {
+                                    setFlash('Minimum order amount of ' . formatCurrency($coupon['min_order']) . ' required.', 'warning');
+                                } else {
+                                    $_SESSION['coupon'] = $coupon;
+                                    setFlash('Coupon applied successfully!', 'success');
+                                }
+                            }
                         } else {
                             // Calculate subtotal
                             $subtotal = 0;

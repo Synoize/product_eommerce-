@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $maxDiscount = isset($_POST['max_discount']) ? (float)$_POST['max_discount'] : 0;
         $expiryDate = isset($_POST['expiry_date']) ? $_POST['expiry_date'] : '';
         $usageLimit = isset($_POST['usage_limit']) ? (int)$_POST['usage_limit'] : 0;
+        $allowMultipleUses = isset($_POST['allow_multiple_uses']) ? 1 : 0;
         $status = isset($_POST['status']) ? 1 : 0;
         $couponId = isset($_POST['coupon_id']) ? (int)$_POST['coupon_id'] : 0;
         
@@ -30,13 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($errors)) {
             try {
                 if ($action === 'add') {
-                    $stmt = $pdo->prepare("INSERT INTO coupons (code, type, value, min_order, max_discount, expiry_date, usage_limit, status, created_at) 
-                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-                    $stmt->execute([$code, $type, $value, $minOrder, $maxDiscount, $expiryDate, $usageLimit, $status]);
+                    $stmt = $pdo->prepare("INSERT INTO coupons (code, type, value, min_order, max_discount, expiry_date, usage_limit, allow_multiple_uses, status, created_at) 
+                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+                    $stmt->execute([$code, $type, $value, $minOrder, $maxDiscount, $expiryDate, $usageLimit, $allowMultipleUses, $status]);
                     setFlash('Coupon added successfully!', 'success');
                 } else {
-                    $stmt = $pdo->prepare("UPDATE coupons SET code = ?, type = ?, value = ?, min_order = ?, max_discount = ?, expiry_date = ?, usage_limit = ?, status = ? WHERE id = ?");
-                    $stmt->execute([$code, $type, $value, $minOrder, $maxDiscount, $expiryDate, $usageLimit, $status, $couponId]);
+                    $stmt = $pdo->prepare("UPDATE coupons SET code = ?, type = ?, value = ?, min_order = ?, max_discount = ?, expiry_date = ?, usage_limit = ?, allow_multiple_uses = ?, status = ? WHERE id = ?");
+                    $stmt->execute([$code, $type, $value, $minOrder, $maxDiscount, $expiryDate, $usageLimit, $allowMultipleUses, $status, $couponId]);
                     setFlash('Coupon updated successfully!', 'success');
                 }
             } catch (PDOException $e) {
@@ -176,7 +177,14 @@ try {
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
                                 <p class="text-xs text-gray-500 mt-1">Leave 0 for unlimited</p>
                             </div>
-                            
+
+                            <div class="flex items-center">
+                                <input type="checkbox" name="allow_multiple_uses" value="1"
+                                       <?php echo ($editCoupon && $editCoupon['allow_multiple_uses']) ? 'checked' : ''; ?>
+                                       class="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500">
+                                <label class="ml-2 text-sm text-gray-600">Allow Multiple Uses <span class="text-xs text-gray-400">(same user can reuse)</span></label>
+                            </div>
+
                             <div class="flex items-center">
                                 <input type="checkbox" name="status" value="1" 
                                        <?php echo (!$editCoupon || $editCoupon['status']) ? 'checked' : ''; ?>
@@ -227,7 +235,12 @@ try {
                                             <div class="text-xs text-gray-500">Max: ₹<?php echo $coupon['max_discount']; ?></div>
                                             <?php endif; ?>
                                         </td>
-                                        <td class="px-4 py-3 text-sm"><?php echo $coupon['used_count']; ?> / <?php echo $coupon['usage_limit'] > 0 ? $coupon['usage_limit'] : '∞'; ?></td>
+                                        <td class="px-4 py-3 text-sm">
+                                            <?php echo $coupon['used_count']; ?> / <?php echo $coupon['usage_limit'] > 0 ? $coupon['usage_limit'] : '∞'; ?>
+                                            <?php if ($coupon['allow_multiple_uses']): ?>
+                                            <div class="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium mt-1">Reusable</div>
+                                            <?php endif; ?>
+                                        </td>
                                         <td class="px-4 py-3 text-sm">
                                             <?php echo date('M d, Y', strtotime($coupon['expiry_date'])); ?>
                                             <?php if (strtotime($coupon['expiry_date']) < time()): ?>

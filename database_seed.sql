@@ -520,3 +520,11 @@ VALUES
 (
     '["pkg1.png","pkg2.png","pkg3.png"]'
 );
+
+INSERT INTO featured_products_video (badge, file_path)
+VALUES
+('Best Seller', 'makhana-classic.mp4'),
+('Cheesy', 'cheese-makhana.mp4'),
+('Spicy', 'peri-peri-makhana.mp4'),
+('Hot Deal', 'spicy-masala.mp4'),
+('Premium', 'premium-spices.mp4');

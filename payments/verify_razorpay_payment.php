@@ -153,11 +153,23 @@ try {
             }
         }
         
-        // Update coupon usage count if coupon was used
+        // Update coupon usage count and track per-user usage if coupon was used
         if (!empty($checkoutData['coupon_code'])) {
+            // Update global usage count
             $couponUpdateQuery = "UPDATE coupons SET used_count = used_count + 1 WHERE code = ?";
             $couponStmt = $pdo->prepare($couponUpdateQuery);
             $couponStmt->execute([$checkoutData['coupon_code']]);
+
+            // Track per-user coupon usage (get coupon_id first)
+            $couponIdQuery = $pdo->prepare("SELECT id FROM coupons WHERE code = ?");
+            $couponIdQuery->execute([$checkoutData['coupon_code']]);
+            $couponId = $couponIdQuery->fetchColumn();
+
+            if ($couponId) {
+                $couponUseQuery = "INSERT INTO coupon_uses (coupon_id, user_id, order_id, used_at) VALUES (?, ?, ?, NOW())";
+                $couponUseStmt = $pdo->prepare($couponUseQuery);
+                $couponUseStmt->execute([$couponId, $userId, $orderId]);
+            }
         }
         
         // Commit transaction
