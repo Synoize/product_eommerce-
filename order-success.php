@@ -49,8 +49,8 @@ unset($_SESSION['last_order_id']);
         <div class="bg-white md:border md:rounded-2xl md:shadow-sm md:p-10 text-center">
             <!-- Success Icon -->
             <div class="mb-6">
-                <div class="w-24 h-24 bg-accent-100 rounded-full flex items-center justify-center mx-auto">
-                    <i class="fas fa-check-circle text-6xl text-accent"></i>
+                <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <i class="fas fa-check-circle text-6xl text-green-500"></i>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@ unset($_SESSION['last_order_id']);
                     <!-- Right -->
                     <div class="text-right">
                         <p class="text-gray-500 text-sm mb-1">Order Total</p>
-                        <p class="font-bold text-xl text-primary-500">
+                        <p class="font-bold text-xl text-green-500">
                             <?php echo formatCurrency($order['total_amount']); ?>
                         </p>
                     </div>
@@ -112,7 +112,7 @@ unset($_SESSION['last_order_id']);
                             <?php endif; ?>
                             <tr class="font-bold">
                                 <td class="py-3">Total</td>
-                                <td class="py-3 text-right text-primary-500"><?php echo formatCurrency($order['total_amount']); ?></td>
+                                <td class="py-3 text-right text-green-500"><?php echo formatCurrency($order['total_amount']); ?></td>
                             </tr>
                         </tbody>
                     </table>

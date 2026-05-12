@@ -9,10 +9,11 @@ require_once __DIR__ . '/includes/header.php';
 <section class="py-12 md:py-20">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-            <h1 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-3 scroll-animate-top">
+            <h1 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-3 scroll-animate-top" style="-webkit-text-stroke: 0.5px black;">
                 Privacy
-                <span class="text-accent" style="-webkit-text-stroke: 1px black;">Policy</span>
+                <span class="text-accent">Policy</span>
             </h1>
+            
             <p class="text-gray-600 text-sm md:text-base max-w-2xl mx-auto animate-slide-bottom">
                 This policy explains what information we collect and how we use and protect it.
             </p>

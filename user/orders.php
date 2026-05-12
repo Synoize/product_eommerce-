@@ -55,7 +55,7 @@ foreach ($orders as $order) {
                             <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
                             <h5 class="text-xl font-semibold text-gray-900 mb-2">No orders yet</h5>
                             <p class="text-gray-500 mb-6">Start shopping to see your orders here!</p>
-                            <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-800 text-white font-semibold py-3 px-6 rounded-full transition hover:shadow-sm">
+                            <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-primary hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-full transition hover:shadow-sm">
                                 <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
                             </a>
                         </div>
@@ -73,7 +73,7 @@ foreach ($orders as $order) {
                             ?>
                                 <div class="border border-gray-200 rounded-xl overflow-hidden">
                                     <button
-                                        class="w-full px-4 md:px-6 py-4 flex flex-row md:items-center md:justify-between gap-4 bg-gray-50 hover:bg-gray-100 transition text-left"
+                                        class="w-full px-4 md:px-6 py-4 flex flex-row md:items-center justify-between gap-4 bg-gray-50 hover:bg-gray-100 transition text-left"
                                         onclick="document.getElementById('order<?php echo $order['id']; ?>').classList.toggle('hidden')">
 
                                         <!-- Left -->
@@ -94,11 +94,11 @@ foreach ($orders as $order) {
                                                 <?php echo ucfirst($order['status']); ?>
                                             </span>
 
-                                            <span class="font-bold text-primary-500 text-sm md:text-base">
+                                            <span class="font-bold text-green-500 text-sm md:text-base">
                                                 <?php echo formatCurrency($order['total_amount']); ?>
                                             </span>
 
-                                            <i class="fas fa-chevron-down text-gray-400 text-sm hidden md:block"></i>
+                                            <i class="fas fa-chevron-down text-gray-400 text-sm "></i>
                                         </div>
 
                                     </button>
@@ -150,7 +150,7 @@ foreach ($orders as $order) {
                                                     <?php endif; ?>
                                                     <tr>
                                                         <td colspan="3" class="px-4 py-2 text-right font-bold text-gray-900">Total</td>
-                                                        <td class="px-4 py-2 text-right font-bold text-primary-500"><?php echo formatCurrency($order['total_amount']); ?></td>
+                                                        <td class="px-4 py-2 text-right font-bold text-green-500"><?php echo formatCurrency($order['total_amount']); ?></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>

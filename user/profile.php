@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <form action="<?php echo BASE_URL; ?>user/profile.php" method="POST" id="profileForm" class="space-y-6">
                         <div>
-                            <h6 class="font-bold text-accent mb-4">Personal Information</h6>
+                            <h6 class="font-bold text-primary mb-4">Personal Information</h6>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div>
-                            <h6 class="font-semibold text-accent mb-4">Address Information</h6>
+                            <h6 class="font-semibold text-primary mb-4">Address Information</h6>
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div>
-                            <h6 class="font-bold text-accent mb-4">Change Password</h6>
+                            <h6 class="font-bold text-red-500 mb-4">Change Password</h6>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
@@ -200,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <button type="submit" class="bg-accent hover:bg-accent-800 text-white text-sm font-semibold py-3 px-8 rounded-lg transition hover:shadow-sm inline-flex items-center">
+                        <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold py-3 px-8 rounded-lg transition hover:shadow-sm inline-flex items-center">
                             <i class="fas fa-save mr-2"></i>Save Changes
                         </button>
                     </form>

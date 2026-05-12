@@ -223,11 +223,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="text-sm text-gray-600 mb-2">
             <ol class="flex items-center space-x-2">
-                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-accent">Home</a></li>
+                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary">Home</a></li>
                 <li><i class="fas fa-chevron-right text-xs"></i></li>
-                <li><a href="<?php echo BASE_URL; ?>cart.php" class="hover:text-accent">Cart</a></li>
+                <li><a href="<?php echo BASE_URL; ?>cart.php" class="hover:text-primary">Cart</a></li>
                 <li><i class="fas fa-chevron-right text-xs"></i></li>
-                <li class="text-accent font-medium">Checkout</li>
+                <li class="text-primary font-medium">Checkout</li>
             </ol>
         </nav>
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Checkout</h1>
@@ -264,8 +264,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <p class="font-medium text-gray-900"><?php echo e($_SESSION['checkout_data']['name']); ?></p>
                                         <p><?php echo e($_SESSION['checkout_data']['address']); ?></p>
                                         <p><?php echo e($_SESSION['checkout_data']['city']); ?>, <?php echo e($_SESSION['checkout_data']['state']); ?> - <?php echo e($_SESSION['checkout_data']['pincode']); ?></p>
-                                        <p><i class="fas fa-phone mr-2 text-primary-500"></i><?php echo e($_SESSION['checkout_data']['mobile']); ?></p>
-                                        <p><i class="fas fa-envelope mr-2 text-primary-500"></i><?php echo e($_SESSION['checkout_data']['email']); ?></p>
+                                        <p><i class="fas fa-phone mr-2 text-primary"></i><?php echo e($_SESSION['checkout_data']['mobile']); ?></p>
+                                        <p><i class="fas fa-envelope mr-2 text-primary"></i><?php echo e($_SESSION['checkout_data']['email']); ?></p>
                                     </div>
                                 </div>
 
@@ -334,10 +334,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="text-center md:text-right">
 
                             <button id="rzp-button"
-                                class="w-full md:w-auto bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-8 rounded-lg transition hover:shadow-sm">
+                                class="w-full md:w-auto bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 px-8 rounded-lg transition hover:shadow-sm">
                                 <!-- Right Side -->
                                 <span class="text-right text-nowrap">
-                                    <i class="fas fa-credit-card mr-2"></i> Pay Now 
+                                    <i class="fas fa-credit-card mr-2"></i> Pay Now
                                     <?php if ($_SESSION['checkout_data']['payment_method'] === 'cod' && $_SESSION['checkout_data']['initial_payment_amount'] > 0): ?>
                                         <?php echo formatCurrency($_SESSION['checkout_data']['initial_payment_amount']); ?>
                                     <?php else: ?>
@@ -348,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </button>
 
                             <div id="payment-loading" class="hidden mt-6">
-                                <div class="w-6 h-6 md:w-12 md:h-12 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                                <div class="w-6 h-6 md:w-12 md:h-12 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
                             </div>
                         </div>
                     <?php else: ?>
@@ -361,7 +361,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php if (!empty($savedAddresses)): ?>
                                     <label for="selected_address_id" class="block md:text-sm font-semibold md:font-medium text-gray-700 mb-2">Select Delivery Address</label>
                                     <select name="selected_address_id" id="selected_address_id" required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white outline-none focus:border-accent focus:ring-2 focus:ring-accent-50 transition">
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white outline-none focus:border-primary transition">
                                         <?php foreach ($savedAddresses as $address): ?>
                                             <option value="<?php echo (int)$address['id']; ?>"
                                                 <?php echo ($selectedAddress && (int)$selectedAddress['id'] === (int)$address['id']) ? 'selected' : ''; ?>>
@@ -389,7 +389,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     <i class="fas fa-envelope mr-2 text-primary-500"></i><?php echo e($user['email'] ?? ''); ?>
                                                 </p>
                                             </div>
-                                            <a href="<?php echo BASE_URL; ?>user/addresses.php" class="inline-flex items-center border border-accent text-accent hover:bg-accent hover:text-white font-medium py-2 px-3 rounded-lg transition text-xs">
+                                            <a href="<?php echo BASE_URL; ?>user/addresses.php" class="inline-flex items-center border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-3 rounded-lg transition text-xs">
                                                 <i class="fas fa-edit mr-2"></i>Manage
                                             </a>
                                         </div>
@@ -446,7 +446,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <div class="flex justify-end sticky top-4">
                                 <button type="submit" <?php echo empty($savedAddresses) ? 'disabled' : ''; ?>
-                                    class="w-full md:w-auto bg-primary-500 hover:bg-primary-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-4 px-8 rounded-lg transition hover:shadow-sm self-end">
+                                    class="w-full md:w-auto bg-primary-600 hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-4 px-8 rounded-lg transition hover:shadow-sm self-end">
                                     <i class="fas fa-credit-card mr-2"></i>Continue to Payment
                                 </button>
                             </div>
@@ -508,7 +508,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="border-t border-gray-200 pt-4">
                         <div class="flex justify-between items-center font-semibold">
                             <span class="text-gray-900 text-xl">Total Amount</span>
-                            <span class="text-xl text-primary-500"><?php echo formatCurrency($total); ?></span>
+                            <span class="text-xl text-green-500"><?php echo formatCurrency($total); ?></span>
                         </div>
                     </div>
                 </div>
@@ -526,7 +526,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "amount": "<?php echo ($_SESSION['checkout_data']['payment_method'] === 'cod' ? $_SESSION['checkout_data']['initial_payment_amount'] : $total) * 100; ?>",
             "currency": "<?php echo RAZORPAY_CURRENCY; ?>",
             "name": "Earthence",
-            "image": "<?php echo PUBLIC_URL; ?>logo.png",
+            "image": "<?php echo PUBLIC_URL . 'logo.png'; ?>",
             "description": "<?php echo ($_SESSION['checkout_data']['payment_method'] === 'cod' ? 'COD Initial Payment' : 'Order Payment'); ?>",
             "order_id": "<?php echo $_SESSION['razorpay_order_id']; ?>",
             "handler": function(response) {
@@ -566,7 +566,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "contact": "<?php echo e($_SESSION['checkout_data']['mobile'] ?? ''); ?>"
             },
             "theme": {
-                "color": "#FBC02D"
+                "color": "#56B4E2"
             }
         };
 

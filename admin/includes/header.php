@@ -29,7 +29,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo isset($pageTitle) ? e($pageTitle) . ' - ' : ''; ?>WebStore</title>
+    <title><?php echo isset($pageTitle) ? e($pageTitle) . ' - ' : ''; ?>Earthence</title>
     <link rel="icon" href="<?= ASSETS_URL; ?>/public/favicon.ico">
 
     <!-- Google Fonts -->

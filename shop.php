@@ -136,12 +136,12 @@ if ($categoryId > 0) {
         <div id="mobileFilterOverlay" class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden"></div>
         <aside id="mobileFilterDrawer" class="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white z-50 lg:hidden shadow-2xl">
             <div class="h-full flex flex-col">
-                <div class="flex items-center justify-between p-4 border-b">
+                <div class="flex items-center justify-between px-4 p-6 border-b">
                     <h5 class="text-lg font-bold text-gray-700">
-                        <i class="fas fa-filter mr-2 text-accent"></i>Filters
+                        <i class="fas fa-filter mr-2 text-primary"></i>Filters
                     </h5>
-                    <button type="button" id="closeMobileFilterBtn" class="w-10 h-10 rounded-lg hover:bg-gray-100 text-gray-700">
-                        <i class="fas fa-times"></i>
+                    <button type="button" id="closeMobileFilterBtn" class="rounded-lg text-gray-500 hover:text-gray-700">
+                        <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
                 </div>
 
@@ -154,7 +154,7 @@ if ($categoryId > 0) {
         bg-gray-50 border 
         rounded-lg p-1
         focus-within:bg-white
-        focus-within:border-accent
+        focus-within:border-primary
         transition-all duration-300
     ">
 
@@ -164,26 +164,23 @@ if ($categoryId > 0) {
                                 name="search"
                                 placeholder="Search makhana, spices..."
                                 value="<?php echo isset($_GET['search']) ? e($_GET['search']) : ''; ?>"
-
-                                class="
-            flex-1 p-2 
-            bg-transparent text-sm text-gray-700
-            placeholder-gray-400
-            outline-none
-            min-w-0
-        ">
+                                class="flex-1 p-2 
+                                        bg-transparent text-sm text-gray-700
+                                        placeholder-gray-400
+                                        outline-none
+                                        min-w-0 ">
 
                             <!-- Button -->
                             <button
                                 type="submit"
                                 class="
             flex items-center justify-center
-            bg-accent text-white rounded-lg
-            hover:bg-accent/90 px-3 py-2
+            bg-primary text-white rounded-lg
+            hover:bg-primary-600 px-3 py-2.5
             shadow-sm hover:shadow-md
             transition-all duration-200
         ">
-                                <i class="fas fa-search text-sm"></i>
+                                <i data-lucide="search" class="w-4 h-4"></i>
                             </button>
 
                         </div>
@@ -195,12 +192,12 @@ if ($categoryId > 0) {
                         <h6 class="font-semibold mb-3 text-gray-700">Categories</h6>
                         <div class="space-y-2">
                             <a href="<?php echo BASE_URL; ?>shop.php"
-                                class="block px-5 py-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == 0 ? 'bg-accent-50 font-medium' : 'hover:bg-gray-50'; ?>">
-                                <i class="fas fa-shop text-accent-900 mr-4"></i> All Categories
+                                class="block px-5 py-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == 0 ? 'bg-primary-100 font-medium' : 'hover:bg-gray-50'; ?>">
+                                 <i class="fas fa-shop text-primary-600 mr-4"></i> All Categories
                             </a>
                             <?php foreach ($categories as $category): ?>
                                 <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $category['id']; ?>"
-                                    class="block py-2.5 px-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == $category['id'] ? 'bg-accent-50 font-medium' : 'hover:bg-gray-50'; ?>">
+                                    class="block py-2.5 px-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == $category['id'] ? 'bg-primary-100 font-medium' : 'hover:bg-gray-50'; ?>">
                                     <?php if ($category['image']): ?>
                                         <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" class="w-8 mr-2 object-contain inline">
                                     <?php endif; ?>
@@ -224,14 +221,14 @@ if ($categoryId > 0) {
                             <div class="grid grid-cols-2 gap-3">
                                 <input type="number" name="min_price" placeholder="Min"
                                     value="<?php echo $minPrice > 0 ? $minPrice : ''; ?>"
-                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-accent">
+                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-primary">
                                 <input type="number" name="max_price" placeholder="Max"
                                     value="<?php echo $maxPrice > 0 ? $maxPrice : ''; ?>"
-                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-accent">
+                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-primary">
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-accent hover:bg-accent-700/80 text-white font-medium py-2.5 px-4 rounded-lg transition">
+                        <button type="submit" class="w-full bg-primary-600 hover:bg-accent-700 text-white font-medium py-2.5 px-4 rounded-lg transition">
                             <i class="fas fa-filter mr-2"></i>Apply Filters
                         </button>
                     </form>
@@ -245,9 +242,9 @@ if ($categoryId > 0) {
                 <div>
                     <nav class="text-sm text-gray-600 mb-2">
                         <ol class="flex items-center space-x-2">
-                            <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary-500">Home</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary">Home</a></li>
                             <li><i class="fas fa-chevron-right text-xs"></i></li>
-                            <li class="text-accent font-medium">Shop</li>
+                            <li class="text-primary font-medium">Shop</li>
                         </ol>
                     </nav>
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
@@ -258,20 +255,13 @@ if ($categoryId > 0) {
 
                 <div class="hidden md:block bg-white sticky p-6 border rounded-lg mt-6 top-24">
                     <h5 class="text-lg font-bold mb-4 text-gray-600">
-                        <i class="fas fa-filter mr-2 text-accent"></i>Filters
+                        <i class="fas fa-filter mr-2 text-primary"></i> Filters
                     </h5>
 
                     <!-- Search -->
                     <form action="<?php echo BASE_URL; ?>shop.php" method="GET" class="hidden md:flex items-center mb-6 w-full">
 
-                        <div class="
-        flex items-center w-full 
-        bg-gray-50 border 
-        rounded-lg p-1
-        focus-within:bg-white
-        focus-within:border-accent
-        transition-all duration-300
-    ">
+                        <div class="flex items-center w-full bg-gray-50 border rounded-lg p-1 focus-within:bg-white focus-within:border-primary transition-all duration-300">
 
                             <!-- Input -->
                             <input
@@ -279,28 +269,19 @@ if ($categoryId > 0) {
                                 name="search"
                                 placeholder="Search makhana, spices..."
                                 value="<?php echo isset($_GET['search']) ? e($_GET['search']) : ''; ?>"
-
-                                class="
-            flex-1 p-2 
-            bg-transparent text-sm text-gray-700
-            placeholder-gray-400
-            outline-none
-            min-w-0
-        ">
+                                class="flex-1 p-2 bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none min-w-0">
 
                             <!-- Button -->
                             <button
                                 type="submit"
                                 class="
             flex items-center justify-center
-            bg-accent text-white rounded-lg
-            hover:bg-accent/90 px-3 py-2
+            bg-primary text-white rounded-lg
+            hover:bg-primary-600 px-3 py-2.5
             shadow-sm hover:shadow-md
-            transition-all duration-200
-        ">
-                                <i class="fas fa-search text-sm"></i>
+            transition-all duration-200">
+                                <i data-lucide="search" class="w-4 h-4"></i>
                             </button>
-
                         </div>
 
                     </form>
@@ -310,12 +291,12 @@ if ($categoryId > 0) {
                         <h6 class="font-semibold mb-3 text-gray-700">Categories</h6>
                         <div class="space-y-2">
                             <a href="<?php echo BASE_URL; ?>shop.php"
-                                class="block px-5 py-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == 0 ? 'bg-accent-50 font-medium' : 'hover:bg-gray-50'; ?>">
-                                <i class="fas fa-shop text-accent-900 mr-4"></i> All Categories
+                                class="block px-5 py-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == 0 ? 'bg-primary-100 font-medium' : 'hover:bg-gray-50'; ?>">
+                                <i class="fas fa-shop text-primary-600 mr-4"></i> All Categories
                             </a>
                             <?php foreach ($categories as $category): ?>
                                 <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $category['id']; ?>"
-                                    class="block py-2.5 px-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == $category['id'] ? 'bg-accent-50 font-medium' : 'hover:bg-gray-50'; ?>">
+                                    class="block py-2.5 px-3 rounded-lg text-sm text-gray-600 <?php echo $categoryId == $category['id'] ? 'bg-primary-100 font-medium' : 'hover:bg-gray-50'; ?>">
                                     <?php if ($category['image']): ?>
                                         <img src="<?php echo getImageUrl($category['image'], 'categories'); ?>" class="w-8 mr-2 object-contain inline">
                                     <?php endif; ?>
@@ -339,14 +320,14 @@ if ($categoryId > 0) {
                             <div class="grid grid-cols-2 gap-3">
                                 <input type="number" name="min_price" placeholder="Min"
                                     value="<?php echo $minPrice > 0 ? $minPrice : ''; ?>"
-                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-accent">
+                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-primary">
                                 <input type="number" name="max_price" placeholder="Max"
                                     value="<?php echo $maxPrice > 0 ? $maxPrice : ''; ?>"
-                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-accent">
+                                    class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-primary">
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-accent hover:bg-accent-700/80 text-white font-medium py-2.5 px-4 rounded-lg transition">
+                        <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2.5 px-4 rounded-lg transition">
                             <i class="fas fa-filter mr-2"></i>Apply Filters
                         </button>
                     </form>
@@ -367,7 +348,7 @@ if ($categoryId > 0) {
 
                     <div class="w-full md:w-auto flex justify-between items-center gap-4">
                         <!-- Mobile Filter Toggle -->
-                        <button type="button" id="openMobileFilterBtn" class="md:hidden inline-flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg text-sm">
+                        <button type="button" id="openMobileFilterBtn" class="md:hidden inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm">
                             <i class="fas fa-filter"></i>
                             Filter
                         </button>
@@ -388,7 +369,7 @@ if ($categoryId > 0) {
 
                             <label class="text-sm text-gray-600 hidden md:block">Sort by:</label>
                             <select name="sort" onchange="this.form.submit()"
-                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:border-primary">
                                 <option value="newest" <?php echo $sortBy == 'newest' ? 'selected' : ''; ?>>Newest First</option>
                                 <option value="price_low" <?php echo $sortBy == 'price_low' ? 'selected' : ''; ?>>Price: Low to High</option>
                                 <option value="price_high" <?php echo $sortBy == 'price_high' ? 'selected' : ''; ?>>Price: High to Low</option>
@@ -400,12 +381,12 @@ if ($categoryId > 0) {
                 </div>
 
                 <!-- Products Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 lg:gap-6">
                     <?php foreach ($products as $product): ?>
                         <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                             <!-- IMAGE -->
-                            <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">
+                            <div class="relative overflow-hidden p-3 md:p-4 bg-primary-100/50">
                                 <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
 
                                 <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
@@ -435,7 +416,7 @@ if ($categoryId > 0) {
                         </small> -->
 
                                 <!-- NAME -->
-                                <h3 class="font-semibold text-gray-900 text-xs sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
+                                <h3 class="font-semibold text-gray-900 text-sm sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
                                     <?php echo e($product['name']); ?>
                                 </h3>
 
@@ -458,7 +439,7 @@ if ($categoryId > 0) {
                                     <!-- LEFT: PRICE -->
                                     <div class="flex items-baseline flex-wrap space-x-1">
 
-                                        <span class="text-primary-600 font-bold text-base sm:text-lg md:text-xl">
+                                        <span class="text-green-600 font-semibold text-base sm:text-lg md:text-xl">
                                             <?php echo formatCurrency($product['price']); ?>
                                         </span>
 
@@ -472,7 +453,7 @@ if ($categoryId > 0) {
 
                                     <!-- RIGHT: DISCOUNT -->
                                     <?php if ($product['original_price'] > $product['price']): ?>
-                                        <span class="bg-green-100 text-green-700 text-[8px] md:text-xs text-center md:font-semibold px-2 py-1 rounded-full">
+                                        <span class="bg-green-100 text-green-600 text-[8px] md:text-xs text-center font-semibold px-2 py-1 rounded-full text-nowrap">
                                             <?php
                                             $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
                                             echo $discount . '% OFF';
@@ -491,7 +472,7 @@ if ($categoryId > 0) {
 
                                         <button type="submit"
                                             class="w-full p-2.5 flex items-center justify-center 
-                       bg-accent hover:bg-accent-800 text-white text-xs md:text-base font-semibold 
+                       bg-primary-700 hover:bg-primary-800 text-white text-xs md:text-base font-semibold 
                        rounded-full gap-2 ">
                                             <i class="fas fa-cart-plus text-xs"></i>
                                             Add to Cart
@@ -517,7 +498,7 @@ if ($categoryId > 0) {
                         <i class="fas fa-search text-5xl text-gray-300 mb-4"></i>
                         <h4 class="text-xl font-semibold text-gray-700 mb-2">No products found</h4>
                         <p class="text-gray-500 mb-4">Try adjusting your filters or search query</p>
-                        <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-700/80 text-white font-medium py-2 px-6 rounded-lg transition">
+                        <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-primary hover:bg-primary-700 text-white font-medium py-2 px-6 rounded-lg transition">
                             Clear Filters
                         </a>
                     </div>
@@ -530,7 +511,7 @@ if ($categoryId > 0) {
                             <?php if ($page > 1): ?>
                                 <li>
                                     <a href="<?php echo BASE_URL; ?>shop.php?<?php echo http_build_query(array_merge($_GET, ['page' => $page - 1])); ?>"
-                                        class="w-10 h-10 rounded-lg bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary-500 transition">
+                                        class="w-10 h-10 rounded-lg bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary transition">
                                         <i class="fas fa-chevron-left"></i>
                                     </a>
                                 </li>
@@ -539,7 +520,7 @@ if ($categoryId > 0) {
                             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                                 <li>
                                     <a href="<?php echo BASE_URL; ?>shop.php?<?php echo http_build_query(array_merge($_GET, ['page' => $i])); ?>"
-                                        class="w-10 h-10 rounded-lg flex items-center justify-center transition <?php echo $i == $page ? 'bg-primary-500 text-white' : 'bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 hover:text-primary-500'; ?>">
+                                        class="w-10 h-10 rounded-lg flex items-center justify-center transition <?php echo $i == $page ? 'bg-primary text-white' : 'bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 hover:text-primary'; ?>">
                                         <?php echo $i; ?>
                                     </a>
                                 </li>
@@ -548,7 +529,7 @@ if ($categoryId > 0) {
                             <?php if ($page < $totalPages): ?>
                                 <li>
                                     <a href="<?php echo BASE_URL; ?>shop.php?<?php echo http_build_query(array_merge($_GET, ['page' => $page + 1])); ?>"
-                                        class="w-10 h-10 rounded-lg bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary-500 transition">
+                                        class="w-10 h-10 rounded-lg bg-white border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary transition">
                                         <i class="fas fa-chevron-right"></i>
                                     </a>
                                 </li>

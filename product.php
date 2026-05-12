@@ -220,11 +220,11 @@ require_once __DIR__ . '/includes/header.php';
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="text-sm text-gray-600">
             <ol class="flex items-center space-x-2">
-                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-accent">Home</a></li>
+                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary">Home</a></li>
                 <li><i class="fas fa-chevron-right text-xs"></i></li>
-                <li><a href="<?php echo BASE_URL; ?>shop.php" class="hover:text-accent">Shop</a></li>
+                <li><a href="<?php echo BASE_URL; ?>shop.php" class="hover:text-primary">Shop</a></li>
                 <li><i class="fas fa-chevron-right text-xs"></i></li>
-                <li class="text-accent font-medium truncate max-w-xs"><?php echo e($product['name']); ?></li>
+                <li class="text-primary font-medium truncate max-w-xs"><?php echo e($product['name']); ?></li>
             </ol>
         </nav>
     </div>
@@ -251,7 +251,7 @@ require_once __DIR__ . '/includes/header.php';
                             <?php foreach ($gallery as $index => $image): ?>
                                 <img src="<?php echo getImageUrl($image, 'products'); ?>"
                                     alt="<?php echo e($product['name']); ?> - <?php echo $index + 1; ?>"
-                                    class="w-full max-h-24 min-h-18 object-cover rounded-xl border cursor-pointer transition hover:opacity-75 <?php echo $index === 0 ? 'ring-2 ring-accent' : ''; ?>"
+                                    class="w-full h-24 object-cover rounded-xl border cursor-pointer transition hover:opacity-75 <?php echo $index === 0 ? 'ring-2 ring-accent' : ''; ?>"
                                     onclick="changeMainImage(this.src)">
                             <?php endforeach; ?>
                         </div>
@@ -283,7 +283,7 @@ require_once __DIR__ . '/includes/header.php';
 
                     <!-- Price -->
                     <div class="mb-6 flex items-center">
-                        <span id="displayProductPrice" class="text-4xl font-bold text-primary-500"><?php echo formatCurrency($selectedPrice); ?></span>
+                        <span id="displayProductPrice" class="text-4xl font-bold text-green-600"><?php echo formatCurrency($selectedPrice); ?></span>
                         <?php if ($product['original_price'] > $product['price']): ?>
                             <span id="displayOriginalPrice" class="text-xl text-gray-400 line-through ml-3"><?php echo formatCurrency($product['original_price']); ?></span>
                             <span id="displayDiscountBadge" class="inline-block bg-green-500 text-white text-xs font-bold px-2 py-1 rounded ml-5">
@@ -438,7 +438,7 @@ require_once __DIR__ . '/includes/header.php';
                                         type="submit"
                                         name="redirect_to"
                                         value="cart"
-                                        class="group relative overflow-hidden bg-primary-500 hover:bg-primary-600 text-white font-semibold md:px-8 p-3.5 rounded-lg hover:shadow-sm transition-all duration-300 inline-flex items-center justify-center">
+                                        class="group relative overflow-hidden bg-primary-600 hover:bg-primary-700 text-white font-semibold md:px-8 p-3.5 rounded-lg hover:shadow-sm transition-all duration-300 inline-flex items-center justify-center">
 
                                         <span class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
 
@@ -483,7 +483,7 @@ require_once __DIR__ . '/includes/header.php';
                                 </div>
                                 <div class="mt-3 border-t border-gray-200 pt-3 flex justify-between gap-4">
                                     <span class="font-bold text-gray-900">Total</span>
-                                    <span id="summaryTotal" class="font-bold text-lg text-primary-500"><?php echo formatCurrency($selectedPrice); ?></span>
+                                    <span id="summaryTotal" class="font-bold text-lg text-green-600"><?php echo formatCurrency($selectedPrice); ?></span>
                                 </div>
                             </div>
                         </form>
@@ -547,7 +547,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <!-- Product Details Accordion -->
-        <div class="mt-16 bg-primary-600 text-white rounded-lg p-4 md:p-8">
+        <div class="mt-16 bg-primary text-white rounded-lg p-4 md:p-8">
             <div class="divide-y divide-white/15">
                 <?php foreach ($productDetailSections as $sectionTitle => $sectionContent): ?>
                     <?php $detailContent = $sectionContent !== '' ? $sectionContent : ($productDetailFallbacks[$sectionTitle] ?? 'Details will be updated soon.'); ?>
@@ -556,7 +556,7 @@ require_once __DIR__ . '/includes/header.php';
                             <span><?php echo e($sectionTitle); ?></span>
                             <i class="fas fa-chevron-up text-sm transition group-open:rotate-90"></i>
                         </summary>
-                        <div class="pb-6 leading-relaxed text-gray-200 text-xs md:text-sm">
+                        <div class="pb-6 leading-relaxed text-gray-100 text-xs md:text-sm">
                             <?php echo nl2br(e($detailContent)); ?>
                         </div>
                     </details>
@@ -754,12 +754,12 @@ require_once __DIR__ . '/includes/header.php';
         <?php if (!empty($relatedProducts)): ?>
             <div class="mt-16">
                 <h3 class="text-2xl font-bold text-gray-900 mb-8">Related Products</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-6">
                     <?php foreach ($relatedProducts as $product): ?>
                         <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                             <!-- IMAGE -->
-                            <div class="relative overflow-hidden p-3 md:p-4 bg-gray-50">
+                            <div class="relative overflow-hidden p-3 md:p-4 bg-primary-100/50">
                                 <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
 
                                 <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
@@ -789,7 +789,7 @@ require_once __DIR__ . '/includes/header.php';
                         </small> -->
 
                                 <!-- NAME -->
-                                <h3 class="font-semibold text-gray-900 text-xs sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
+                                <h3 class="font-semibold text-gray-900 text-sm sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
                                     <?php echo e($product['name']); ?>
                                 </h3>
 
@@ -806,14 +806,13 @@ require_once __DIR__ . '/includes/header.php';
                                     </p>
                                 <?php endif; ?>
 
-
                                 <!-- PRICE -->
                                 <div class="w-full flex justify-between items-center">
 
                                     <!-- LEFT: PRICE -->
                                     <div class="flex items-baseline flex-wrap space-x-1">
 
-                                        <span class="text-primary-600 font-bold text-base sm:text-lg md:text-xl">
+                                        <span class="text-green-600 font-semibold text-base sm:text-lg md:text-xl">
                                             <?php echo formatCurrency($product['price']); ?>
                                         </span>
 
@@ -827,7 +826,7 @@ require_once __DIR__ . '/includes/header.php';
 
                                     <!-- RIGHT: DISCOUNT -->
                                     <?php if ($product['original_price'] > $product['price']): ?>
-                                        <span class="bg-green-100 text-green-700 text-[8px] md:text-xs text-center md:font-semibold px-2 py-1 rounded-full">
+                                        <span class="bg-green-100 text-green-600 text-[8px] md:text-xs text-center font-semibold px-2 py-1 rounded-full text-nowrap">
                                             <?php
                                             $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
                                             echo $discount . '% OFF';
@@ -846,7 +845,7 @@ require_once __DIR__ . '/includes/header.php';
 
                                         <button type="submit"
                                             class="w-full p-2.5 flex items-center justify-center 
-                       bg-accent hover:bg-accent-800 text-white text-xs md:text-base font-semibold 
+                       bg-primary-700 hover:bg-primary-800 text-white text-xs md:text-base font-semibold 
                        rounded-full gap-2 ">
                                             <i class="fas fa-cart-plus text-xs"></i>
                                             Add to Cart

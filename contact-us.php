@@ -51,11 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- Page Header -->
 <section class="py-12 md:py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-3 scroll-animate-top">
+        <h1 class="text-3xl sm:text-5xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-top" style="-webkit-text-stroke: 0.5px black;">
             Contact
-            <span class="text-accent" style="-webkit-text-stroke: 1px black;">Us</span>
-        </h2>
-        <p class="text-gray-600 text-sm md:text-base animate-slide-bottom">We'd love to hear from you. Get in touch with us.</p>
+            <span class="text-accent">
+                Us
+            </span>
+        </h1>
+        <p class="text-sm md:text-base text-gray-500 max-w-2xl mx-auto animate-slide-bottom">We'd love to hear from you. Get in touch with us.</p>
     </div>
 </section>
 
@@ -65,9 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Contact Info -->
         <div class="lg:col-span-1 animate-slide-left">
             <div class="bg-white h-full">
-                <h4 class="text-2xl sm:text-3xl font-luckiest text-primary-600 text-center md:text-left leading-tight mb-6">
+                <h4 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest" style="-webkit-text-stroke: 0.2px black;">
                     Get In
-                    <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+                    <span class="text-accent">
                         Touch
                     </span>
                 </h4>
@@ -185,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-600 transition"><?php echo isset($_POST['message']) ? e($_POST['message']) : ''; ?></textarea>
                     </div>
 
-                    <button type="submit" class="inline-flex items-center bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold py-4 px-8 rounded-lg transition hover:shadow-md animate-slide-pop">
+                    <button type="submit" class="inline-flex items-center bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold py-4 px-8 rounded-lg transition hover:shadow-md animate-slide-pop">
                         <i class="fas fa-paper-plane mr-2"></i>Send Message
                     </button>
                 </form>
@@ -229,11 +231,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Heading -->
         <div class="text-center mb-14">
             <h2 class="text-2xl sm:text-3xl font-luckiest text-primary-600 leading-tight scroll-animate-top">
-                Frequently
+               
                 <span class="text-accent" style="-webkit-text-stroke:1px black;">
-                    Asked Questions
+                   
                 </span>
             </h2>
+            <h4 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-top" style="-webkit-text-stroke: 0.2px black;">
+                Frequently
+                <span class="text-accent">
+                    Asked Questions
+                </span>
+            </h4>
+
 
             <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-sm md:text-base leading-relaxed scroll-animate-top">
                 Everything you need to know about our premium makhana, spices, delivery, freshness, and healthy snacking experience.

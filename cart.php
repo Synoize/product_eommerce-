@@ -233,9 +233,9 @@ $total = $subtotal - $discount;
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="text-sm text-gray-600 mb-2">
             <ol class="flex items-center space-x-2">
-                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary-500">Home</a></li>
+                <li><a href="<?php echo BASE_URL; ?>" class="hover:text-primary">Home</a></li>
                 <li><i class="fas fa-chevron-right text-xs"></i></li>
-                <li class="text-accent font-medium">Shopping Cart</li>
+                <li class="text-primary font-medium">Shopping Cart</li>
             </ol>
         </nav>
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Shopping Cart</h1>
@@ -251,7 +251,7 @@ $total = $subtotal - $discount;
                 <i class="fas fa-shopping-cart text-7xl text-gray-300 mb-6"></i>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h3>
                 <p class="text-gray-500 mb-6">Looks like you haven't added any products yet.</p>
-                <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-800 text-white text-sm font-semibold py-4 px-8 rounded-full transition hover:shadow-sm">
+                <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-primary hover:bg-primary-600 text-white text-sm font-semibold py-4 px-8 rounded-full transition hover:shadow-sm">
                     <i class="fas fa-shopping-bag mr-2"></i>Continue Shopping
                 </a>
             </div>
@@ -358,7 +358,7 @@ $total = $subtotal - $discount;
                     </div>
 
                     <!-- Continue Shopping -->
-                    <a href="<?php echo BASE_URL; ?>shop.php" class="group inline-flex items-center border border-accent text-accent hover:bg-accent-800 hover:text-white font-medium py-3 px-6 rounded-full transition">
+                    <a href="<?php echo BASE_URL; ?>shop.php" class="group inline-flex items-center border border-primary text-primary hover:bg-primary hover:text-white font-medium py-3 px-6 rounded-full transition">
                         <i class="fas fa-arrow-left mr-2 transition duration-300 group-hover:-translate-x-1 "></i>Continue Shopping
                     </a>
                 </div>
@@ -371,13 +371,13 @@ $total = $subtotal - $discount;
                         <!-- Coupon Section -->
                         <?php if (!isset($_SESSION['coupon'])): ?>
                             <div class="mb-6">
-                                <p class="font-semibold text-gray-700 mb-3"><i class="fas fa-tag mr-2 text-primary-500"></i>Have a coupon?</p>
+                                <p class="font-semibold text-gray-700 mb-3"><i class="fas fa-tag mr-2 text-green-500"></i>Have a coupon?</p>
                                 <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="w-full">
                                     <input type="hidden" name="action" value="apply_coupon">
                                     <div class="flex">
                                         <input type="text" name="coupon_code" placeholder="Enter coupon code" required
-                                            class="w-full px-4 py-2 border rounded-l-lg text-sm outline-none focus:border-accent">
-                                        <button type="submit" class="bg-accent hover:bg-accent-700/90 text-white font-medium px-4 py-2 rounded-r-lg transition">Apply</button>
+                                            class="w-full px-4 py-2 border rounded-l-lg text-sm outline-none focus:border-primary">
+                                        <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2 rounded-r-lg transition">Apply</button>
                                     </div>
                                 </form>
                             </div>
@@ -417,12 +417,12 @@ $total = $subtotal - $discount;
                         <div class="border-t border-gray-200 pt-4 mb-6">
                             <div class="flex justify-between">
                                 <span class="font-bold text-gray-900">Total</span>
-                                <span class="font-bold text-xl text-primary-500"><?php echo formatCurrency($total); ?></span>
+                                <span class="font-bold text-xl text-green-500"><?php echo formatCurrency($total); ?></span>
                             </div>
                         </div>
 
                         <!-- Checkout Button -->
-                        <a href="<?php echo BASE_URL; ?>checkout.php" class="block w-full bg-accent hover:bg-accent-800 text-white font-semibold py-4 px-6 rounded-lg text-center text-sm transition hover:shadow-sm">
+                        <a href="<?php echo BASE_URL; ?>checkout.php" class="block w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-4 px-6 rounded-lg text-center text-sm transition hover:shadow-sm">
                             <i class="fas fa-credit-card mr-2"></i>Proceed to Checkout
                         </a>
                     </div>

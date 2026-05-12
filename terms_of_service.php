@@ -9,9 +9,9 @@ require_once __DIR__ . '/includes/header.php';
 <section class="py-12 md:py-20">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-            <h1 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-3 scroll-animate-top">
+            <h1 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-3 scroll-animate-top" style="-webkit-text-stroke: 0.5px black;">
                 Terms of
-                <span class="text-accent" style="-webkit-text-stroke: 1px black;">Service</span>
+                <span class="text-accent">Service</span>
             </h1>
             <p class="text-gray-600 text-sm md:text-base max-w-2xl mx-auto animate-slide-bottom">
                 Please read these terms carefully before using our website and placing orders.

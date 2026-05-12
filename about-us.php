@@ -11,13 +11,13 @@ require_once 'includes/header.php';
 <!-- About Hero -->
 <section class="py-12 md:pt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-3xl sm:text-5xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-top">
+        <h1 class="text-3xl sm:text-5xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-top" style="-webkit-text-stroke: 0.5px black;">
             About
-            <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+            <span class="text-accent">
                 Earthence
             </span>
         </h1>
-        <p class="text-sm md:text-base text-gray-600 max-w-2xl mx-auto animate-slide-bottom">Your trusted destination for quality products and exceptional shopping experience</p>
+        <p class="text-sm md:text-base text-gray-500 max-w-2xl mx-auto animate-slide-bottom">Your trusted destination for quality products and exceptional shopping experience</p>
     </div>
 </section>
 
@@ -29,14 +29,14 @@ require_once 'includes/header.php';
                 alt="About Earthence" class="w-full animate-float">
         </div>
         <div class="text-center md:text-start">
-            <h1 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-right">
+            <h1 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-right" style="-webkit-text-stroke: 0.2px black;">
                 Who We
-                <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+                <span class="text-accent">
                     Are
                 </span>
             </h1>
-            <p class="text-gray-600 mb-4 leading-relaxed text-sm md:text-base animate-slide-right">Earthence is a leading e-commerce platform dedicated to providing customers with a seamless and enjoyable shopping experience. Founded with a vision to make quality products accessible to everyone, we have grown into a trusted marketplace serving thousands of satisfied customers.</p>
-            <p class="text-gray-600 mb-6 leading-relaxed text-sm md:text-base animate-slide-right">Our team is passionate about curating the best products, ensuring competitive prices, and delivering exceptional customer service. We believe in building lasting relationships with our customers based on trust, transparency, and mutual respect.</p>
+            <p class="text-gray-500 mb-4 leading-relaxed text-sm md:text-base animate-slide-right">Earthence is a leading e-commerce platform dedicated to providing customers with a seamless and enjoyable shopping experience. Founded with a vision to make quality products accessible to everyone, we have grown into a trusted marketplace serving thousands of satisfied customers.</p>
+            <p class="text-gray-500 mb-6 leading-relaxed text-sm md:text-base animate-slide-right">Our team is passionate about curating the best products, ensuring competitive prices, and delivering exceptional customer service. We believe in building lasting relationships with our customers based on trust, transparency, and mutual respect.</p>
             <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-800 text-white text-sm font-semibold py-3 px-6 rounded-full transition hover:shadow-md animate-slide-bottom">
                 <i class="fas fa-shopping-bag mr-2"></i>Start Shopping
             </a>
@@ -46,18 +46,18 @@ require_once 'includes/header.php';
     <!-- Our Mission -->
     <div class="flex flex-col-reverse md:grid grid-cols-1 lg:grid-cols-2 md:gap-12 items-center my-20">
         <div class="text-center md:text-start">
-            <h1 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-right">
+            <h1 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-right" style="-webkit-text-stroke: 0.2px black;">
                 Our
-                <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+                <span class="text-accent">
                     Mission
                 </span>
             </h1>
 
-            <p class="text-gray-600 mb-4 leading-relaxed text-sm md:text-base animate-slide-right">
+            <p class="text-gray-500 mb-4 leading-relaxed text-sm md:text-base animate-slide-right">
                 To bring healthy and flavorful snacks to every home by offering premium quality makhana, authentic spices, and delicious traditional products made with care. We are committed to delivering freshness, taste, and nutrition in every bite while maintaining the highest standards of quality and hygiene.
             </p>
 
-            <p class="text-gray-600 mb-6 leading-relaxed text-sm md:text-base animate-slide-right">
+            <p class="text-gray-500 mb-6 leading-relaxed text-sm md:text-base animate-slide-right">
                 Our passion lies in promoting wholesome snacking and rich Indian flavors through carefully sourced ingredients and handcrafted blends. From crunchy makhana to aromatic spices, we aim to create products that add both health and taste to your everyday lifestyle.
             </p>
             <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-800 text-white text-sm font-semibold py-3 px-6 rounded-full transition hover:shadow-md animate-slide-bottom">
@@ -77,18 +77,18 @@ require_once 'includes/header.php';
                 alt="About Earthence" class="w-full animate-float">
         </div>
         <div class="text-center md:text-start">
-            <h1 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-right">
+            <h1 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-right" style="-webkit-text-stroke: 0.2px black;">
                 Our
-                <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+                <span class="text-accent">
                     Vision
                 </span>
             </h1>
 
-            <p class="text-gray-600 mb-4 leading-relaxed text-sm md:text-base animate-slide-right">
+            <p class="text-gray-500 mb-4 leading-relaxed text-sm md:text-base animate-slide-right">
                 Our vision is to become a trusted household name for healthy snacks and authentic spices by combining traditional flavors with modern quality standards. We aim to inspire healthier lifestyles through nutritious products that celebrate the richness of Indian taste and culture.
             </p>
 
-            <p class="text-gray-600 mb-6 leading-relaxed text-sm md:text-base animate-slide-right">
+            <p class="text-gray-500 mb-6 leading-relaxed text-sm md:text-base animate-slide-right">
                 We envision creating a brand that delivers purity, freshness, and happiness to customers across the country while supporting sustainable sourcing and maintaining a strong commitment to quality, innovation, and customer satisfaction.
             </p>
             <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-accent hover:bg-accent-800 text-white text-sm font-semibold py-3 px-6 rounded-full transition hover:shadow-md animate-slide-bottom">
@@ -99,7 +99,7 @@ require_once 'includes/header.php';
 </section>
 
 <!-- Every Mood -->
-<section class="my-20 relative bg-accent">
+<section class="my-20 relative bg-primary">
 
     <!-- SCALLOP TOP FULL WIDTH -->
     <div class="absolute -top-0.5 left-0 w-full leading-none">
@@ -141,10 +141,10 @@ require_once 'includes/header.php';
         <!-- RIGHT CONTENT -->
         <div class="text-center lg:text-left space-y-6">
 
-            <h2 class="scroll-animate-top text-3xl md:text-5xl font-luckiest text-primary-600 mb-3">
-                From Classic to 
-                <span class="text-white" style="-webkit-text-stroke: 1px black;">Bold — </span> Discover a Flavor for Every 
-                <span class="text-white" style="-webkit-text-stroke: 1px black;">Mood.</span>
+            <h2 class="scroll-animate-top text-3xl md:text-5xl font-luckiest text-accent mb-3" style="-webkit-text-stroke: 0.5px black;">
+                From Classic to
+                <span class="text-white">Bold — </span> Discover a Flavor for Every
+                <span class="text-white">Mood.</span>
             </h2>
 
             <!-- FEATURES -->
@@ -172,14 +172,23 @@ require_once 'includes/header.php';
 
             </ul>
 
-            <!-- BUTTON -->
+            <!-- Explore Flavors -->
             <div class="flex justify-center lg:justify-start">
                 <a href="<?php echo BASE_URL; ?>about-us.php"
-                    class="bg-primary-600 text-white font-semibold 
-            py-3 px-8 rounded-full 
-            shadow-[3px_3px_0_#000] hover:shadow-[4px_3px_0_#000] 
-            transition duration-150 scroll-animate-top">
-                    Explore Flavors
+                    class="group relative inline-flex items-center justify-center
+    overflow-hidden rounded-full
+    bg-accent-500 px-8 py-3
+    font-semibold text-gray-900
+    shadow-[4px_4px_0_#000]
+    transition-all duration-500 ease-out
+    hover:-translate-y-1 hover:shadow-[6px_6px_0_#000]
+    active:translate-y-0 active:shadow-[2px_2px_0_#000]
+    scroll-animate-top">
+
+                    <span class="transition-all duration-300 group-hover:tracking-wide text-nowrap">
+                        Explore Flavors
+                    </span>
+
                 </a>
             </div>
 
@@ -227,8 +236,8 @@ require_once 'includes/header.php';
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>chili.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Authentic Spices</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Authentic Spices</h3>
+                <p class="text-sm text-gray-500">
                     Rich aroma and traditional blends to enhance every dish.
                 </p>
             </div>
@@ -236,8 +245,8 @@ require_once 'includes/header.php';
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>snacks.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Crispy Snacks</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Crispy Snacks</h3>
+                <p class="text-sm text-gray-500">
                     Freshly prepared snacks with perfect crunch and taste.
                 </p>
             </div>
@@ -245,8 +254,8 @@ require_once 'includes/header.php';
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>spices.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Premium Quality</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Premium Quality</h3>
+                <p class="text-sm text-gray-500">
                     Handpicked ingredients ensuring purity and freshness.
                 </p>
             </div>
@@ -338,8 +347,8 @@ require_once 'includes/header.php';
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/variety_snacks.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Variety of Snacks</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Variety of Snacks</h3>
+                <p class="text-sm text-gray-500">
                     From namkeen to traditional treats, something for everyone.
                 </p>
             </div>
@@ -347,8 +356,8 @@ require_once 'includes/header.php';
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/natural_ingredients.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Natural Ingredients</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Natural Ingredients</h3>
+                <p class="text-sm text-gray-500">
                     No artificial flavors, only real and natural goodness.
                 </p>
             </div>
@@ -356,8 +365,8 @@ require_once 'includes/header.php';
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/packaging.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Fresh Packaging</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Fresh Packaging</h3>
+                <p class="text-sm text-gray-500">
                     Hygienically packed to preserve taste and quality.
                 </p>
             </div>
@@ -375,7 +384,7 @@ require_once 'includes/header.php';
         preserveAspectRatio="none">
 
         <path
-            fill="#43a047"
+            fill="#56B4E2"
             d="
         M0,100
         C180,20 360,200 540,100
@@ -385,11 +394,11 @@ require_once 'includes/header.php';
         " />
     </svg>
 
-    <div class="py-8 md:py-20 bg-primary-600 text-white">
+    <div class="py-8 md:py-20 bg-primary text-white">
         <div class="max-w-6xl mx-auto px-4 text-center">
 
             <!-- TITLE -->
-            <h2 class="text-3xl md:text-5xl font-luckiest text-white mb-12 md:mb-20 scroll-animate-top">Why Choose <span class="text-accent" style="-webkit-text-stroke: 1px black;">Earthance?</span></h2>
+            <h2 class="text-3xl md:text-5xl font-luckiest text-white mb-12 md:mb-20 scroll-animate-top" style="-webkit-text-stroke: 0.5px black;">Why Choose <span class="text-accent">Earthance?</span></h2>
 
             <!-- FEATURES -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -397,11 +406,11 @@ require_once 'includes/header.php';
                 <!-- ITEM 1 -->
                 <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
                     <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-shopping-bag text-2xl md:text-5xl text-primary-500"></i>
+                        <i class="fas fa-shopping-bag text-2xl md:text-5xl text-primary-600"></i>
                     </span>
                     <div>
                         <h3 class="font-semibold">Premium Ingredients</h3>
-                        <p class="text-sm text-white/80">
+                        <p class="text-sm text-gray-100">
                             Only high-quality potatoes & natural seasonings.
                         </p>
                     </div>
@@ -410,11 +419,11 @@ require_once 'includes/header.php';
                 <!-- ITEM 2 -->
                 <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
                     <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-shipping-fast text-2xl md:text-5xl text-primary-500"></i>
+                        <i class="fas fa-shipping-fast text-2xl md:text-5xl text-primary-600"></i>
                     </span>
                     <div>
                         <h3 class="font-semibold">Fast Delivery</h3>
-                        <p class="text-sm text-white/80">
+                        <p class="text-sm text-gray-100">
                             Fresh, crunchy snacks delivered to your doorstep.
                         </p>
                     </div>
@@ -423,11 +432,11 @@ require_once 'includes/header.php';
                 <!-- ITEM 3 -->
                 <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
                     <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-heart text-2xl md:text-5xl text-primary-500"></i>
+                        <i class="fas fa-heart text-2xl md:text-5xl text-primary-600"></i>
                     </span>
                     <div>
                         <h3 class="font-semibold">Loved Nationwide</h3>
-                        <p class="text-sm text-white/80">
+                        <p class="text-sm text-gray-100">
                             Trusted by thousands of snack lovers.
                         </p>
                     </div>
@@ -444,7 +453,7 @@ require_once 'includes/header.php';
         preserveAspectRatio="none">
 
         <path
-            fill="#43a047"
+            fill="#56B4E2"
             d="
         M0,100
         C240,160 480,20 720,100
@@ -458,13 +467,13 @@ require_once 'includes/header.php';
 <!-- Call to Action -->
 <section class="py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest scroll-animate-top">
+        <h1 class="text-2xl sm:text-3xl text-primary-600 leading-[1.2] mb-6 font-luckiest scroll-animate-top" style="-webkit-text-stroke: 0.2px black;">
             Ready to Start
-            <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+            <span class="text-accent">
                 Shopping?
             </span>
         </h1>
-        <p class="text-gray-600 text-sm md:text-base mb-6 scroll-animate-top">Explore our wide range of products and experience the Earthence difference today.</p>
+        <p class="text-gray-500 text-sm md:text-base mb-6 scroll-animate-top">Explore our wide range of products and experience the Earthence difference today.</p>
         <a href="<?php echo BASE_URL; ?>shop.php" class="inline-flex items-center bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold py-4 px-8 rounded-full transition hover:shadow-md animate-pop">
             <i class="fas fa-shopping-bag mr-2"></i>Browse Products
         </a>

@@ -88,7 +88,7 @@ try {
 ?>
 
 <!-- Hero Section -->
-<section class="bg-accent-50/50 py-20 md:py-20 overflow-hidden">
+<section class="bg-primary py-20 md:py-20 overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -109,8 +109,7 @@ try {
 
                                 <img
                                     src="<?php echo IMAGES_URL . 'info_image/' . $image; ?>"
-                                    class="pkg absolute max-h-full w-auto opacity-0 scale-75"
-                                    alt="Hero Image">
+                                    class="pkg absolute max-h-full w-auto opacity-0 scale-75">
 
                     <?php
                             endforeach;
@@ -133,40 +132,56 @@ try {
             <!-- TEXT (SHOW BELOW ON MOBILE) -->
             <div class="order-2 md:order-1 text-center md:text-left">
 
-                <h1 class="text-4xl sm:text-6xl text-primary-600 leading-[1.2] mb-6 font-luckiest animate-slide-left">
+                <h1 class="text-4xl sm:text-6xl text-accent leading-[1.2] mb-6 font-luckiest animate-slide-left" style="-webkit-text-stroke: 0.5px black;">
                     Discover
-                    <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+                    <span class="text-white">
                         Delicious Snacks
                     </span>
                     and Indian Authentic
-                    <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+                    <span class="text-white">
                         Spices
                     </span>
                 </h1>
 
-                <p class="text-base text-gray-600 mb-10 max-w-lg mx-auto md:mx-0 animate-slide-left">
+                <p class="text-base text-white mb-10 max-w-lg mx-auto md:mx-0 animate-slide-left">
                     Discover the rich flavors of our carefully curated selection of wholesome snacks and aromatic spices, crafted to bring freshness, taste, and authenticity to every bite and every meal you prepare.
                 </p>
 
-                <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                <div class="grid grid-cols-2 w-full md:max-w-sm gap-4">
 
                     <!-- Explore Flavors -->
                     <a href="<?php echo BASE_URL; ?>about-us.php"
-                        class="bg-accent-500 text-gray-900 font-semibold 
-            py-3 px-8 rounded-full 
-            shadow-[3px_3px_0_#000] hover:shadow-[4px_3px_0_#000] 
-            transition duration-150 animate-slide-bottom">
-                        Explore Flavors
+                        class="group relative inline-flex items-center justify-center
+    overflow-hidden rounded-full
+    bg-accent-500 px-8 py-3
+    font-semibold text-gray-900
+    shadow-[4px_4px_0_#000]
+    transition-all duration-500 ease-out
+    hover:-translate-y-1 hover:shadow-[6px_6px_0_#000]
+    active:translate-y-0 active:shadow-[2px_2px_0_#000]
+    animate-slide-bottom">
+
+                        <span class="transition-all duration-300 group-hover:tracking-wide text-nowrap">
+                            Explore Flavors
+                        </span>
+
                     </a>
 
                     <!-- Shop Now -->
                     <a href="<?php echo BASE_URL; ?>shop.php"
-                        class="bg-white text-gray-800 font-semibold 
-            py-3 px-8 rounded-full border border-gray-200
-            shadow-[3px_3px_0_#000] hover:shadow-[4px_3px_0_#000] 
-            transition duration-150 animate-slide-bottom">
+                        class="group relative inline-flex items-center justify-center
+    overflow-hidden rounded-full
+    bg-white px-8 py-3
+    font-semibold text-gray-900
+    shadow-[4px_4px_0_#000]
+    transition-all duration-500 ease-out
+    hover:-translate-y-1 hover:shadow-[6px_6px_0_#000]
+    active:translate-y-0 active:shadow-[2px_2px_0_#000]
+    animate-slide-bottom">
                         <i class="fas fa-shopping-bag mr-2"></i>
-                        Shop Now
+                        <span class="transition-all duration-300 group-hover:tracking-wide text-nowrap">
+                            Shop Now
+                        </span>
                     </a>
 
                 </div>
@@ -257,9 +272,9 @@ try {
 
         <!-- Heading -->
         <div class="text-center mb-12 scroll-animate-top">
-            <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-2">
+            <h2 class="text-3xl md:text-5xl font-luckiest text-primary mb-2" style="-webkit-text-stroke: 0.5px black;">
                 Shop by
-                <span class="text-accent" style="-webkit-text-stroke: 1px black;">
+                <span class="text-accent">
                     Category
                 </span>
             </h2>
@@ -318,7 +333,7 @@ try {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-end mb-12">
             <div class="scroll-animate-top mx-auto md:mx-0 text-center md:text-left">
-                <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-2">Featured <span class="text-accent" style="-webkit-text-stroke: 1px black;">Products</span></h2>
+                <h2 class="text-3xl md:text-5xl font-luckiest text-primary mb-2" style="-webkit-text-stroke: 0.5px black;">Featured <span class="text-accent">Products</span></h2>
                 <p class="text-gray-500 text-base">Handpicked items just for you</p>
             </div>
             <a href="<?php echo BASE_URL; ?>shop.php"
@@ -339,7 +354,7 @@ try {
                 <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                     <!-- IMAGE -->
-                    <div class="relative overflow-hidden p-3 md:p-4 bg-accent-50/50">
+                    <div class="relative overflow-hidden p-3 md:p-4 bg-primary-100/50">
                         <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
 
                         <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
@@ -369,7 +384,7 @@ try {
                         </small> -->
 
                         <!-- NAME -->
-                        <h3 class="font-semibold text-gray-900 text-xs sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
+                        <h3 class="font-semibold text-gray-900 text-sm sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
                             <?php echo e($product['name']); ?>
                         </h3>
 
@@ -392,7 +407,7 @@ try {
                             <!-- LEFT: PRICE -->
                             <div class="flex items-baseline flex-wrap space-x-1">
 
-                                <span class="text-primary-600 font-bold text-base sm:text-lg md:text-xl">
+                                <span class="text-green-600 font-semibold text-base sm:text-lg md:text-xl">
                                     <?php echo formatCurrency($product['price']); ?>
                                 </span>
 
@@ -406,7 +421,7 @@ try {
 
                             <!-- RIGHT: DISCOUNT -->
                             <?php if ($product['original_price'] > $product['price']): ?>
-                                <span class="bg-green-100 text-green-700 text-[8px] md:text-xs text-center md:font-semibold px-2 py-1 rounded-full">
+                                <span class="bg-green-100 text-green-600 text-[8px] md:text-xs text-center font-semibold px-2 py-1 rounded-full text-nowrap">
                                     <?php
                                     $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
                                     echo $discount . '% OFF';
@@ -425,7 +440,7 @@ try {
 
                                 <button type="submit"
                                     class="w-full p-2.5 flex items-center justify-center 
-                       bg-accent hover:bg-accent-800 text-white text-xs md:text-base font-semibold 
+                       bg-primary-700 hover:bg-primary-800 text-white text-xs md:text-base font-semibold 
                        rounded-full gap-2 ">
                                     <i class="fas fa-cart-plus text-xs"></i>
                                     Add to Cart
@@ -460,9 +475,9 @@ try {
 
         <!-- Heading -->
         <div class="text-center px-4 scroll-animate-top">
-            <h2 class="text-3xl sm:text-5xl font-luckiest text-primary-600 leading-tight">
+            <h2 class="text-3xl sm:text-5xl font-luckiest text-primary-600 leading-tight" style="-webkit-text-stroke: 0.5px black;">
                 Crunch. Watch.
-                <span class="text-accent" style="-webkit-text-stroke:1px black;">
+                <span class="text-accent">
                     Enjoy.
                 </span>
             </h2>
@@ -531,7 +546,7 @@ try {
 
                             <!-- Badge -->
                             <div class="absolute top-4 left-4 z-20">
-                                <span class="bg-white/90 backdrop-blur-xl text-accent text-xs font-bold px-4 py-2 rounded-full border">
+                                <span class="bg-white/90 backdrop-blur-xl text-primary text-xs font-bold px-4 py-2 rounded-full border">
                                     <?= e($video['badge']); ?>
                                 </span>
                             </div>
@@ -548,7 +563,7 @@ try {
                 class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-30
         w-12 h-12 flex items-center justify-center
         rounded-full bg-white/90 backdrop-blur-sm shadow-sm
-        text-accent hover:bg-accent hover:text-white
+        text-primary hover:bg-primary hover:text-white
         transition duration-300">
 
                 <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -559,7 +574,7 @@ try {
                 class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-30
         w-12 h-12 flex items-center justify-center
         rounded-full bg-white/90 backdrop-blur-sm shadow-sm
-        text-accent hover:bg-accent hover:text-white
+        text-primary hover:bg-primary hover:text-white
         transition duration-300">
 
                 <i data-lucide="chevron-right" class="w-5 h-5"></i>
@@ -604,7 +619,7 @@ try {
 </section>
 
 <!-- Every Mood -->
-<section class="my-20 relative bg-accent">
+<section class="my-20 relative bg-primary">
 
     <!-- SCALLOP TOP FULL WIDTH -->
     <div class="absolute -top-0.5 left-0 w-full leading-none">
@@ -646,10 +661,10 @@ try {
         <!-- RIGHT CONTENT -->
         <div class="text-center lg:text-left space-y-6">
 
-            <h2 class="scroll-animate-top text-3xl md:text-5xl font-luckiest text-primary-600 mb-3">
+            <h2 class="scroll-animate-top text-3xl md:text-5xl font-luckiest text-accent mb-3" style="-webkit-text-stroke: 0.5px black;">
                 From Classic to
-                <span class="text-white" style="-webkit-text-stroke: 1px black;">Bold — </span> Discover a Flavor for Every
-                <span class="text-white" style="-webkit-text-stroke: 1px black;">Mood.</span>
+                <span class="text-white">Bold — </span> Discover a Flavor for Every
+                <span class="text-white">Mood.</span>
             </h2>
 
             <!-- FEATURES -->
@@ -677,14 +692,23 @@ try {
 
             </ul>
 
-            <!-- BUTTON -->
+            <!-- Explore Flavors -->
             <div class="flex justify-center lg:justify-start">
                 <a href="<?php echo BASE_URL; ?>about-us.php"
-                    class="bg-primary-600 text-white font-semibold 
-            py-3 px-8 rounded-full 
-            shadow-[3px_3px_0_#000] hover:shadow-[4px_3px_0_#000] 
-            transition duration-150 scroll-animate-top">
-                    Explore Flavors
+                    class="group relative inline-flex items-center justify-center
+    overflow-hidden rounded-full
+    bg-accent-500 px-8 py-3
+    font-semibold text-gray-900
+    shadow-[4px_4px_0_#000]
+    transition-all duration-500 ease-out
+    hover:-translate-y-1 hover:shadow-[6px_6px_0_#000]
+    active:translate-y-0 active:shadow-[2px_2px_0_#000]
+    scroll-animate-top">
+
+                    <span class="transition-all duration-300 group-hover:tracking-wide text-nowrap">
+                        Explore Flavors
+                    </span>
+
                 </a>
             </div>
 
@@ -725,16 +749,16 @@ try {
 <section class="bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="scroll-animate-top text-center mb-12">
-            <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-2">Trending <span class="text-accent" style="-webkit-text-stroke: 1px black;">Now</span></h2>
+            <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-2" style="-webkit-text-stroke: 0.5px black;">Trending <span class="text-accent">Now</span></h2>
             <p class="text-gray-500 text-base">Most popular items this week</p>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8">
             <?php foreach ($trendingProducts as $product): ?>
-                <div class="bg-white rounded-2xl border border-gray-100 hover:shadow-md transition-all duration-300 overflow-hidden group">
+                <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">
 
                     <!-- IMAGE -->
-                    <div class="relative bg-accent-50/50 flex items-center justify-center p-3 sm:p-4">
+                    <div class="relative overflow-hidden p-3 md:p-4 bg-primary-100/50">
                         <?php $imageUrl = getImageUrl($product['image'], 'products'); ?>
 
                         <a href="<?php echo BASE_URL; ?>product.php?id=<?php echo $product['id']; ?>">
@@ -745,21 +769,26 @@ try {
                        group-hover:scale-105 transition duration-300">
                         </a>
 
-                        <!-- LOW STOCK BADGE -->
+                        <!-- BADGES -->
                         <?php if ($product['stock'] <= 10 && $product['stock'] > 0): ?>
-                            <span class="absolute top-2 left-2 bg-spice/10 backdrop-blur-sm text-spice text-xs font-semibold px-2 py-1 rounded-full">
+                            <span class="absolute top-3 left-3 bg-spice/10 backdrop-blur-sm text-spice text-xs font-semibold px-2 py-1 rounded-full shadow">
                                 Only <?php echo $product['stock']; ?> left
                             </span>
                         <?php endif; ?>
 
-                        <?php renderWishlistIconButton($product['id'], 'absolute top-2 right-2 z-10'); ?>
+                        <?php renderWishlistIconButton($product['id'], 'absolute top-3 right-3 z-10'); ?>
                     </div>
 
                     <!-- CONTENT -->
-                    <div class="p-3 sm:p-4 flex flex-col gap-2">
+                    <div class="p-3 md:p-4 flex flex-col justify-between h-[160px] md:h-[180px]">
+
+                        <!-- CATEGORY -->
+                        <!-- <small class="text-gray-400 text-xs uppercase tracking-wide">
+                            <?php echo e($product['category_name']); ?>
+                        </small> -->
 
                         <!-- NAME -->
-                        <h3 class="font-semibold text-gray-900 text-xs sm:text-sm md:text-base leading-tight line-clamp-2">
+                        <h3 class="font-semibold text-gray-900 text-sm sm:text-lg leading-tight line-clamp-2 md:line-clamp-1">
                             <?php echo e($product['name']); ?>
                         </h3>
 
@@ -776,26 +805,27 @@ try {
                             </p>
                         <?php endif; ?>
 
+                        <!-- PRICE -->
+                        <div class="w-full flex justify-between items-center">
 
-                        <!-- PRICE ROW -->
-                        <div class="flex justify-between items-center">
+                            <!-- LEFT: PRICE -->
+                            <div class="flex items-baseline flex-wrap space-x-1">
 
-                            <!-- PRICE -->
-                            <div class="flex items-center space-x-1 flex-wrap">
-                                <span class="text-primary-600 font-bold text-sm sm:text-base md:text-lg">
+                                <span class="text-green-600 font-semibold text-base sm:text-lg md:text-xl">
                                     <?php echo formatCurrency($product['price']); ?>
                                 </span>
 
                                 <?php if ($product['original_price'] > $product['price']): ?>
-                                    <span class="text-gray-400 line-through text-[10px] sm:text-xs">
+                                    <span class="text-gray-400 line-through text-xs sm:text-sm">
                                         <?php echo formatCurrency($product['original_price']); ?>
                                     </span>
                                 <?php endif; ?>
+
                             </div>
 
-                            <!-- DISCOUNT -->
+                            <!-- RIGHT: DISCOUNT -->
                             <?php if ($product['original_price'] > $product['price']): ?>
-                                <span class="bg-green-100 text-green-700 text-[8px] sm:text-xs text-center px-2 py-0.5 rounded-full">
+                                <span class="bg-green-100 text-green-600 text-[8px] md:text-xs text-center font-semibold px-2 py-1 rounded-full text-nowrap">
                                     <?php
                                     $discount = round((($product['original_price'] - $product['price']) / $product['original_price']) * 100);
                                     echo $discount . '% OFF';
@@ -807,28 +837,27 @@ try {
 
                         <!-- BUTTON -->
                         <?php if ($product['stock'] > 0): ?>
-                            <form action="<?php echo BASE_URL; ?>cart.php" method="POST" class="mt-2">
+                            <form action="<?php echo BASE_URL; ?>cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                                 <input type="hidden" name="action" value="add">
                                 <input type="hidden" name="quantity" value="1">
 
                                 <button type="submit"
-                                    class="w-full py-2.5 flex items-center justify-center gap-2 
-                           bg-primary-500 hover:bg-primary-600 text-white 
-                           text-xs sm:text-base font-semibold 
-                           rounded-full">
+                                    class="w-full p-2.5 flex items-center justify-center 
+                       bg-primary-700 hover:bg-primary-800 text-white text-xs md:text-base font-semibold 
+                       rounded-full gap-2 ">
                                     <i class="fas fa-cart-plus text-xs"></i>
                                     Add to Cart
                                 </button>
                             </form>
-                        <?php else: ?>
+                        <?php elseif ($product['stock'] <= 0): ?>
                             <button disabled
-                                class="w-full py-2.5 flex items-center justify-center 
-                       bg-gray-300 text-white text-xs sm:text-base font-semibold 
-                       rounded-full cursor-not-allowed mt-2">
+                                class="w-full p-2.5 flex items-center justify-center 
+                   bg-red-500 text-white text-xs md:text-base font-semibold rounded-full cursor-not-allowed">
                                 Out of Stock
                             </button>
                         <?php endif; ?>
+
 
                     </div>
                 </div>
@@ -845,7 +874,7 @@ try {
         preserveAspectRatio="none">
 
         <path
-            fill="#43a047"
+            fill="#56B4E2"
             d="
         M0,100
         C180,20 360,200 540,100
@@ -855,11 +884,11 @@ try {
         " />
     </svg>
 
-    <div class="py-8 md:py-20 bg-primary-600 text-white">
+    <div class="py-8 md:py-20 bg-primary text-white">
         <div class="max-w-6xl mx-auto px-4 text-center">
 
             <!-- TITLE -->
-            <h2 class="text-3xl md:text-5xl font-luckiest text-white mb-12 md:mb-20 scroll-animate-top">Why Choose <span class="text-accent" style="-webkit-text-stroke: 1px black;">Earthance?</span></h2>
+            <h2 class="text-3xl md:text-5xl font-luckiest text-white mb-12 md:mb-20 scroll-animate-top" style="-webkit-text-stroke: 0.5px black;">Why Choose <span class="text-accent">Earthance?</span></h2>
 
             <!-- FEATURES -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -867,11 +896,11 @@ try {
                 <!-- ITEM 1 -->
                 <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
                     <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-shopping-bag text-2xl md:text-5xl text-primary-500"></i>
+                        <i class="fas fa-shopping-bag text-2xl md:text-5xl text-primary-600"></i>
                     </span>
                     <div>
                         <h3 class="font-semibold">Premium Ingredients</h3>
-                        <p class="text-sm text-white/80">
+                        <p class="text-sm text-gray-100">
                             Only high-quality potatoes & natural seasonings.
                         </p>
                     </div>
@@ -880,11 +909,11 @@ try {
                 <!-- ITEM 2 -->
                 <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
                     <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-shipping-fast text-2xl md:text-5xl text-primary-500"></i>
+                        <i class="fas fa-shipping-fast text-2xl md:text-5xl text-primary-600"></i>
                     </span>
                     <div>
                         <h3 class="font-semibold">Fast Delivery</h3>
-                        <p class="text-sm text-white/80">
+                        <p class="text-sm text-gray-100">
                             Fresh, crunchy snacks delivered to your doorstep.
                         </p>
                     </div>
@@ -893,11 +922,11 @@ try {
                 <!-- ITEM 3 -->
                 <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
                     <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-heart text-2xl md:text-5xl text-primary-500"></i>
+                        <i class="fas fa-heart text-2xl md:text-5xl text-primary-600"></i>
                     </span>
                     <div>
                         <h3 class="font-semibold">Loved Nationwide</h3>
-                        <p class="text-sm text-white/80">
+                        <p class="text-sm text-gray-100">
                             Trusted by thousands of snack lovers.
                         </p>
                     </div>
@@ -914,7 +943,7 @@ try {
         preserveAspectRatio="none">
 
         <path
-            fill="#43a047"
+            fill="#56B4E2"
             d="
         M0,100
         C240,160 480,20 720,100
@@ -936,8 +965,8 @@ try {
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>chili.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Authentic Spices</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Authentic Spices</h3>
+                <p class="text-sm text-gray-500">
                     Rich aroma and traditional blends to enhance every dish.
                 </p>
             </div>
@@ -945,8 +974,8 @@ try {
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>snacks.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Crispy Snacks</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Crispy Snacks</h3>
+                <p class="text-sm text-gray-500">
                     Freshly prepared snacks with perfect crunch and taste.
                 </p>
             </div>
@@ -954,8 +983,8 @@ try {
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>spices.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Premium Quality</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Premium Quality</h3>
+                <p class="text-sm text-gray-500">
                     Handpicked ingredients ensuring purity and freshness.
                 </p>
             </div>
@@ -1047,8 +1076,8 @@ try {
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/variety_snacks.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Variety of Snacks</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Variety of Snacks</h3>
+                <p class="text-sm text-gray-500">
                     From namkeen to traditional treats, something for everyone.
                 </p>
             </div>
@@ -1056,8 +1085,8 @@ try {
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/natural_ingredients.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Natural Ingredients</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Natural Ingredients</h3>
+                <p class="text-sm text-gray-500">
                     No artificial flavors, only real and natural goodness.
                 </p>
             </div>
@@ -1065,8 +1094,8 @@ try {
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/packaging.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-gray-800">Fresh Packaging</h3>
-                <p class="text-sm text-gray-600">
+                <h3 class="font-semibold text-primary">Fresh Packaging</h3>
+                <p class="text-sm text-gray-500">
                     Hygienically packed to preserve taste and quality.
                 </p>
             </div>
@@ -1080,8 +1109,8 @@ try {
 <section>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-2xl mx-auto text-center">
-            <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-6 scroll-animate-top">Subscribe to <span class="text-accent" style="-webkit-text-stroke: 1px black;">Our Newsletter</span></h2>
-            <p class="text-gray-600 text-base mb-12 scroll-animate-top">Get the latest updates on new products and exclusive offers</p>
+            <h2 class="text-3xl md:text-5xl font-luckiest text-primary-600 mb-6 scroll-animate-top" style="-webkit-text-stroke: 0.5px black;">Subscribe to <span class="text-accent">Our Newsletter</span></h2>
+            <p class="text-gray-500 text-base mb-12 scroll-animate-top">Get the latest updates on new products and exclusive offers</p>
 
             <form class="flex flex-col sm:flex-row gap-4" action="<?php echo BASE_URL; ?>subscribe.php" method="POST">
                 <input type="email" name="email" placeholder="Enter your email" required

@@ -10,7 +10,7 @@
         <span class="absolute inset-0 rounded-full bg-primary-400/20 animate-ping"></span>
 
         <!-- Main Button -->
-        <div class="relative w-14 h-14 md:w-16 md:h-16 rounded-full bg-primary-500 shadow-xl flex items-center justify-center transition-all duration-300 ease-out hover:scale-110 hover:-translate-y-1 active:scale-95 ">
+        <div class="relative w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500 shadow-xl flex items-center justify-center transition-all duration-300 ease-out hover:scale-110 hover:-translate-y-1 active:scale-95 ">
 
             <!-- Soft Overlay -->
             <span class="absolute inset-0 rounded-full bg-white/10"></span>
