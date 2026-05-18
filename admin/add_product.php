@@ -106,6 +106,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    $uploadVariantImage = function ($index) use (&$errors) {
+        if (!isset($_FILES['weights']['error'][$index]['image'])) {
+            return '';
+        }
+
+        $error = $_FILES['weights']['error'][$index]['image'];
+        if ($error === UPLOAD_ERR_NO_FILE) {
+            return '';
+        }
+        if ($error !== UPLOAD_ERR_OK) {
+            $errors[] = 'Variant image upload failed (error code ' . $error . ')';
+            return '';
+        }
+
+        $fileType = $_FILES['weights']['type'][$index]['image'] ?? '';
+        $fileSize = (int)($_FILES['weights']['size'][$index]['image'] ?? 0);
+        $tmpName = $_FILES['weights']['tmp_name'][$index]['image'] ?? '';
+        $originalName = $_FILES['weights']['name'][$index]['image'] ?? 'variant-image';
+
+        if (!in_array($fileType, ['image/jpeg', 'image/png', 'image/webp'])) {
+            $errors[] = 'Only JPG, PNG, and WEBP variant images are allowed';
+            return '';
+        }
+        if ($fileSize > 2 * 1024 * 1024) {
+            $errors[] = 'Each variant image must be less than 2MB';
+            return '';
+        }
+        if (!is_uploaded_file($tmpName)) {
+            $errors[] = 'Variant image upload failed for ' . e($originalName);
+            return '';
+        }
+
+        $fileName = time() . '_variant_' . (int)$index . '_' . preg_replace('/[^A-Za-z0-9\.\-_]/', '_', basename($originalName));
+        if (move_uploaded_file($tmpName, PRODUCTS_PATH . $fileName)) {
+            return $fileName;
+        }
+
+        $errors[] = 'Failed to upload variant image: ' . e($originalName);
+        return '';
+    };
+
     // Handle weights
     $weights = isset($_POST['weights']) ? $_POST['weights'] : [];
     $validWeights = [];
@@ -119,12 +160,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $weightStock = (int)($weightData['stock'] ?? 0);
             
             if (!empty($weight) && $weightPrice > 0 && $weightStock >= 0) {
+                $variantImage = $uploadVariantImage($index);
                 $validWeights[] = [
                     'flavour' => $weightFlavor,
                     'weight' => $weight,
                     'price' => $weightPrice,
                     'original_price' => $weightOriginalPrice > 0 ? $weightOriginalPrice : null,
-                    'stock' => $weightStock
+                    'stock' => $weightStock,
+                    'image' => $variantImage
                 ];
             }
         }
@@ -142,9 +185,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Insert weights if provided
             if (!empty($validWeights)) {
-                $stmt = $pdo->prepare("INSERT INTO product_variants (product_id, flavour, weight, price, original_price, stock, status, sort_order) VALUES (?, ?, ?, ?, ?, ?, 1, ?)");
+                $stmt = $pdo->prepare("INSERT INTO product_variants (product_id, flavour, weight, price, original_price, stock, image, status, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)");
                 foreach ($validWeights as $index => $weightData) {
-                    $stmt->execute([$productId, $weightData['flavour'], $weightData['weight'], $weightData['price'], $weightData['original_price'], $weightData['stock'], $index]);
+                    $stmt->execute([$productId, $weightData['flavour'], $weightData['weight'], $weightData['price'], $weightData['original_price'], $weightData['stock'], $weightData['image'], $index]);
                 }
             }
             
@@ -301,7 +344,7 @@ function addWeight(weight = '', price = '', stock = '', flavour = '', originalPr
     const weightDiv = document.createElement('div');
     weightDiv.className = 'weight-entry bg-gray-50 p-4 rounded-lg mb-3';
     weightDiv.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
+        <div class="grid grid-cols-1 md:grid-cols-7 gap-4 items-end">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Flavor</label>
                 <input type="text" name="weights[${weightIndex}][flavour]" value="${flavour}" placeholder="e.g., Classic, Peri Peri"
@@ -325,6 +368,11 @@ function addWeight(weight = '', price = '', stock = '', flavour = '', originalPr
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Stock *</label>
                 <input type="number" name="weights[${weightIndex}][stock]" value="${stock}" min="0" required
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                <input type="file" name="weights[${weightIndex}][image]" accept="image/jpeg,image/png,image/webp"
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
             </div>
             <div>

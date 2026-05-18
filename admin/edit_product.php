@@ -39,7 +39,7 @@ if (!empty($product['gallery'])) {
 // Fetch product weights
 $productWeights = [];
 try {
-    $stmt = $pdo->prepare("SELECT id, product_id, flavour AS flavor, weight, price, original_price, stock, sort_order, created_at FROM product_variants WHERE product_id = ? AND status = 1 ORDER BY sort_order ASC");
+    $stmt = $pdo->prepare("SELECT id, product_id, flavour AS flavor, weight, price, original_price, stock, image, sort_order, created_at FROM product_variants WHERE product_id = ? AND status = 1 ORDER BY sort_order ASC");
     $stmt->execute([$productId]);
     $productWeights = $stmt->fetchAll();
 } catch (PDOException $e) {
@@ -155,6 +155,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     
+    $uploadVariantImage = function ($index, $existingImage = '') use (&$errors) {
+        if (!isset($_FILES['weights']['error'][$index]['image'])) {
+            return $existingImage;
+        }
+
+        $error = $_FILES['weights']['error'][$index]['image'];
+        if ($error === UPLOAD_ERR_NO_FILE) {
+            return $existingImage;
+        }
+        if ($error !== UPLOAD_ERR_OK) {
+            $errors[] = 'Variant image upload failed (error code ' . $error . ')';
+            return $existingImage;
+        }
+
+        $fileType = $_FILES['weights']['type'][$index]['image'] ?? '';
+        $fileSize = (int)($_FILES['weights']['size'][$index]['image'] ?? 0);
+        $tmpName = $_FILES['weights']['tmp_name'][$index]['image'] ?? '';
+        $originalName = $_FILES['weights']['name'][$index]['image'] ?? 'variant-image';
+
+        if (!in_array($fileType, ['image/jpeg', 'image/png', 'image/webp'])) {
+            $errors[] = 'Only JPG, PNG, and WEBP variant images are allowed';
+            return $existingImage;
+        }
+        if ($fileSize > 2 * 1024 * 1024) {
+            $errors[] = 'Each variant image must be less than 2MB';
+            return $existingImage;
+        }
+        if (!is_uploaded_file($tmpName)) {
+            $errors[] = 'Variant image upload failed for ' . e($originalName);
+            return $existingImage;
+        }
+
+        $fileName = time() . '_variant_' . (int)$index . '_' . preg_replace('/[^A-Za-z0-9\.\-_]/', '_', basename($originalName));
+        if (move_uploaded_file($tmpName, PRODUCTS_PATH . $fileName)) {
+            if ($existingImage && file_exists(PRODUCTS_PATH . $existingImage)) {
+                unlink(PRODUCTS_PATH . $existingImage);
+            }
+            return $fileName;
+        }
+
+        $errors[] = 'Failed to upload variant image: ' . e($originalName);
+        return $existingImage;
+    };
+
     // Handle weights
     $weights = isset($_POST['weights']) ? $_POST['weights'] : [];
     $validWeights = [];
@@ -168,12 +212,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $weightStock = (int)($weightData['stock'] ?? 0);
             
             if (!empty($weight) && $weightPrice > 0 && $weightStock >= 0) {
+                $variantImage = $uploadVariantImage($index, trim($weightData['existing_image'] ?? ''));
                 $validWeights[] = [
                     'flavour' => $weightFlavor,
                     'weight' => $weight,
                     'price' => $weightPrice,
                     'original_price' => $weightOriginalPrice > 0 ? $weightOriginalPrice : null,
-                    'stock' => $weightStock
+                    'stock' => $weightStock,
+                    'image' => $variantImage
                 ];
             }
         }
@@ -195,9 +241,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$productId]);
             
             if (!empty($validWeights)) {
-                $stmt = $pdo->prepare("INSERT INTO product_variants (product_id, flavour, weight, price, original_price, stock, status, sort_order) VALUES (?, ?, ?, ?, ?, ?, 1, ?)");
+                $stmt = $pdo->prepare("INSERT INTO product_variants (product_id, flavour, weight, price, original_price, stock, image, status, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)");
                 foreach ($validWeights as $index => $weightData) {
-                    $stmt->execute([$productId, $weightData['flavour'], $weightData['weight'], $weightData['price'], $weightData['original_price'], $weightData['stock'], $index]);
+                    $stmt->execute([$productId, $weightData['flavour'], $weightData['weight'], $weightData['price'], $weightData['original_price'], $weightData['stock'], $weightData['image'], $index]);
                 }
             }
             
@@ -347,7 +393,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div id="weights-container">
                                 <?php if (!empty($productWeights)): ?>
                                     <?php foreach ($productWeights as $index => $weight): ?>
-                                        <div class="weight-entry grid grid-cols-1 md:grid-cols-6 gap-3 items-end p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                        <div class="weight-entry grid grid-cols-1 md:grid-cols-7 gap-3 items-end p-4 border border-gray-200 rounded-lg bg-gray-50">
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-1">Flavor</label>
                                                 <input type="text" name="weights[<?php echo $index; ?>][flavour]" value="<?php echo htmlspecialchars($weight['flavor'] ?? ''); ?>" 
@@ -377,6 +423,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <input type="number" name="weights[<?php echo $index; ?>][stock]" value="<?php echo $weight['stock']; ?>" 
                                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" 
                                                        min="0" required>
+                                            </div>
+                                            <div class="flex-1">
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                                                <?php if (!empty($weight['image'])): ?>
+                                                    <img src="<?php echo getImageUrl($weight['image'], 'products'); ?>" class="w-12 h-12 rounded-lg object-cover mb-2" alt="">
+                                                <?php endif; ?>
+                                                <input type="hidden" name="weights[<?php echo $index; ?>][existing_image]" value="<?php echo e($weight['image'] ?? ''); ?>">
+                                                <input type="file" name="weights[<?php echo $index; ?>][image]"
+                                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                                                       accept="image/jpeg,image/png,image/webp">
                                             </div>
                                             <button type="button" onclick="removeWeight(this)" class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
                                                 <i class="fas fa-trash"></i>
@@ -412,7 +468,7 @@ let weightIndex = <?php echo count($productWeights); ?>;
 function addWeight() {
     const container = document.getElementById('weights-container');
     const weightEntry = document.createElement('div');
-    weightEntry.className = 'weight-entry grid grid-cols-1 md:grid-cols-6 gap-3 items-end p-4 border border-gray-200 rounded-lg bg-gray-50';
+    weightEntry.className = 'weight-entry grid grid-cols-1 md:grid-cols-7 gap-3 items-end p-4 border border-gray-200 rounded-lg bg-gray-50';
     weightEntry.innerHTML = `
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Flavor</label>
@@ -443,6 +499,13 @@ function addWeight() {
             <input type="number" name="weights[${weightIndex}][stock]" 
                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" 
                    min="0" required>
+        </div>
+        <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+            <input type="hidden" name="weights[${weightIndex}][existing_image]" value="">
+            <input type="file" name="weights[${weightIndex}][image]"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                   accept="image/jpeg,image/png,image/webp">
         </div>
         <button type="button" onclick="removeWeight(this)" class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
             <i class="fas fa-trash"></i>

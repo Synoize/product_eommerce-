@@ -123,7 +123,7 @@ if (!empty($mainImage) && !in_array($mainImage, $gallery)) {
 // Fetch product weights
 $productWeights = [];
 try {
-    $stmt = $pdo->prepare("SELECT id, product_id, flavour AS flavor, weight, price, original_price, stock, sort_order, created_at FROM product_variants WHERE product_id = ? AND status = 1 ORDER BY sort_order ASC");
+    $stmt = $pdo->prepare("SELECT id, product_id, flavour AS flavor, weight, price, original_price, stock, image, sort_order, created_at FROM product_variants WHERE product_id = ? AND status = 1 ORDER BY sort_order ASC");
     $stmt->execute([$productId]);
     $productWeights = $stmt->fetchAll();
 } catch (PDOException $e) {
@@ -355,17 +355,17 @@ require_once __DIR__ . '/includes/header.php';
                             <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                             <input type="hidden" name="action" value="add">
 
-                            <?php if (!empty($productFlavors) || $hasUnflavoredWeights): ?>
+                            <?php if (!empty($productFlavors)): ?>
                                 <div class="mb-5">
                                     <label class="block text-base font-semibold text-gray-800 mb-3">Select Flavour</label>
                                     <div class="flex flex-wrap gap-3">
                                         <?php if ($hasUnflavoredWeights): ?>
-                                            <button type="button" class="flavor-filter min-w-[110px] rounded-md border-2 <?php echo $initialFlavorFilter === '__without_flavour__' ? 'border-accent bg-accent/5 text-accent-800' : 'border-gray-300 bg-white text-gray-800'; ?> px-5 py-3 text-center text-sm font-semibold transition hover:border-accent hover:text-accent" data-flavor="__without_flavour__" onclick="selectFlavor(this)">
+                                            <button type="button" class="flavor-filter min-w-[110px] rounded-xl border-2 <?php echo $initialFlavorFilter === '__without_flavour__' ? 'border-accent bg-accent/5 text-gray-800' : 'border-gray-300 bg-white text-gray-800'; ?> px-5 py-3 text-center text-xs font-semibold transition" data-flavor="__without_flavour__" onclick="selectFlavor(this)">
                                                 No Flavour
                                             </button>
                                         <?php endif; ?>
                                         <?php foreach ($productFlavors as $flavor): ?>
-                                            <button type="button" class="flavor-filter min-w-[110px] rounded-md border-2 border-gray-300 bg-white px-5 py-3 text-center text-sm font-semibold text-gray-800 transition hover:border-accent hover:text-accent" data-flavor="<?php echo e($flavor); ?>" onclick="selectFlavor(this)">
+                                            <button type="button" class="flavor-filter min-w-[110px] rounded-xl border-2 border-gray-300 bg-white px-5 py-3 text-center text-xs font-semibold text-gray-800 transition" data-flavor="<?php echo e($flavor); ?>" onclick="selectFlavor(this)">
                                                 <?php echo e($flavor); ?>
                                             </button>
                                         <?php endforeach; ?>
@@ -387,10 +387,10 @@ require_once __DIR__ . '/includes/header.php';
                                             ?>
                                             <label
                                                 data-flavor="<?php echo e($weightFlavorValue); ?>"
-                                                class="<?php echo $isInitialVisible ? '' : 'hidden'; ?> relative flex min-w-[105px] items-center justify-center overflow-hidden rounded-md border-2 px-5 py-3 text-sm text-nowrap font-medium transition-all duration-300
+                                                class="<?php echo $isInitialVisible ? '' : 'hidden'; ?> group relative flex min-w-[115px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl bg-white px-4 py-3 text-center transition-all duration-300
     <?php echo (int)$weight['stock'] <= 0
-                                                ? 'cursor-not-allowed bg-gray-100 opacity-60 border-gray-200'
-                                                : 'cursor-pointer bg-white border-gray-300 hover:border-accent hover:text-accent hover:shadow-sm'; ?>">
+                                                ? 'cursor-not-allowed border border-gray-200 bg-gray-50 opacity-70'
+                                                : ''; ?>">
 
                                                 <!-- Radio -->
                                                 <input
@@ -403,34 +403,43 @@ require_once __DIR__ . '/includes/header.php';
                                                     data-price="<?php echo (float)$weight['price']; ?>"
                                                     data-original-price="<?php echo !empty($weight['original_price']) ? (float)$weight['original_price'] : (float)($product['original_price'] ?? 0); ?>"
                                                     data-stock="<?php echo (int)$weight['stock']; ?>"
+                                                    data-image-url="<?php echo !empty($weight['image']) ? e(getImageUrl($weight['image'], 'products')) : ''; ?>"
                                                     onchange="updatePrice(this)"
                                                     <?php echo $index === $selectedWeightIndex ? 'checked' : ''; ?>
                                                     <?php echo (int)$weight['stock'] <= 0 ? 'disabled' : ''; ?>>
 
-                                                <!-- Selected Background -->
+                                                <!-- Selected Border -->
                                                 <span
-                                                    class="absolute inset-0 rounded-md border-2 border-transparent transition-all duration-300
+                                                    class="absolute inset-0 rounded-xl border-2 transition-all duration-300
         peer-checked:border-accent peer-checked:bg-accent/5">
                                                 </span>
 
-                                                <!-- Content -->
-                                                <div class="relative z-10 flex flex-col items-center justify-center text-center">
-
-                                                    <!-- Weight -->
+                                                <!-- Weight -->
+                                                <div class="relative z-10 flex flex-col items-center">
                                                     <span
-                                                        class="text-sm font-semibold transition-colors duration-300
+                                                        class="text-xs font-bold tracking-wide transition-all duration-300
             <?php echo (int)$weight['stock'] <= 0
                                                 ? 'text-gray-400'
-                                                : 'peer-checked:text-accent-800'; ?>">
+                                                : 'text-gray-800 peer-checked:text-accent'; ?>">
                                                         <?php echo e($weight['weight']); ?>
                                                     </span>
 
                                                     <!-- Stock Status -->
                                                     <?php if ((int)$weight['stock'] <= 0): ?>
-                                                        <span class="mt-1 text-xs font-medium text-red-500">
+                                                        <span
+                                                            class="mt-2 rounded-full bg-red-100 px-2 py-1 text-[10px] font-semibold text-red-600">
                                                             Out of Stock
                                                         </span>
                                                     <?php endif; ?>
+                                                </div>
+
+                                                <!-- Check Icon -->
+                                                <div
+                                                    class="absolute left-2 top-2 hidden h-5 w-5 items-center justify-center rounded-full bg-accent text-white peer-checked:flex">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                                    </svg>
                                                 </div>
                                             </label>
                                         <?php endforeach; ?>
@@ -950,6 +959,7 @@ require_once __DIR__ . '/includes/header.php';
 
     let selectedUnitPrice = <?php echo json_encode($selectedPrice); ?>;
     let selectedOriginalPrice = <?php echo json_encode($productOriginalPrice); ?>;
+    const defaultProductImageUrl = <?php echo json_encode($mainImageUrl); ?>;
 
     function formatMoney(amount) {
         return new Intl.NumberFormat('en-IN', {
@@ -994,28 +1004,30 @@ require_once __DIR__ . '/includes/header.php';
             increaseQty(stock);
         };
 
+        changeMainImage(input.dataset.imageUrl || defaultProductImageUrl);
+
         updatePriceSummary(input);
     }
 
     function selectFlavor(button) {
         const wasActive = button.classList.contains('border-accent');
-        const flavorFilter = wasActive ? null : (button.dataset.flavor || '');
+        const defaultFlavorButton = document.querySelector('.flavor-filter[data-flavor="__without_flavour__"]');
+        const flavorFilter = wasActive && defaultFlavorButton ? '__without_flavour__' : (wasActive ? null : (button.dataset.flavor || ''));
         document.querySelectorAll('.flavor-filter').forEach(filter => {
-            const active = !wasActive && filter === button;
+            const active = filter.dataset.flavor === flavorFilter;
             filter.classList.toggle('border-accent', active);
             filter.classList.toggle('bg-accent/5', active);
-            filter.classList.toggle('text-accent', active);
+            filter.classList.toggle('text-gray-800', active);
             filter.classList.toggle('border-gray-300', !active);
             filter.classList.toggle('bg-white', !active);
-            filter.classList.toggle('text-gray-800', !active);
         });
 
         let firstAvailable = null;
         document.querySelectorAll('label[data-flavor]').forEach(label => {
             const input = label.querySelector('input[name="variant_id"]');
-            const matches = flavorFilter === null
-                || (flavorFilter === '__without_flavour__' && label.dataset.flavor === '')
-                || label.dataset.flavor === flavorFilter;
+            const matches = flavorFilter === null ||
+                (flavorFilter === '__without_flavour__' && label.dataset.flavor === '') ||
+                label.dataset.flavor === flavorFilter;
             label.classList.toggle('hidden', !matches);
             if (!matches && input) {
                 input.checked = false;
