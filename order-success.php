@@ -97,7 +97,9 @@ unset($_SESSION['last_order_id']);
                                     <td class="py-3">
                                         <?php echo e($item['product_name']); ?>
                                         <?php if (!empty($item['weight'])): ?>
-                                            <span class="text-blue-600 text-xs">(<?php echo e($item['weight']); ?>)</span>
+                                            <p class="text-accent text-sm">
+                                                <i class="fas fa-weight-hanging mr-1 text-xs"></i><?php echo !empty($item['flavour']) ? e($item['flavour']) . ' - ' : ''; ?><?php echo e($item['weight']); ?>
+                                            </p>
                                         <?php endif; ?>
                                         (x<?php echo $item['quantity']; ?>)
                                     </td>

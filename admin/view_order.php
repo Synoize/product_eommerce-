@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Admin - View Order Details
  */
@@ -23,7 +24,7 @@ try {
                           WHERE o.id = ?");
     $stmt->execute([$orderId]);
     $order = $stmt->fetch();
-    
+
     if (!$order) {
         setFlash('Order not found', 'danger');
         redirect(BASE_URL . 'admin/manage_orders.php');
@@ -49,12 +50,12 @@ try {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     $newStatus = $_POST['status'] ?? '';
     $allowedStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
-    
+
     if (in_array($newStatus, $allowedStatuses)) {
         try {
             $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
             $stmt->execute([$newStatus, $orderId]);
-            
+
             // Refresh order data
             $stmt = $pdo->prepare("SELECT o.*, u.name as user_name, u.email as user_email, u.mobile as user_mobile 
                                   FROM orders o 
@@ -62,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                                   WHERE o.id = ?");
             $stmt->execute([$orderId]);
             $order = $stmt->fetch();
-            
+
             setFlash('Order status updated successfully!', 'success');
         } catch (PDOException $e) {
             setFlash('Error updating order status', 'danger');
@@ -75,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     <div class="h-[calc(100vh-80px)] flex">
         <!-- Admin Sidebar -->
         <?php include __DIR__ . '/includes/sidebar.php'; ?>
-        
+
         <!-- Main Content -->
         <div class="flex-1 overflow-y-auto p-6 md:p-8">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
@@ -84,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                     <i class="fas fa-arrow-left mr-2"></i>Back to Orders
                 </a>
             </div>
-            
+
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Order Info -->
                 <div class="lg:col-span-2 space-y-6">
@@ -117,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                             </button>
                         </form>
                     </div>
-                    
+
                     <!-- Order Items -->
                     <div class="bg-white rounded-xl shadow-md p-6">
                         <h5 class="font-bold text-gray-900 mb-4">Order Items</h5>
@@ -133,18 +134,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     <?php foreach ($orderItems as $item): ?>
-                                    <tr>
-                                        <td class="px-4 py-3">
-                                            <div class="flex items-center">
-                                                <img src="<?php echo getImageUrl($item['product_image'], 'products'); ?>" 
-                                                     class="w-12 h-12 rounded-lg mr-3 object-cover" alt="">
-                                                <span class="text-sm"><?php echo e($item['product_name']); ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-3 text-center"><?php echo $item['quantity']; ?></td>
-                                        <td class="px-4 py-3 text-right"><?php echo formatCurrency($item['price']); ?></td>
-                                        <td class="px-4 py-3 text-right font-medium"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></td>
-                                    </tr>
+                                        <tr>
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center">
+                                                    <img src="<?php echo getImageUrl($item['product_image'], 'products'); ?>"
+                                                        class="w-12 h-12 rounded-lg mr-3 object-cover" alt="">
+                                                    <div>
+                                                        <span class="text-sm"><?php echo e($item['product_name']); ?></span>
+                                                        <?php if (!empty($item['weight'])): ?>
+                                                            <p class="text-accent text-sm">
+                                                                <i class="fas fa-weight-hanging mr-1 text-xs"></i><?php echo !empty($item['flavour']) ? e($item['flavour']) . ' - ' : ''; ?><?php echo e($item['weight']); ?>
+                                                            </p>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-center"><?php echo $item['quantity']; ?></td>
+                                            <td class="px-4 py-3 text-right"><?php echo formatCurrency($item['price']); ?></td>
+                                            <td class="px-4 py-3 text-right font-medium"><?php echo formatCurrency($item['price'] * $item['quantity']); ?></td>
+                                        </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                                 <tfoot class="bg-gray-50 font-medium">
@@ -153,10 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                                         <td class="px-4 py-2 text-right"><?php echo formatCurrency($order['total_amount'] + $order['discount_amount']); ?></td>
                                     </tr>
                                     <?php if ($order['discount_amount'] > 0): ?>
-                                    <tr>
-                                        <td colspan="3" class="px-4 py-2 text-right">Discount</td>
-                                        <td class="px-4 py-2 text-right text-green-600">-<?php echo formatCurrency($order['discount_amount']); ?></td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="3" class="px-4 py-2 text-right">Discount</td>
+                                            <td class="px-4 py-2 text-right text-green-600">-<?php echo formatCurrency($order['discount_amount']); ?></td>
+                                        </tr>
                                     <?php endif; ?>
                                     <tr>
                                         <td colspan="3" class="px-4 py-2 text-right font-bold">Total</td>
@@ -166,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                             </table>
                         </div>
                     </div>
-                    
+
                     <!-- Shipping Address -->
                     <div class="bg-white rounded-xl shadow-md p-6">
                         <h5 class="font-bold text-gray-900 mb-4">Shipping Information</h5>
@@ -177,26 +185,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                         <p class="text-gray-600 text-sm">Mobile: <?php echo e($order['mobile']); ?></p>
                     </div>
                 </div>
-                
+
                 <!-- Order Summary -->
                 <div class="space-y-6">
                     <div class="bg-white rounded-xl shadow-md p-6">
                         <h5 class="font-bold text-gray-900 mb-4">Order Summary</h5>
                         <p class="text-sm mb-2"><span class="font-medium">Order Date:</span> <?php echo date('F d, Y H:i', strtotime($order['created_at'])); ?></p>
                         <p class="text-sm mb-4"><span class="font-medium">Order ID:</span> #<?php echo $order['id']; ?></p>
-                        
+
                         <div class="border-t border-gray-200 pt-4 mb-4">
                             <h6 class="font-bold text-gray-900 mb-3">Payment Information</h6>
                             <?php
-                                $paymentMethod = $order['payment_method'] ?? '';
-                                $paymentStatus = $order['payment_status'] ?? 'pending';
-                                $initialPaymentStatus = $order['initial_payment_status'] ?? 'pending';
-                                $paymentStatusClass = $paymentStatus === 'paid'
-                                    ? 'bg-green-100 text-green-700'
-                                    : ($paymentStatus === 'failed' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700');
-                                $initialStatusClass = $initialPaymentStatus === 'paid'
-                                    ? 'bg-green-100 text-green-700'
-                                    : ($initialPaymentStatus === 'failed' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700');
+                            $paymentMethod = $order['payment_method'] ?? '';
+                            $paymentStatus = $order['payment_status'] ?? 'pending';
+                            $initialPaymentStatus = $order['initial_payment_status'] ?? 'pending';
+                            $paymentStatusClass = $paymentStatus === 'paid'
+                                ? 'bg-green-100 text-green-700'
+                                : ($paymentStatus === 'failed' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700');
+                            $initialStatusClass = $initialPaymentStatus === 'paid'
+                                ? 'bg-green-100 text-green-700'
+                                : ($initialPaymentStatus === 'failed' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700');
                             ?>
                             <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm">
                                 <div class="space-y-2">
@@ -253,15 +261,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <?php if ($order['coupon_code']): ?>
-                        <div class="border-t border-gray-200 pt-4">
-                            <h6 class="font-bold text-gray-900 mb-2">Coupon Applied</h6>
-                            <span class="inline-block bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium"><?php echo e($order['coupon_code']); ?></span>
-                        </div>
+                            <div class="border-t border-gray-200 pt-4">
+                                <h6 class="font-bold text-gray-900 mb-2">Coupon Applied</h6>
+                                <span class="inline-block bg-primary-100 text-primary-700 px-2 py-1 rounded text-xs font-medium"><?php echo e($order['coupon_code']); ?></span>
+                            </div>
                         <?php endif; ?>
                     </div>
-                    
+
                     <!-- Customer Info -->
                     <div class="bg-white rounded-xl shadow-md p-6">
                         <h5 class="font-bold text-gray-900 mb-4">Customer Information</h5>

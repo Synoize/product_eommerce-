@@ -49,9 +49,11 @@ try {
                     <ul class="space-y-4 text-gray-800 text-sm">
                         <li class="flex items-start max-w-sm">
                             <i class="fas fa-map-marker-alt mt-1 mr-2 text-accent-900"></i>
-                            3rd Floor, IT Park, Parsodi, Hingna Road, Nagpur, Maharashtra 440022, India
+                            House No. 04 Ground Floor, Samta Colony,
+                            Hudkeshwar Khurd,Nagpur-440037,
+                            Maharashtra, India
                         </li>
-                        <li class="flex items-center"><i class="fas fa-phone mr-2 text-green-700"></i>+91 934 567 8900</li>
+                        <li class="flex items-center"><i class="fas fa-phone mr-2 text-green-700"></i>+91 7313726134</li>
                         <li class="flex items-center"><i class="fas fa-envelope mr-2 text-red-600"></i>support@earthence.com</li>
                     </ul>
                 </div>

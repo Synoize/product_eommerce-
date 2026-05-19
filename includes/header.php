@@ -548,6 +548,17 @@ try {
 
                                 <div class="py-2 text-sm">
 
+                                    <!-- Admin Dashboard -->
+                                    <?php if (isAdmin()): ?>
+                                        <a href="<?php echo BASE_URL; ?>admin"
+                                            class="flex items-center px-4 py-2 transition
+        <?php echo basename($_SERVER['PHP_SELF']) === 'admin'
+                                            ? 'bg-primary-50 text-primary-600 font-medium'
+                                            : 'text-gray-700 hover:bg-gray-50 hover:text-primary-600'; ?>">
+                                            <i class="fas fa-user-tie mr-3"></i> Admin Dashboard
+                                        </a>
+                                    <?php endif; ?>
+
                                     <!-- My Profile -->
                                     <a href="<?php echo BASE_URL; ?>user/profile.php"
                                         class="flex items-center px-4 py-2 transition
@@ -720,6 +731,24 @@ try {
                 <!-- Mobile Auth Links -->
                 <?php if (isLoggedIn()): ?>
                     <div>
+                        <!-- Admin Dashboard -->
+                        <?php if (isAdmin()): ?>
+                            <a href="<?php echo BASE_URL; ?>admin"
+                                class="flex items-center px-4 py-2 transition
+        <?php echo basename($_SERVER['PHP_SELF']) === 'admin'
+                                ? 'bg-primary-50 text-primary-600 font-medium'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-primary-600'; ?>">
+                                
+                            </a>
+
+                            <a href="<?php echo BASE_URL; ?>admin"
+                                class="flex items-center p-3 rounded-lg transition
+                <?php echo basename($_SERVER['PHP_SELF']) === 'admin'
+                                ? 'bg-primary-50 text-primary-600 font-medium'
+                                : 'text-gray-700 hover:bg-gray-50'; ?>">
+                               <i class="fas fa-user-tie mr-3"></i> Admin Dashboard
+                            </a>
+                        <?php endif; ?>
 
                         <!-- Profile -->
                         <a href="<?php echo BASE_URL; ?>user/profile.php"

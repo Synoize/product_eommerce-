@@ -126,7 +126,9 @@ foreach ($orders as $order) {
                                                                     <div>
                                                                         <span class="text-gray-900 text-nowrap"><?php echo e($item['product_name']); ?></span>
                                                                         <?php if (!empty($item['weight'])): ?>
-                                                                            <div class="text-blue-600 text-xs font-medium"><?php echo e($item['weight']); ?></div>
+                                                                            <p class="text-accent text-sm">
+                                                                                <i class="fas fa-weight-hanging mr-1 text-xs"></i><?php echo !empty($item['flavour']) ? e($item['flavour']) . ' - ' : ''; ?><?php echo e($item['weight']); ?>
+                                                                            </p>
                                                                         <?php endif; ?>
                                                                     </div>
                                                                 </div>

@@ -416,7 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 
                                     <!-- Online Payment -->
-                                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition payment-method-option <?php echo ($paymentMethod !== 'cod') ? 'border-accent bg-accent-50' : 'border-gray-200 hover:border-gray-300'; ?>" data-method="online">
+                                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition payment-method-option <?php echo ($paymentMethod !== 'cod') ? 'border-primary bg-primary-50' : 'border-gray-200 hover:border-gray-300'; ?>" data-method="online">
                                         <input type="radio" name="payment_method" value="online"
                                             <?php echo ($paymentMethod !== 'cod') ? 'checked' : ''; ?>
                                             class="mt-1 w-4 h-4 text-accent cursor-pointer payment-method-input">
@@ -432,7 +432,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </label>
 
                                     <!-- COD -->
-                                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition payment-method-option <?php echo ($paymentMethod === 'cod') ? 'border-accent bg-accent-50' : 'border-gray-200 hover:border-gray-300'; ?>" data-method="cod">
+                                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition payment-method-option <?php echo ($paymentMethod === 'cod') ? 'border-primary bg-primary-50' : 'border-gray-200 hover:border-gray-300'; ?>" data-method="cod">
                                         <input type="radio" name="payment_method" value="cod"
                                             <?php echo ($paymentMethod === 'cod') ? 'checked' : ''; ?>
                                             class="mt-1 w-4 h-4 text-accent cursor-pointer payment-method-input">
@@ -640,9 +640,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             document.querySelectorAll('.payment-method-option').forEach(function(label) {
                 if (label.getAttribute('data-method') === selectedMethod) {
                     label.classList.remove('border-gray-200', 'hover:border-gray-300');
-                    label.classList.add('border-accent', 'bg-accent-50');
+                    label.classList.add('border-primary', 'bg-primary-50');
                 } else {
-                    label.classList.remove('border-accent', 'bg-accent-50');
+                    label.classList.remove('border-primary', 'bg-primary-50');
                     label.classList.add('border-gray-200', 'hover:border-gray-300');
                 }
             });
