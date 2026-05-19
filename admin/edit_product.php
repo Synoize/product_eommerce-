@@ -390,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </button>
                             </div>
                             
-                            <div id="weights-container">
+                            <div id="weights-container" class="space-y-2">
                                 <?php if (!empty($productWeights)): ?>
                                     <?php foreach ($productWeights as $index => $weight): ?>
                                         <div class="weight-entry grid grid-cols-1 md:grid-cols-7 gap-3 items-end p-4 border border-gray-200 rounded-lg bg-gray-50">
@@ -448,7 +448,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <hr class="my-6 border-gray-200">
                         
                         <div class="flex gap-3">
-                            <button type="submit" class="px-5 py-2.5 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-medium">
+                            <button type="submit" class="px-5 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-700 transition-colors font-medium">
                                 <i class="fas fa-save me-2"></i>Update Product
                             </button>
                             <a href="<?php echo BASE_URL; ?>admin/manage_products.php" class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">

@@ -262,11 +262,12 @@ require_once __DIR__ . '/includes/header.php';
             <div>
                 <div class="space-y-4">
                     <!-- Main Image -->
-                    <div class="rounded-2xl border overflow-hidden shadow-sm bg-gray-50">
+                    <div class="relative rounded-2xl border overflow-hidden shadow-sm bg-gray-50">
                         <?php
                         $mainImageUrl = !empty($gallery) ? getImageUrl($gallery[0], 'products') : getImageUrl($product['image'], 'products');
                         ?>
-                        <img src="<?php echo $mainImageUrl; ?>" id="mainProductImage" alt="<?php echo e($product['name']); ?>" class="w-full max-h-96 min-h-92 object-contain">
+                        <?php renderWishlistIconButton($product['id'], 'absolute top-4 right-4 z-10'); ?>
+                        <img src="<?php echo $mainImageUrl; ?>" id="mainProductImage" alt="<?php echo e($product['name']); ?>" class="w-full max-h-96 min-h-90 object-contain">
                     </div>
 
                     <!-- Thumbnail Images -->
@@ -275,7 +276,7 @@ require_once __DIR__ . '/includes/header.php';
                             <?php foreach ($gallery as $index => $image): ?>
                                 <img src="<?php echo getImageUrl($image, 'products'); ?>"
                                     alt="<?php echo e($product['name']); ?> - <?php echo $index + 1; ?>"
-                                    class="w-full h-24 object-cover rounded-xl border cursor-pointer transition hover:opacity-75 <?php echo $index === 0 ? 'ring-2 ring-accent' : ''; ?>"
+                                    class="w-full h-16 md:h-24 object-contain rounded-xl border cursor-pointer transition hover:opacity-75 <?php echo $index === 0 ? 'ring-2 ring-accent' : ''; ?>"
                                     onclick="changeMainImage(this.src)">
                             <?php endforeach; ?>
                         </div>
@@ -293,7 +294,9 @@ require_once __DIR__ . '/includes/header.php';
                     </a>
 
                     <!-- Title -->
-                    <h1 class="text-2xl md:text-4xl font-bold text-gray-900 mt-2 mb-4 line-clamp-2"><?php echo e($product['name']); ?></h1>
+                    <div class="mt-2 mb-4 flex items-start gap-3">
+                        <h1 class="flex-1 text-2xl md:text-4xl font-bold text-gray-900 line-clamp-2"><?php echo e($product['name']); ?></h1>
+                    </div>
 
                     <!-- Rating -->
                     <div class="flex items-center mb-4">
@@ -633,7 +636,7 @@ require_once __DIR__ . '/includes/header.php';
 
         <!-- Reviews Section -->
         <div class="mt-16" id="reviews">
-            <h3 class="text-3xl md:text-4xl font-luckiest text-primary-600 text-center md:text-start mb-8">Customer <span class="text-accent" style="-webkit-text-stroke: 1px black;">Reviews</span></h3>
+            <h3 class="text-3xl md:text-4xl font-luckiest text-primary-600 text-center md:text-start mb-8" style="-webkit-text-stroke: 0.5px black;">Customer <span class="text-accent">Reviews</span></h3>
 
             <div class="mb-8">
                 <div class="bg-primary-600 text-white px-6 md:px-10 py-6">
@@ -820,7 +823,7 @@ require_once __DIR__ . '/includes/header.php';
         <!-- Related Products -->
         <?php if (!empty($relatedProducts)): ?>
             <div class="mt-16">
-                <h3 class="text-2xl font-bold text-gray-900 mb-8">Related Products</h3>
+                <h3 class="text-3xl md:text-4xl font-luckiest text-primary-600 text-center md:text-start mb-8" style="-webkit-text-stroke: 0.5px black;">Related <span class="text-accent">Products</span></h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-6">
                     <?php foreach ($relatedProducts as $product): ?>
                         <div class="bg-white rounded-2xl border hover:shadow-md transition-all duration-300 overflow-hidden group">

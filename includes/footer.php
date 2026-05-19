@@ -173,7 +173,7 @@ try {
     </div>
 </footer>
 
-<script src="<?php echo ASSETS_URL; ?>/public/js/script.js"></script>
+<script src="./assets/public/js/script.js"></script>
 <script>
     lucide.createIcons();
 </script>

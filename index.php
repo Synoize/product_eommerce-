@@ -284,14 +284,14 @@ try {
         </div>
 
         <!-- Categories Container -->
-        <div class="flex gap-6 md:gap-16 overflow-x-auto 
+        <div class="flex gap-4 md:gap-16 overflow-x-auto 
                 justify-center md:justify-center 
                  [&::-webkit-scrollbar]:hidden 
             scrollbar-hide">
 
             <?php foreach ($categories as $category): ?>
                 <a href="<?php echo BASE_URL; ?>shop.php?category=<?php echo $category['id']; ?>"
-                    class="group flex-shrink-0 text-center ">
+                    class="group flex-shrink-0 text-center">
 
                     <!-- Image -->
                     <div class="relative transition duration-300 
@@ -668,26 +668,34 @@ try {
             </h2>
 
             <!-- FEATURES -->
-            <ul class="space-y-4 text-xs sm:text-base text-gray-800 max-w-lg mx-auto lg:mx-0">
+            <ul class="space-y-4 text-xs sm:text-base text-gray-800 max-w-lg text-start">
 
                 <li class="scroll-animate-left flex items-center gap-3 justify-start">
-                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png" class="w-8 opacity-80 mt-1" />
-                    Pure crunch with perfectly balanced salt.
+                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png"
+                        class="w-8 opacity-80 mt-1" />
+
+                    Premium Raw & Flavoured Makhana crafted with quality and care.
                 </li>
 
                 <li class="scroll-animate-left flex items-center gap-3 justify-start">
-                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png" class="w-8 opacity-80 mt-1" />
-                    A bold, fiery blend that excites your taste buds.
+                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png"
+                        class="w-8 opacity-80 mt-1" />
+
+                    Advanced dehydration and roasting technologies for superior freshness.
                 </li>
 
                 <li class="scroll-animate-left flex items-center gap-3 justify-start">
-                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png" class="w-8 opacity-80 mt-1" />
-                    Creamy, rich cheese in every crispy bite.
+                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png"
+                        class="w-8 opacity-80 mt-1" />
+
+                    Globally compliant healthy snacks and agro-based food products.
                 </li>
 
                 <li class="scroll-animate-left flex items-center gap-3 justify-start">
-                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png" class="w-8 opacity-80 mt-1" />
-                    Smooth, tangy flavor with a savory twist.
+                    <img src="<?php echo IMAGES_URL; ?>/makhana_icon.png"
+                        class="w-8 opacity-80 mt-1" />
+
+                    Sustainable sourcing that empowers farmers and supports wellness.
                 </li>
 
             </ul>
@@ -885,51 +893,107 @@ try {
     </svg>
 
     <div class="py-8 md:py-20 bg-primary text-white">
-        <div class="max-w-6xl mx-auto px-4 text-center">
+        <div class="max-w-7xl mx-auto px-4 text-center">
 
             <!-- TITLE -->
             <h2 class="text-3xl md:text-5xl font-luckiest text-white mb-12 md:mb-20 scroll-animate-top" style="-webkit-text-stroke: 0.5px black;">Why Choose <span class="text-accent">Earthance?</span></h2>
 
             <!-- FEATURES -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
 
                 <!-- ITEM 1 -->
-                <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
-                    <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-shopping-bag text-2xl md:text-5xl text-primary-600"></i>
+                <div class="flex items-start md:flex-col md:items-center gap-4 text-left md:text-center scroll-animate-left">
+
+                    <span class="flex-shrink-0 w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
+                        <i class="fas fa-seedling text-2xl md:text-4xl text-primary-600"></i>
                     </span>
+
                     <div>
-                        <h3 class="font-semibold">Premium Ingredients</h3>
-                        <p class="text-sm text-gray-100">
-                            Only high-quality potatoes & natural seasonings.
+                        <h3 class="font-semibold text-white mb-2">
+                            Premium Sourcing
+                        </h3>
+
+                        <p class="text-sm text-gray-100 leading-relaxed">
+                            Direct procurement from certified Indian farms.
                         </p>
                     </div>
+
                 </div>
 
                 <!-- ITEM 2 -->
-                <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
-                    <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-shipping-fast text-2xl md:text-5xl text-primary-600"></i>
+                <div class="flex items-start md:flex-col md:items-center gap-4 text-left md:text-center scroll-animate-left">
+
+                    <span class="flex-shrink-0 w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
+                        <i class="fas fa-industry text-2xl md:text-4xl text-primary-600"></i>
                     </span>
+
                     <div>
-                        <h3 class="font-semibold">Fast Delivery</h3>
-                        <p class="text-sm text-gray-100">
-                            Fresh, crunchy snacks delivered to your doorstep.
+                        <h3 class="font-semibold text-white mb-2">
+                            Advanced Processing
+                        </h3>
+
+                        <p class="text-sm text-gray-100 leading-relaxed">
+                            State-of-the-art dehydration and roasting technologies.
                         </p>
                     </div>
+
                 </div>
 
                 <!-- ITEM 3 -->
-                <div class="flex items-center gap-4 text-left justify-center sm:justify-start scroll-animate-left">
-                    <span class="flex-shrink-0 w-14 h-14 sm:w-28 sm:h-28 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
-                        <i class="fas fa-heart text-2xl md:text-5xl text-primary-600"></i>
+                <div class="flex items-start md:flex-col md:items-center gap-4 text-left md:text-center scroll-animate-left">
+
+                    <span class="flex-shrink-0 w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
+                        <i class="fas fa-globe text-2xl md:text-4xl text-primary-600"></i>
                     </span>
+
                     <div>
-                        <h3 class="font-semibold">Loved Nationwide</h3>
-                        <p class="text-sm text-gray-100">
-                            Trusted by thousands of snack lovers.
+                        <h3 class="font-semibold text-white mb-2">
+                            Global Standards
+                        </h3>
+
+                        <p class="text-sm text-gray-100 leading-relaxed">
+                            Compliance with export regulations and food safety certifications.
                         </p>
                     </div>
+
+                </div>
+
+                <!-- ITEM 4 -->
+                <div class="flex items-start md:flex-col md:items-center gap-4 text-left md:text-center scroll-animate-left">
+
+                    <span class="flex-shrink-0 w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
+                        <i class="fas fa-handshake text-2xl md:text-4xl text-primary-600"></i>
+                    </span>
+
+                    <div>
+                        <h3 class="font-semibold text-white mb-2">
+                            Reliable Partnership
+                        </h3>
+
+                        <p class="text-sm text-gray-100 leading-relaxed">
+                            Ethical business practices, timely delivery, and transparency.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- ITEM 5 -->
+                <div class="flex items-start md:flex-col md:items-center gap-4 text-left md:text-center scroll-animate-left">
+
+                    <span class="flex-shrink-0 w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center bg-accent-500 rounded-full shadow-md">
+                        <i class="fas fa-leaf text-2xl md:text-4xl text-primary-600"></i>
+                    </span>
+
+                    <div>
+                        <h3 class="font-semibold text-white mb-2">
+                            Sustainability Focus
+                        </h3>
+
+                        <p class="text-sm text-gray-100 leading-relaxed">
+                            Eco-friendly operations and farmer empowerment initiatives.
+                        </p>
+                    </div>
+
                 </div>
 
             </div>
@@ -965,27 +1029,39 @@ try {
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>chili.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-primary">Authentic Spices</h3>
+
+                <h3 class="font-semibold text-primary">
+                    Premium Sourcing
+                </h3>
+
                 <p class="text-sm text-gray-500">
-                    Rich aroma and traditional blends to enhance every dish.
+                    Direct procurement from certified Indian farms for quality and purity.
                 </p>
             </div>
 
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>snacks.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-primary">Crispy Snacks</h3>
+
+                <h3 class="font-semibold text-primary">
+                    Healthy Snack Innovation
+                </h3>
+
                 <p class="text-sm text-gray-500">
-                    Freshly prepared snacks with perfect crunch and taste.
+                    Smart, tasty, and guilt-free snacking solutions for modern lifestyles.
                 </p>
             </div>
 
             <div class="flex flex-col items-center md:items-end">
                 <img src="<?php echo IMAGES_URL; ?>spices.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-primary">Premium Quality</h3>
+
+                <h3 class="font-semibold text-primary">
+                    Global Quality Standards
+                </h3>
+
                 <p class="text-sm text-gray-500">
-                    Handpicked ingredients ensuring purity and freshness.
+                    Manufactured under strict hygiene and food safety compliance standards.
                 </p>
             </div>
 
@@ -1011,6 +1087,7 @@ try {
 
             <img src="<?php echo IMAGES_URL; ?>packaging.png"
                 class="authentic absolute w-auto max-h-full object-contain opacity-0">
+
         </div>
 
         <script>
@@ -1076,31 +1153,44 @@ try {
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/variety_snacks.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-primary">Variety of Snacks</h3>
+
+                <h3 class="font-semibold text-primary">
+                    Export Excellence
+                </h3>
+
                 <p class="text-sm text-gray-500">
-                    From namkeen to traditional treats, something for everyone.
+                    Reliable bulk export and private label solutions for global markets.
                 </p>
             </div>
 
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/natural_ingredients.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-primary">Natural Ingredients</h3>
+
+                <h3 class="font-semibold text-primary">
+                    Natural Ingredients
+                </h3>
+
                 <p class="text-sm text-gray-500">
-                    No artificial flavors, only real and natural goodness.
+                    Carefully selected ingredients with focus on nutrition and wellness.
                 </p>
             </div>
 
             <div class="flex flex-col items-center md:items-start">
                 <img src="<?php echo IMAGES_URL; ?>/packaging.png"
                     class="w-20 h-20 object-contain animate-float">
-                <h3 class="font-semibold text-primary">Fresh Packaging</h3>
+
+                <h3 class="font-semibold text-primary">
+                    Sustainable Packaging
+                </h3>
+
                 <p class="text-sm text-gray-500">
-                    Hygienically packed to preserve taste and quality.
+                    Hygienic and eco-friendly packaging designed for freshness and safety.
                 </p>
             </div>
 
         </div>
+
 
     </div>
 </section>

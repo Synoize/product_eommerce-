@@ -83,9 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <h6 class="font-bold text-gray-900 mb-1">Address</h6>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            123 Commerce Street <br>
-                            Business District, City 12345 <br>
-                            Country
+                            House No. 04 Ground Floor, Samta Colony, <br>
+                            Hudkeshwar Khurd,Nagpur-440037,<br>
+                            Maharashtra, India
                         </p>
                     </div>
                 </div>
@@ -99,8 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <h6 class="font-bold text-gray-900 mb-1">Phone</h6>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            +1 234 567 8900 <br>
-                            +1 234 567 8901
+                           +91 7313726134
                         </p>
                     </div>
                 </div>
@@ -114,8 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div>
                         <h6 class="font-bold text-gray-900 mb-1">Email</h6>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            support@webstore.com <br>
-                            info@webstore.com
+                            support@earthence.com <br>
+                            info@earthence.com
                         </p>
                     </div>
                 </div>

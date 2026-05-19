@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Database Configuration
  * Core PHP eCommerce Project
@@ -46,18 +47,21 @@ try {
 }
 
 // Helper function to get PDO instance
-function getDB() {
+function getDB()
+{
     global $pdo;
     return $pdo;
 }
 
 // Security helper function
-function e($string) {
+function e($string)
+{
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }
 
 // Redirect helper
-function redirect($url) {
+function redirect($url)
+{
     if (!headers_sent()) {
         header("Location: " . $url);
         exit();
@@ -69,7 +73,8 @@ function redirect($url) {
     exit();
 }
 
-function isLocalRedirectUrl($url) {
+function isLocalRedirectUrl($url)
+{
     if (empty($url) || !is_string($url)) {
         return false;
     }
@@ -78,11 +83,13 @@ function isLocalRedirectUrl($url) {
     return strpos($url, $appBase) === 0;
 }
 
-function getSafeRedirectUrl($url, $fallback = BASE_URL) {
+function getSafeRedirectUrl($url, $fallback = BASE_URL)
+{
     return isLocalRedirectUrl($url) ? $url : $fallback;
 }
 
-function rememberRedirectAfterLogin($url = null) {
+function rememberRedirectAfterLogin($url = null)
+{
     if ($url === null) {
         $url = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
             ? getCurrentPageUrl()
@@ -93,12 +100,14 @@ function rememberRedirectAfterLogin($url = null) {
 }
 
 // Flash message helper
-function setFlash($message, $type = 'success') {
+function setFlash($message, $type = 'success')
+{
     $_SESSION['flash_message'] = $message;
     $_SESSION['flash_type'] = $type;
 }
 
-function getFlash() {
+function getFlash()
+{
     if (isset($_SESSION['flash_message'])) {
         $message = $_SESSION['flash_message'];
         $type = $_SESSION['flash_type'] ?? 'success';
@@ -110,23 +119,25 @@ function getFlash() {
 }
 
 // Format currency
-function formatCurrency($amount) {
+function formatCurrency($amount)
+{
     return '₹' . number_format($amount, 2);
 }
 
 // Image URL helper
-function getImageUrl($image, $type = 'products') {
+function getImageUrl($image, $type = 'products')
+{
     if (empty($image)) {
         return ASSETS_URL . 'images/placeholder.png';
     }
-    
+
     // Check if external URL
     if (strpos($image, 'http') === 0) {
         return $image;
     }
-    
+
     // Local path
-    switch($type) {
+    switch ($type) {
         case 'products':
             return PRODUCTS_URL . $image;
         case 'categories':
@@ -139,17 +150,20 @@ function getImageUrl($image, $type = 'products') {
 }
 
 // Check if user is logged in
-function isLoggedIn() {
+function isLoggedIn()
+{
     return isset($_SESSION['user_id']);
 }
 
 // Check if user is admin
-function isAdmin() {
+function isAdmin()
+{
     return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 }
 
 // Require admin access
-function requireAdmin() {
+function requireAdmin()
+{
     if (!isAdmin()) {
         setFlash('Access denied. Admin privileges required.', 'danger');
         redirect(BASE_URL . 'user/login.php');
@@ -157,7 +171,8 @@ function requireAdmin() {
 }
 
 // Require login
-function requireLogin($redirectAfterLogin = null) {
+function requireLogin($redirectAfterLogin = null)
+{
     if (!isLoggedIn()) {
         rememberRedirectAfterLogin($redirectAfterLogin);
         setFlash('Please login to continue.', 'warning');
@@ -166,11 +181,12 @@ function requireLogin($redirectAfterLogin = null) {
 }
 
 // Wishlist helper functions
-function isInWishlist($productId) {
+function isInWishlist($productId)
+{
     if (!isLoggedIn()) {
         return false;
     }
-    
+
     global $pdo;
     try {
         $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM wishlist WHERE user_id = ? AND product_id = ?");
@@ -181,11 +197,12 @@ function isInWishlist($productId) {
     }
 }
 
-function addToWishlist($productId) {
+function addToWishlist($productId)
+{
     if (!isLoggedIn()) {
         return false;
     }
-    
+
     global $pdo;
     try {
         $stmt = $pdo->prepare("INSERT INTO wishlist (user_id, product_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE created_at = NOW()");
@@ -196,11 +213,12 @@ function addToWishlist($productId) {
     }
 }
 
-function removeFromWishlist($productId) {
+function removeFromWishlist($productId)
+{
     if (!isLoggedIn()) {
         return false;
     }
-    
+
     global $pdo;
     try {
         $stmt = $pdo->prepare("DELETE FROM wishlist WHERE user_id = ? AND product_id = ?");
@@ -211,11 +229,12 @@ function removeFromWishlist($productId) {
     }
 }
 
-function getWishlistCount() {
+function getWishlistCount()
+{
     if (!isLoggedIn()) {
         return 0;
     }
-    
+
     global $pdo;
     try {
         $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM wishlist WHERE user_id = ?");
@@ -226,7 +245,8 @@ function getWishlistCount() {
     }
 }
 
-function getCurrentPageUrl() {
+function getCurrentPageUrl()
+{
     if (empty($_SERVER['HTTP_HOST'])) {
         return BASE_URL;
     }
@@ -237,34 +257,53 @@ function getCurrentPageUrl() {
     return $protocol . $_SERVER['HTTP_HOST'] . $requestUri;
 }
 
-function renderWishlistIconButton($productId, $formClass = '', $buttonClass = '') {
+function renderWishlistIconButton($productId, $formClass = '', $buttonClass = '')
+{
     $productId = (int)$productId;
+
     $inWishlist = isInWishlist($productId);
+
     $action = $inWishlist ? 'remove' : 'add';
     $label = $inWishlist ? 'Remove from wishlist' : 'Add to wishlist';
-    $iconClass = $inWishlist ? 'fas' : 'far';
-    $stateClass = $inWishlist
-        ? 'bg-red-500 text-white hover:bg-red-600'
-        : 'bg-white/95 text-gray-600 hover:bg-white hover:text-red-500';
-    $classes = trim($stateClass . ' w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition ' . $buttonClass);
-    ?>
-    <form action="<?php echo BASE_URL; ?>wishlist_action.php" method="POST" class="<?php echo e($formClass); ?>">
+
+    // Heart icon style
+    $iconClass = $inWishlist ? 'fas fa-heart text-red-500' : 'far fa-heart text-gray-500';
+
+    // Button style
+    $classes = trim(
+        'group w-10 h-10 rounded-full 
+        bg-white flex items-center justify-center' . $buttonClass
+    );
+?>
+
+    <form
+        action="<?php echo BASE_URL; ?>wishlist_action.php"
+        method="POST"
+        class="<?php echo e($formClass); ?>">
         <input type="hidden" name="product_id" value="<?php echo $productId; ?>">
         <input type="hidden" name="wishlist_action" value="<?php echo $action; ?>">
         <input type="hidden" name="redirect_url" value="<?php echo e(getCurrentPageUrl()); ?>">
-        <button type="submit" class="<?php echo e($classes); ?>" title="<?php echo e($label); ?>" aria-label="<?php echo e($label); ?>">
-            <i class="<?php echo $iconClass; ?> fa-heart"></i>
+
+        <button
+            type="submit"
+            class="<?php echo e($classes); ?>"
+            title="<?php echo e($label); ?>"
+            aria-label="<?php echo e($label); ?>">
+            <i class="<?php echo $iconClass; ?> text-sm transition-all duration-300 group-hover:text-red-500 transition-all duration-300
+        hover:scale-110 active:scale-95 "></i>
         </button>
     </form>
-    <?php
+
+<?php
 }
 
 
-function  getOrderCount() {
+function  getOrderCount()
+{
     if (!isLoggedIn()) {
         return 0;
     }
-    
+
     global $pdo;
     try {
         $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM orders WHERE user_id = ?");
