@@ -10,6 +10,7 @@ require_once __DIR__ . '/../includes/razorpay.php';
 
 // Require login
 if (!isLoggedIn()) {
+    rememberRedirectAfterLogin(BASE_URL . 'checkout.php');
     setFlash('Please login to continue.', 'warning');
     redirect(BASE_URL . 'user/login.php');
 }

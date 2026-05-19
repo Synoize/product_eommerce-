@@ -69,6 +69,29 @@ function redirect($url) {
     exit();
 }
 
+function isLocalRedirectUrl($url) {
+    if (empty($url) || !is_string($url)) {
+        return false;
+    }
+
+    $appBase = rtrim(BASE_URL, '/') . '/';
+    return strpos($url, $appBase) === 0;
+}
+
+function getSafeRedirectUrl($url, $fallback = BASE_URL) {
+    return isLocalRedirectUrl($url) ? $url : $fallback;
+}
+
+function rememberRedirectAfterLogin($url = null) {
+    if ($url === null) {
+        $url = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET'
+            ? getCurrentPageUrl()
+            : ($_SERVER['HTTP_REFERER'] ?? BASE_URL);
+    }
+
+    $_SESSION['redirect_after_login'] = getSafeRedirectUrl($url, BASE_URL);
+}
+
 // Flash message helper
 function setFlash($message, $type = 'success') {
     $_SESSION['flash_message'] = $message;
@@ -134,8 +157,9 @@ function requireAdmin() {
 }
 
 // Require login
-function requireLogin() {
+function requireLogin($redirectAfterLogin = null) {
     if (!isLoggedIn()) {
+        rememberRedirectAfterLogin($redirectAfterLogin);
         setFlash('Please login to continue.', 'warning');
         redirect(BASE_URL . 'user/login.php');
     }

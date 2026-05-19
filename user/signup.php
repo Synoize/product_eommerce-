@@ -5,9 +5,17 @@
 
 require_once __DIR__ . '/../includes/db_connect.php';
 
+if (isset($_GET['redirect'])) {
+    rememberRedirectAfterLogin($_GET['redirect']);
+}
+
 // Redirect if already logged in
 if (isLoggedIn()) {
-    redirect(BASE_URL);
+    $redirect = isset($_SESSION['redirect_after_login'])
+        ? getSafeRedirectUrl($_SESSION['redirect_after_login'], BASE_URL)
+        : BASE_URL;
+    unset($_SESSION['redirect_after_login']);
+    redirect($redirect);
 }
 
 $errors = [];
@@ -53,7 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_role'] = 'user';
                 
                 setFlash('Welcome to Earthence! Your account has been created.', 'success');
-                redirect(BASE_URL);
+                $redirect = isset($_SESSION['redirect_after_login'])
+                    ? getSafeRedirectUrl($_SESSION['redirect_after_login'], BASE_URL)
+                    : BASE_URL;
+                unset($_SESSION['redirect_after_login']);
+                redirect($redirect);
                 exit; // Stop execution after redirect
             }
         } catch (PDOException $e) {

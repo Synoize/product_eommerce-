@@ -626,7 +626,7 @@ try {
                     <?php else: ?>
 
                         <!-- Login Button -->
-                        <a href="<?php echo BASE_URL; ?>user/login.php"
+                        <a href="<?php echo BASE_URL; ?>user/login.php?redirect=<?php echo urlencode(getCurrentPageUrl()); ?>"
                             class="hidden md:block
            bg-primary-500 hover:bg-primary-600 
            text-white px-5 py-2.5 rounded-full 
@@ -819,7 +819,7 @@ try {
 
                 <?php else: ?>
                     <div class="border-t border-gray-100 pt-2 mt-2">
-                        <a href="<?php echo BASE_URL; ?>user/login.php"
+                        <a href="<?php echo BASE_URL; ?>user/login.php?redirect=<?php echo urlencode(getCurrentPageUrl()); ?>"
                             class="flex items-center justify-center p-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition mt-2">
                             Login / Register
                         </a>

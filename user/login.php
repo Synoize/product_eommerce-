@@ -5,9 +5,17 @@
 
 require_once __DIR__ . '/../includes/db_connect.php';
 
+if (isset($_GET['redirect'])) {
+    rememberRedirectAfterLogin($_GET['redirect']);
+}
+
 // Redirect if already logged in
 if (isLoggedIn()) {
-    redirect(BASE_URL);
+    $redirect = isset($_SESSION['redirect_after_login'])
+        ? getSafeRedirectUrl($_SESSION['redirect_after_login'], BASE_URL)
+        : BASE_URL;
+    unset($_SESSION['redirect_after_login']);
+    redirect($redirect);
 }
 
 $errors = [];
@@ -37,7 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 setFlash('Welcome back, ' . $user['name'] . '!', 'success');
                 
                 // Redirect to intended page or home
-                $redirect = isset($_SESSION['redirect_after_login']) ? $_SESSION['redirect_after_login'] : BASE_URL;
+                $redirect = isset($_SESSION['redirect_after_login'])
+                    ? getSafeRedirectUrl($_SESSION['redirect_after_login'], BASE_URL)
+                    : BASE_URL;
                 unset($_SESSION['redirect_after_login']);
                 redirect($redirect);
                 exit; // Stop execution after redirect
@@ -53,6 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $pageTitle = 'Login';
 require_once __DIR__ . '/../includes/header.php';
+$signupUrl = BASE_URL . 'user/signup.php';
+if (isset($_SESSION['redirect_after_login'])) {
+    $signupUrl .= '?redirect=' . urlencode(getSafeRedirectUrl($_SESSION['redirect_after_login'], BASE_URL));
+}
 ?>
 
 <div class="h-[calc(100vh-80px)] py-12 md:py-20 px-4">
@@ -103,7 +117,7 @@ require_once __DIR__ . '/../includes/header.php';
             
             <div class="text-center mt-6">
                 <p class="text-gray-600">Don't have an account? 
-                    <a href="<?php echo BASE_URL; ?>user/signup.php" class="text-primary hover:text-primary-700">Sign up</a>
+                    <a href="<?php echo e($signupUrl); ?>" class="text-primary hover:text-primary-700">Sign up</a>
                 </p>
             </div>
         </div>

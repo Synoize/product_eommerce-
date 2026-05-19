@@ -12,6 +12,7 @@ header('Content-Type: application/json');
 
 // Require login
 if (!isLoggedIn()) {
+    rememberRedirectAfterLogin(BASE_URL . 'checkout.php');
     echo json_encode(['error' => 'Please login to continue']);
     exit;
 }
