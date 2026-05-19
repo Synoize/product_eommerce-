@@ -4,6 +4,7 @@
  */
 
 require_once __DIR__ . '/../includes/db_connect.php';
+require_once __DIR__ . '/../includes/pincode_validation.php';
 requireLogin();
 
 $userId = $_SESSION['user_id'];
@@ -34,7 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (empty($address)) $errors[] = 'Address is required';
             if (empty($city)) $errors[] = 'City is required';
             if (empty($state)) $errors[] = 'State is required';
-            if (empty($pincode) || !preg_match('/^[0-9]{6}$/', $pincode)) $errors[] = 'Valid 6-digit pincode is required';
+            $pincodeLookup = lookupIndianPincode($pincode);
+            if (!$pincodeLookup['valid']) {
+                $errors[] = $pincodeLookup['message'];
+            }
             
             if (empty($errors)) {
                 try {
@@ -147,7 +151,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <!-- Add/Edit Form -->
                 <div class="bg-white md:border md:rounded-lg md:shadow-sm md:p-8">
                     <h5 class="font-bold text-gray-900 mb-4"><?php echo $editAddress ? 'Edit Address' : 'Add New Address'; ?></h5>
-                    <form method="POST" class="space-y-4">
+                    <form method="POST" class="space-y-4" data-pincode-api="<?php echo BASE_URL; ?>api/validate_pincode.php">
                         <input type="hidden" name="action" value="<?php echo $editAddress ? 'edit' : 'add'; ?>">
                         <?php if ($editAddress): ?>
                         <input type="hidden" name="address_id" value="<?php echo $editAddress['id']; ?>">
@@ -189,7 +193,7 @@ require_once __DIR__ . '/../includes/header.php';
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
-                                <input type="text" name="pincode" required pattern="[0-9]{6}" maxlength="6"
+                                <input type="text" name="pincode" required pattern="[1-9][0-9]{5}" maxlength="6" inputmode="numeric" autocomplete="postal-code"
                                        value="<?php echo $editAddress ? e($editAddress['pincode']) : ''; ?>"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-primary transition">
                             </div>
@@ -263,4 +267,5 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
+<script src="<?php echo ASSETS_URL; ?>/public/js/pincode-lookup.js"></script>
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

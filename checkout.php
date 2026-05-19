@@ -8,6 +8,7 @@
 $pageTitle = 'Checkout';
 require_once 'includes/header.php';
 require_once 'includes/razorpay.php';
+require_once 'includes/pincode_validation.php';
 
 // Require login
 requireLogin();
@@ -132,7 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($address)) $errors[] = 'Address is required';
         if (empty($city)) $errors[] = 'City is required';
         if (empty($state)) $errors[] = 'State is required';
-        if (empty($pincode) || !preg_match('/^[0-9]{6}$/', $pincode)) $errors[] = 'Valid 6-digit pincode is required';
+        $pincodeLookup = lookupIndianPincode($pincode);
+        if (!$pincodeLookup['valid']) {
+            $errors[] = 'Selected delivery address has an invalid pincode. Please update the address before checkout.';
+        }
     }
 
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Valid email is required';

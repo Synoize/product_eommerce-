@@ -6,6 +6,7 @@
 
 $pageTitle = 'My Profile';
 require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/pincode_validation.php';
 
 // Require login
 requireLogin();
@@ -27,7 +28,6 @@ try {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = isset($_POST['name']) ? trim($_POST['name']) : '';
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-    $mobile = isset($_POST['mobile']) ? trim($_POST['mobile']) : '';
     $address = isset($_POST['address']) ? trim($_POST['address']) : '';
     $city = isset($_POST['city']) ? trim($_POST['city']) : '';
     $state = isset($_POST['state']) ? trim($_POST['state']) : '';
@@ -37,12 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newPassword = isset($_POST['new_password']) ? $_POST['new_password'] : '';
     $confirmNewPassword = isset($_POST['confirm_new_password']) ? $_POST['confirm_new_password'] : '';
 
-    $mobile = preg_replace('/\\s+/', '', $mobile);
-
     // Validation
     if (empty($name)) $errors[] = 'Name is required';
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Valid email is required';
-    if (empty($mobile) || !preg_match('/^\\+[1-9]\\d{7,14}$/', $mobile)) $errors[] = 'Valid mobile number with country code is required (e.g. +919876543210)';
+    if ($pincode !== '') {
+        $pincodeLookup = lookupIndianPincode($pincode);
+        if (!$pincodeLookup['valid']) {
+            $errors[] = $pincodeLookup['message'];
+        }
+    }
 
     // Check email uniqueness (excluding current user)
     if (empty($errors)) {
@@ -75,11 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update user data
             if (!empty($newPassword)) {
                 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, mobile = ?, address = ?, city = ?, state = ?, pincode = ?, password = ? WHERE id = ?");
-                $stmt->execute([$name, $email, $mobile, $address, $city, $state, $pincode, $hashedPassword, $userId]);
+                $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, address = ?, city = ?, state = ?, pincode = ?, password = ? WHERE id = ?");
+                $stmt->execute([$name, $email, $address, $city, $state, $pincode, $hashedPassword, $userId]);
             } else {
-                $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, mobile = ?, address = ?, city = ?, state = ?, pincode = ? WHERE id = ?");
-                $stmt->execute([$name, $email, $mobile, $address, $city, $state, $pincode, $userId]);
+                $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, address = ?, city = ?, state = ?, pincode = ? WHERE id = ?");
+                $stmt->execute([$name, $email, $address, $city, $state, $pincode, $userId]);
             }
 
             // Update session
@@ -122,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     <?php endif; ?>
 
-                    <form action="<?php echo BASE_URL; ?>user/profile.php" method="POST" id="profileForm" class="space-y-6">
+                    <form action="<?php echo BASE_URL; ?>user/profile.php" method="POST" id="profileForm" class="space-y-6" data-pincode-api="<?php echo BASE_URL; ?>api/validate_pincode.php">
                         <div>
                             <h6 class="font-bold text-primary mb-4">Personal Information</h6>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -140,10 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
-                                    <input type="tel" name="mobile" required
-                                        pattern="\+[0-9]{8,15}" maxlength="16"
-                                        value="<?php echo e($_POST['mobile'] ?? $user['mobile'] ?? ''); ?>"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-accent transition">
+                                    <input type="tel" value="<?php echo e($user['mobile'] ?? ''); ?>" readonly
+                                        class="w-full px-4 py-3 border border-gray-200 bg-gray-100 text-gray-600 rounded-lg outline-none cursor-not-allowed">
                                 </div>
                             </div>
                         </div>
@@ -171,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
-                                        <input type="text" name="pincode" maxlength="6"
+                                        <input type="text" name="pincode" pattern="[1-9][0-9]{5}" maxlength="6" inputmode="numeric" autocomplete="postal-code"
                                             value="<?php echo e($_POST['pincode'] ?? $user['pincode'] ?? ''); ?>"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:border-accent transition">
                                     </div>
@@ -211,20 +212,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-    // Mobile and pincode validation
-    document.querySelector('input[name="mobile"]').addEventListener('input', function(e) {
-        this.value = this.value.replace(/\s+/g, '');
-        if (this.value.length > 0 && this.value[0] !== '+') {
-            this.value = '+' + this.value.replace(/[^0-9]/g, '');
-        } else {
-            this.value = '+' + this.value.substring(1).replace(/[^0-9]/g, '');
-        }
-        this.value = this.value.slice(0, 16);
-    });
-
+    // Pincode validation
     document.querySelector('input[name="pincode"]').addEventListener('input', function(e) {
         this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
     });
 </script>
 
+<script src="<?php echo ASSETS_URL; ?>/public/js/pincode-lookup.js"></script>
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
